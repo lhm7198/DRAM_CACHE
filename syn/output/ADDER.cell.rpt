@@ -1,0 +1,26 @@
+ 
+****************************************
+Report : cell
+Design : ADDER
+Version: Q-2019.12-SP5-5
+Date   : Tue Jun 28 15:58:57 2022
+****************************************
+
+Attributes:
+    b - black box (unknown)
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    u - contains unmapped logic
+
+Cell                      Reference       Library             Area  Attributes
+--------------------------------------------------------------------------------
+U5                        SVR_TIE0_1      um28nchvlogl35udl140f_ssgwc0p9v0c
+                                                          0.392000  
+U6                        SVM_EO2_V2_0P5  um28nchhlogl35udl140f_ssgwc0p9v0c
+                                                          0.686000  
+reg_c_reg                 SVM_FDPRBQ_V2_1 um28nchhlogl35udl140f_ssgwc0p9v0c
+                                                          1.764000  n
+--------------------------------------------------------------------------------
+Total 3 cells                                             2.842000
+1

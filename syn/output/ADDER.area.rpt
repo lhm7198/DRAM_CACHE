@@ -1,0 +1,46 @@
+ 
+****************************************
+Report : area
+Design : ADDER
+Version: Q-2019.12-SP5-5
+Date   : Tue Jun 28 15:58:57 2022
+****************************************
+
+Library(s) Used:
+
+    um28nchhlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v0c.db)
+    um28nchvlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v0c.db)
+
+Number of ports:                           15
+Number of nets:                             7
+Number of cells:                            3
+Number of combinational cells:              2
+Number of sequential cells:                 1
+Number of macros/black boxes:               0
+Number of buf/inv:                          0
+Number of references:                       3
+
+Combinational area:                  1.078000
+Buf/Inv area:                        0.000000
+Noncombinational area:               1.764000
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                     2.842000
+Total area:                 undefined
+
+The above information was reported from the logical library. The following are from the physical library:
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area          Local cell area
+                                  ------------------  --------------------------- 
+Hierarchical cell                 Absolute   Percent  Combi-    Noncombi-  Black-
+                                  Total      Total    national  national   boxes   Design
+--------------------------------  ---------  -------  --------  ---------  ------  ---------
+ADDER                                2.8420    100.0    1.0780     1.7640  0.0000  ADDER
+--------------------------------  ---------  -------  --------  ---------  ------  ---------
+Total                                                   1.0780     1.7640  0.0000
+
+1

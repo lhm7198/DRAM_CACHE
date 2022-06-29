@@ -1,0 +1,86 @@
+#!/bin/bash
+
+source ../../common.sh
+
+SAVE_PATH=./lib_container.tcl
+SAMSUNG08_UHD_PATH=$LIB_PATH/SAMSUNG_8nm
+GATE_LENGTH=20
+
+# Fixed library type
+LIB_TYPE=uhd
+
+# Choose threshold voltage
+read -p "MultiThreshold Design? [yes/no]: " MVT
+if [ $MVT = "no" ]
+then
+	read -p "Standard cell type? [hvt/lvt/rvt/slvt]: " CELL_TYPE
+	LIB_PATH=$SAMSUNG08_UHD_PATH/$GATE_LENGTH$LIB_TYPE/*/$CELL_TYPE/latest/liberty/
+
+elif [ $MVT = "yes" ]
+then
+	LIB_PATH=$SAMSUNG08_UHD_PATH/$GATE_LENGTH$LIB_TYPE/*/*/latest/liberty/
+fi
+
+
+
+# Save link_library
+LIB_LIST_FF=$LIB_PATH/logic_synth/*ff*.db
+LIB_LIST_TT=$LIB_PATH/logic_synth/*tt*.db
+LIB_LIST_SS=$LIB_PATH/logic_synth/*ss*.db
+
+printf "%s\n" "set link_library \\" > $SAVE_PATH
+printf "[list * " >> $SAVE_PATH
+for LIB in $LIB_LIST_FF
+do
+	printf "%s " "$LIB" >> $SAVE_PATH
+done
+for LIB in $LIB_LIST_TT
+do
+	printf "%s " "$LIB" >> $SAVE_PATH
+done
+for LIB in $LIB_LIST_SS
+do
+	printf "%s " "$LIB" >> $SAVE_PATH
+done
+printf "]\n" >> $SAVE_PATH
+
+
+
+
+# Choose PVT and VDD corner
+# and Save target_library
+read -p "PVT Corner? [ff/tt/ss]: " PVT
+if [ $PVT='ff' ]
+then
+    read -p "Select VDD Corner [0p495v/0p605v/0p715v/0p825v/0p9v/1p0v] : " VDD
+	TARGET_LIST=$LIB_PATH/logic_synth/*ff*$VDD*.db
+elif [ $PVT='tt' ]
+then
+    read -p "Select VDD Corner [0p55v/0p65v/0p75v/0p85v/0p95v] : " VDD
+    TARGET_LIST=$LIB_PATH/logic_synth/*tt*$VDD*.db 
+elif [ $PVT='ss' ]
+then
+	read -p "Select VDD Corner [0p495v/0p585v/0p675v/0p765v/0p855v/1p0v] : " VDD
+    TARGET_LIST=$LIB_PATH/logic_synth/*ss*$VDD*.db 
+fi
+
+
+# Save target_library
+printf "%s\n" "set target_library \\" >> $SAVE_PATH
+printf "[list " >> $SAVE_PATH
+for LIB in $TARGET_LIST
+do
+	printf "%s " "$LIB" >> $SAVE_PATH
+done
+printf "]\n" >> $SAVE_PATH
+
+# Save symbol_library
+printf "%s\n" "set symbol_library \\" >> $SAVE_PATH
+printf "[list " >> $SAVE_PATH
+for LIB in $LIB_PATH/symbol/*.sdb
+do
+	printf "%s " "$LIB" >> $SAVE_PATH
+done
+printf "]\n" >> $SAVE_PATH
+
+

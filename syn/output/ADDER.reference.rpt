@@ -1,0 +1,30 @@
+ 
+****************************************
+Report : reference
+Design : ADDER
+Version: Q-2019.12-SP5-5
+Date   : Tue Jun 28 15:58:57 2022
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+SVM_EO2_V2_0P5     um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.686000       1      0.686000  
+SVM_FDPRBQ_V2_1    um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  1.764000       1      1.764000  n
+SVR_TIE0_1         um28nchvlogl35udl140f_ssgwc0p9v0c
+                                  0.392000       1      0.392000  
+-----------------------------------------------------------------------------
+Total 3 references                                      2.842000
+1

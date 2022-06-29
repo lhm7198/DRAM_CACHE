@@ -1,0 +1,94 @@
+ 
+****************************************
+Report : design
+Design : ADDER
+Version: Q-2019.12-SP5-5
+Date   : Tue Jun 28 15:58:57 2022
+****************************************
+
+Design allows ideal nets on clock nets.
+
+Library(s) Used:
+
+    um28nchhlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v0c.db)
+    um28nchvlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v0c.db)
+
+Local Link Library:
+
+    {/media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v0c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v125c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9vn40c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/lvt/latest/liberty/logic_synth/um28nchllogl35udl140f_ssgwc0p9v0c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/lvt/latest/liberty/logic_synth/um28nchllogl35udl140f_ssgwc0p9v125c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/lvt/latest/liberty/logic_synth/um28nchllogl35udl140f_ssgwc0p9vn40c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/svt/latest/liberty/logic_synth/um28nchslogl35udl140f_ssgwc0p9v0c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/svt/latest/liberty/logic_synth/um28nchslogl35udl140f_ssgwc0p9v125c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/svt/latest/liberty/logic_synth/um28nchslogl35udl140f_ssgwc0p9vn40c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/uhvt/latest/liberty/logic_synth/um28nchulogl35udl140f_ssgwc0p9v0c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/uhvt/latest/liberty/logic_synth/um28nchulogl35udl140f_ssgwc0p9v125c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/uhvt/latest/liberty/logic_synth/um28nchulogl35udl140f_ssgwc0p9vn40c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v0c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v125c.db, /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9vn40c.db}
+
+Flip-Flop Types:
+
+    No flip-flop types specified.
+
+Latch Types:
+
+    No latch types specified.
+
+Operating Conditions:
+
+
+    Operating Condition Name : SSGWC0P9V0C
+    Library : um28nchhlogl35udl140f_ssgwc0p9v0c
+    Process :  1.000
+    Temperature :   0.00
+    Voltage :   0.90
+    Interconnect Model : best_case_tree
+
+Wire Loading Model:
+
+    Selected automatically from the total cell area.
+
+Name           :   ZeroWLM
+Location       :   um28nchhlogl35udl140f_ssgwc0p9v0c
+Resistance     :   0.0009
+Capacitance    :   2e-07
+Area           :   0
+Slope          :   0.1
+Fanout   Length   Points Average Cap Std Deviation
+--------------------------------------------------------------
+     1     0.00
+     2     0.00
+     3     0.00
+     4     0.00
+     5     0.00
+     6     0.00
+     7     0.00
+     8     0.00
+     9     0.00
+    10     0.00
+    11     0.00
+    12     0.00
+    13     0.00
+    14     0.00
+    15     0.00
+    16     0.00
+
+
+
+Wire Loading Model Mode: enclosed.
+
+Timing Ranges:
+
+    No timing ranges specified.
+
+Pin Input Delays:
+
+    None specified.
+
+Pin Output Delays:
+
+    None specified.
+
+Disabled Timing Arcs:
+
+    No arcs disabled.
+
+Required Licenses:
+
+    None Required
+
+Design Parameters:
+
+    None specified.
+1

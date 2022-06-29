@@ -1,0 +1,322 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -nworst 10
+        -max_paths 10
+Design : ADDER
+Version: Q-2019.12-SP5-5
+Date   : Tue Jun 28 15:58:57 2022
+****************************************
+
+Operating Conditions: SSGWC0P9V0C   Library: um28nchhlogl35udl140f_ssgwc0p9v0c
+Wire Load Model Mode: enclosed
+
+  Startpoint: a[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 f
+  a[0] (in)                                0.00       0.00 f
+  U6/X (SVM_EO2_V2_0P5)                    0.07       0.07 r
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.07 r
+  data arrival time                                   0.07
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.07       0.43
+  data required time                                  0.43
+  -----------------------------------------------------------
+  data required time                                  0.43
+  data arrival time                                  -0.07
+  -----------------------------------------------------------
+  slack (MET)                                         0.36
+
+
+  Startpoint: b[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 f
+  b[0] (in)                                0.00       0.00 f
+  U6/X (SVM_EO2_V2_0P5)                    0.07       0.07 r
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.07 r
+  data arrival time                                   0.07
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.07       0.43
+  data required time                                  0.43
+  -----------------------------------------------------------
+  data required time                                  0.43
+  data arrival time                                  -0.07
+  -----------------------------------------------------------
+  slack (MET)                                         0.36
+
+
+  Startpoint: b[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  b[0] (in)                                0.00       0.00 r
+  U6/X (SVM_EO2_V2_0P5)                    0.07       0.07 r
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.07 r
+  data arrival time                                   0.07
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.07       0.43
+  data required time                                  0.43
+  -----------------------------------------------------------
+  data required time                                  0.43
+  data arrival time                                  -0.07
+  -----------------------------------------------------------
+  slack (MET)                                         0.36
+
+
+  Startpoint: a[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  a[0] (in)                                0.00       0.00 r
+  U6/X (SVM_EO2_V2_0P5)                    0.07       0.07 r
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.07 r
+  data arrival time                                   0.07
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.07       0.43
+  data required time                                  0.43
+  -----------------------------------------------------------
+  data required time                                  0.43
+  data arrival time                                  -0.07
+  -----------------------------------------------------------
+  slack (MET)                                         0.37
+
+
+  Startpoint: a[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 f
+  a[0] (in)                                0.00       0.00 f
+  U6/X (SVM_EO2_V2_0P5)                    0.08       0.08 f
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.08 f
+  data arrival time                                   0.08
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.08
+  -----------------------------------------------------------
+  slack (MET)                                         0.39
+
+
+  Startpoint: b[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 f
+  b[0] (in)                                0.00       0.00 f
+  U6/X (SVM_EO2_V2_0P5)                    0.08       0.08 f
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.08 f
+  data arrival time                                   0.08
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.08
+  -----------------------------------------------------------
+  slack (MET)                                         0.39
+
+
+  Startpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: c[0] (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.00 r
+  reg_c_reg/Q (SVM_FDPRBQ_V2_1)            0.09       0.09 r
+  c[0] (out)                               0.00       0.09 r
+  data arrival time                                   0.09
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  output external delay                    0.00       0.50
+  data required time                                  0.50
+  -----------------------------------------------------------
+  data required time                                  0.50
+  data arrival time                                  -0.09
+  -----------------------------------------------------------
+  slack (MET)                                         0.41
+
+
+  Startpoint: a[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  a[0] (in)                                0.00       0.00 r
+  U6/X (SVM_EO2_V2_0P5)                    0.05       0.05 f
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.05 f
+  data arrival time                                   0.05
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.05
+  -----------------------------------------------------------
+  slack (MET)                                         0.42
+
+
+  Startpoint: b[0] (input port clocked by clk)
+  Endpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  b[0] (in)                                0.00       0.00 r
+  U6/X (SVM_EO2_V2_0P5)                    0.05       0.05 f
+  reg_c_reg/D (SVM_FDPRBQ_V2_1)            0.00       0.05 f
+  data arrival time                                   0.05
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.05
+  -----------------------------------------------------------
+  slack (MET)                                         0.42
+
+
+  Startpoint: reg_c_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: c[0] (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ADDER              ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_c_reg/CK (SVM_FDPRBQ_V2_1)           0.00       0.00 r
+  reg_c_reg/Q (SVM_FDPRBQ_V2_1)            0.08       0.08 f
+  c[0] (out)                               0.00       0.08 f
+  data arrival time                                   0.08
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  output external delay                    0.00       0.50
+  data required time                                  0.50
+  -----------------------------------------------------------
+  data required time                                  0.50
+  data arrival time                                  -0.08
+  -----------------------------------------------------------
+  slack (MET)                                         0.42
+
+
+1

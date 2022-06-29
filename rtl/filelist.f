@@ -1,2 +1,3 @@
 -sverilog
-$ROOT_PATH/rtl/adder.sv
+$ROOT_PATH/rtl/fifo.v
+

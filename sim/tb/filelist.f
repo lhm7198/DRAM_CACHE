@@ -1,2 +1,2 @@
 -sveriliog
-$ROOT_PATH/sim/tb/adder_tb.sv
+$ROOT_PATH/sim/tb/FIFO_tb.sv

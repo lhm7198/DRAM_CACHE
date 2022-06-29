@@ -28,6 +28,8 @@ reg     [PTR_WIDTH-1:0] head_nxt;
 reg     [PTR_WIDTH-1:0] tail;
 reg     [PTR_WIDTH-1:0] tail_nxt;
 
+reg 	[PTR_WIDTH-1:0] remain;
+
 // write ptr next 
 always @(*) begin
 	if (head == (FIFO_SIZE-1)) begin 

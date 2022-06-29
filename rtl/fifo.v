@@ -18,14 +18,15 @@ module FIFO # (
 	output [DATA_BIT_SIZE-1:0] read_data           
 );
 
+localparam PTR_WIDTH = $clog2(FIFO_SIZE);
 
 // internals 
 reg     [DATA_BIT_SIZE-1:0] mem[FIFO_SIZE-1:0];
-reg     [7:0] head;
-reg     [7:0] head_nxt;
+reg     [PTR_WIDTH-1:0] head;
+reg     [PTR_WIDTH-1:0] head_nxt;
 
-reg     [7:0] tail;
-reg     [7:0] tail_nxt;
+reg     [PTR_WIDTH-1:0] tail;
+reg     [PTR_WIDTH-1:0] tail_nxt;
 
 // write ptr next 
 always @(*) begin

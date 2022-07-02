@@ -76,11 +76,11 @@ always @(posedge clk) begin
 	end
 end
 
-assign full = (remain == FIFO_SIZE);
-assign A_full = (remain >= A_FULL_THR);
+assign full = (remain == FIFO_SIZE) ? 1 : 0;
+assign A_full = (remain >= A_FULL_THR) ? 1 : 0;
 
-assign empty = (remain == 0);
-assign A_empty = (remain <= A_EMPTY_THR);
+assign empty = (remain == 0) ? 1 : 0;
+assign A_empty = (remain <= A_EMPTY_THR) ? 1 : 0;
 
 assign read_data = mem[tail]; 
 

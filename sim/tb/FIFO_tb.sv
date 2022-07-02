@@ -13,10 +13,17 @@ wire empty, A_empty;
 reg read_en;
 reg [7:0] read_data;
 
+/*
+reg [2:0] head;
+reg [2:0] tail;
+reg [2:0] remain;
+*/
+
 localparam CLOCK_PERIOD = 1000;
 
 always #(CLOCK_PERIOD/2) clk = ~clk;
 
+int i;
 initial
 begin
 	#(CLOCK_PERIOD-100);
@@ -24,11 +31,30 @@ begin
 	#(CLOCK_PERIOD);
 	reset = 1'b0;
 
-	$display("Here!");
+	#(CLOCK_PERIOD);
+	$display("Write");
 	write_en = 1'b1;
-	write_data = 8'b1;
-	$display("I am!");
+	#(CLOCK_PERIOD);
+	for(i=0; i<10; i++) begin
+		write_data = $urandom % 256;
+		#(CLOCK_PERIOD);
 
+		$display("%dst write_data : %d, full : %d", i, write_data, full);
+	end
+	write_en = 1'b0;
+	
+	/*
+	#(CLOCK_PERIOD);
+	$display("Read");
+	read_en = 1'b1;
+	#(CLOCK_PERIOD);
+	for(i=0; i<4; i++) begin
+		#(CLOCK_PERIOD);
+	
+		$display("%dst read_data : %d, empty : %d", i, read_data, empty);
+	end
+	read_en = 1'b0;
+	*/
 	$finish;
 end
 

@@ -13,11 +13,7 @@ wire empty, A_empty;
 reg read_en;
 reg [7:0] read_data;
 
-/*
-reg [2:0] head;
-reg [2:0] tail;
-reg [2:0] remain;
-*/
+wire [3:0] test;
 
 localparam CLOCK_PERIOD = 1000;
 
@@ -33,32 +29,33 @@ begin
 
 	#(CLOCK_PERIOD);
 	$display("Write");
-	write_en = 1'b1;
+	write_en = 1'b0;
 	#(CLOCK_PERIOD);
-	for(i=0; i<10; i++) begin
+	write_en = 1'b1;
+	for(i=0; i<16; i++) begin
 		write_data = $urandom % 256;
 		#(CLOCK_PERIOD);
 
-		$display("%dst write_data : %d, full : %d", i, write_data, full);
+		$display("%dst write_data : %d, full : %d, remain : %d, A_EMPTY : %d, A_FULL : %d", i, write_data, full, test, A_empty, A_full);
 	end
 	write_en = 1'b0;
 	
-	/*
 	#(CLOCK_PERIOD);
 	$display("Read");
+	read_en = 1'b0;
+	#(CLOCK_PERIOD);
 	read_en = 1'b1;
 	#(CLOCK_PERIOD);
-	for(i=0; i<4; i++) begin
+	for(i=0; i<16; i++) begin
 		#(CLOCK_PERIOD);
 	
 		$display("%dst read_data : %d, empty : %d", i, read_data, empty);
 	end
 	read_en = 1'b0;
-	*/
 	$finish;
 end
 
 FIFO fifo(.clk(clk), .reset(reset), .full(full), .A_full(A_full), .write_en(write_en), .write_data(write_data),
-	.empty(empty), .A_empty(A_empty), .read_en(read_en), .read_data(read_data));
+	.empty(empty), .A_empty(A_empty), .read_en(read_en), .read_data(read_data), .test(test));
 
 endmodule

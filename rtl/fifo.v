@@ -15,10 +15,12 @@ module FIFO # (
 	output empty,
 	output A_empty,
 	input read_en,
-	output [DATA_BIT_SIZE-1:0] read_data           
+	output [DATA_BIT_SIZE-1:0] read_data,
+
+	output [3:0] test
 );
 
-localparam PTR_WIDTH = $clog2(FIFO_SIZE);
+localparam PTR_WIDTH = $clog2(FIFO_SIZE) + 1;
 
 // internals 
 reg     [DATA_BIT_SIZE-1:0] mem[FIFO_SIZE-1:0];
@@ -83,5 +85,7 @@ assign empty = (remain == 0) ? 1 : 0;
 assign A_empty = (remain <= A_EMPTY_THR) ? 1 : 0;
 
 assign read_data = mem[tail]; 
+
+assign test = remain;
 
 endmodule

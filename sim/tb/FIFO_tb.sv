@@ -28,15 +28,17 @@ begin
 	reset = 1'b0;
 
 	#(CLOCK_PERIOD);
-	$display("Write");
+	$display("\nWrite");
 	write_en = 1'b0;
 	#(CLOCK_PERIOD);
 	write_en = 1'b1;
 	for(i=0; i<16; i++) begin
 		write_data = $urandom % 256;
-		#(CLOCK_PERIOD);
 
-		$display("%dst write_data : %d, full : %d, remain : %d, A_EMPTY : %d, A_FULL : %d", i, write_data, full, test, A_empty, A_full);
+		$display("%dst write_data : %d, full : %d, empty : %d, remain : %d, A_EMPTY : %d, A_FULL : %d",
+		       	i, write_data, full, empty, test, A_empty, A_full);
+	
+		#(CLOCK_PERIOD);
 	end
 	write_en = 1'b0;
 	
@@ -45,11 +47,11 @@ begin
 	read_en = 1'b0;
 	#(CLOCK_PERIOD);
 	read_en = 1'b1;
-	#(CLOCK_PERIOD);
 	for(i=0; i<16; i++) begin
-		#(CLOCK_PERIOD);
-	
-		$display("%dst read_data : %d, empty : %d", i, read_data, empty);
+		$display("%dst read_data : %d, full : %d, empty : %d, remain : %d, A_EMPTY : %d, A_FULL : %d",
+		       	i, read_data, full, empty, test, A_empty, A_full);
+
+		#(CLOCK_PERIOD);	
 	end
 	read_en = 1'b0;
 	$finish;

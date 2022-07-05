@@ -1,0 +1,44 @@
+ 
+****************************************
+Report : resources
+Design : FIFO
+Version: Q-2019.12-SP5-5
+Date   : Mon Jul  4 11:46:28 2022
+****************************************
+
+
+Resource Report for this hierarchy in file
+        /home/lhm7198/DRAM_CACHE/rtl/fifo.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=3    | add_47 (fifo.sv:47)        |
+| add_x_2        | DW01_inc       | width=3    | add_55 (fifo.sv:55)        |
+| add_x_3        | DW01_inc       | width=4    | add_60 (fifo.sv:60)        |
+| sub_x_4        | DW01_dec       | width=4    | sub_63 (fifo.sv:63)        |
+| gte_x_8        | DW_cmp         | width=4    | gte_87 (fifo.sv:87)        |
+| lte_x_9        | DW_cmp         | width=4    | lte_89 (fifo.sv:89)        |
+=============================================================================
+
+
+Datapath Extraction Report
+
+Information: Operator associated with resources 'add_60 (fifo.sv:60)' in design 'FIFO' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'C376 (fifo.sv:59)'.  (HDL-120)
+
+Information: Operator associated with resources 'sub_63 (fifo.sv:63)' in design 'FIFO' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'C376 (fifo.sv:59)'.  (HDL-120)
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_2            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| sub_x_4            | DW01_dec         | apparch (area)     |                |
+| gte_x_8            | DW_cmp           | apparch (area)     |                |
+| lte_x_9            | DW_cmp           | apparch (area)     |                |
+===============================================================================
+
+1

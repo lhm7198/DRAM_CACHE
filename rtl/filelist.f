@@ -1,3 +1,3 @@
 -sverilog
-$ROOT_PATH/rtl/fifo.v
+$ROOT_PATH/rtl/fifo.sv
 

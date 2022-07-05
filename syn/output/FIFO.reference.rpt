@@ -1,0 +1,74 @@
+ 
+****************************************
+Report : reference
+Design : FIFO
+Version: Q-2019.12-SP5-5
+Date   : Mon Jul  4 11:46:28 2022
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+SVM_AN3B_1         um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       1      0.490000  
+SVM_AO2BB2_0P75    um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.588000      67     39.396000  
+SVM_AO21_1         um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       8      3.920000  
+SVM_AOAI211_0P5    um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       2      0.980000  
+SVM_AOI21_S_0P5    um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.392000       2      0.784000  
+SVM_AOI22_T_0P5    um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       9      4.410000  
+SVM_AOI31_1        um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       1      0.490000  
+SVM_AOI211_1       um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       1      0.490000  
+SVM_AOI221_1       um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.686000       2      1.372000  
+SVM_AOI222_1       um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.784000       8      6.272000  
+SVM_AOI2222_V2_1   um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.980000       8      7.840000  
+SVM_EN2_V2_0P5     um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.686000       1      0.686000  
+SVM_FDPQ_V2_1      um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  1.568000      78    122.303997  n
+SVM_INV_1          um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.196000      14      2.744000  
+SVM_MUXI2_MG_0P5   um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.588000       1      0.588000  
+SVM_ND2B_V1_1      um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.392000       2      0.784000  
+SVM_ND2_0P5        um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.294000       3      0.882000  
+SVM_ND2_1          um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.294000      17      4.998000  
+SVM_NR2B_V1_1      um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.392000       3      1.176000  
+SVM_NR2_S_1        um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.294000      16      4.704000  
+SVM_OAI21_1        um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.392000       2      0.784000  
+SVM_OAI21_S_1      um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.392000       2      0.784000  
+SVM_OAI31_G_1      um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       3      1.470000  
+SVM_OAOI211_V2_1   um28nchhlogl35udl140f_ssgwc0p9v0c
+                                  0.490000       1      0.490000  
+SVP_INV_1          um28nchslogl35udl140f_ssgwc0p9v0c
+                                  0.196000       1      0.196000  
+-----------------------------------------------------------------------------
+Total 25 references                                   209.033997
+1

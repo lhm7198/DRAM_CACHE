@@ -1,0 +1,390 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -nworst 10
+        -max_paths 10
+Design : FIFO
+Version: Q-2019.12-SP5-5
+Date   : Mon Jul  4 11:46:28 2022
+****************************************
+
+Operating Conditions: SSGWC0P9V0C   Library: um28nchhlogl35udl140f_ssgwc0p9v0c
+Wire Load Model Mode: enclosed
+
+  Startpoint: empty_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: empty_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  empty_reg/CK (SVM_FDPQ_V2_1)             0.00       0.00 r
+  empty_reg/Q (SVM_FDPQ_V2_1)              0.08       0.08 f
+  U338/X (SVM_NR2B_V1_1)                   0.05       0.13 r
+  U341/X (SVM_INV_1)                       0.03       0.16 f
+  U249/X (SVM_NR2_S_1)                     0.03       0.19 r
+  U346/X (SVM_AN3B_1)                      0.05       0.24 r
+  U243/X (SVM_NR2_S_1)                     0.02       0.26 f
+  U242/X (SVM_AO2BB2_0P75)                 0.05       0.31 f
+  U253/X (SVM_NR2_S_1)                     0.03       0.34 r
+  U252/X (SVM_ND2_0P5)                     0.03       0.37 f
+  U262/X (SVM_OAI21_1)                     0.04       0.41 r
+  empty_reg/D (SVM_FDPQ_V2_1)              0.00       0.41 r
+  data arrival time                                   0.41
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  empty_reg/CK (SVM_FDPQ_V2_1)             0.00       0.50 r
+  library setup time                      -0.04       0.46
+  data required time                                  0.46
+  -----------------------------------------------------------
+  data required time                                  0.46
+  data arrival time                                  -0.41
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U311/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][0]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][0]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U310/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][1]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][1]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U309/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][2]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][2]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][3]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U308/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][3]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][3]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][4]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U307/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][4]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][4]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][5]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U306/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][5]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][5]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U305/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][6]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][6]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: full_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: mem_reg[7][7]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  full_reg/CK (SVM_FDPQ_V2_1)              0.00       0.00 r
+  full_reg/Q (SVM_FDPQ_V2_1)               0.08       0.08 f
+  U211/X (SVM_ND2B_V1_1)                   0.05       0.14 f
+  U241/X (SVM_NR2_S_1)                     0.05       0.19 r
+  U349/X (SVM_INV_1)                       0.03       0.22 f
+  U218/X (SVM_OAI21_S_1)                   0.03       0.25 r
+  U216/X (SVM_ND2_1)                       0.09       0.33 f
+  U304/X (SVM_AO2BB2_0P75)                 0.09       0.42 f
+  mem_reg[7][7]/D (SVM_FDPQ_V2_1)          0.00       0.42 f
+  data arrival time                                   0.42
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  mem_reg[7][7]/CK (SVM_FDPQ_V2_1)         0.00       0.50 r
+  library setup time                      -0.03       0.47
+  data required time                                  0.47
+  -----------------------------------------------------------
+  data required time                                  0.47
+  data arrival time                                  -0.42
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+  Startpoint: empty_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: empty_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  FIFO               ZeroWLM               um28nchhlogl35udl140f_ssgwc0p9v0c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  empty_reg/CK (SVM_FDPQ_V2_1)             0.00       0.00 r
+  empty_reg/Q (SVM_FDPQ_V2_1)              0.08       0.08 f
+  U338/X (SVM_NR2B_V1_1)                   0.05       0.13 r
+  U341/X (SVM_INV_1)                       0.03       0.16 f
+  U249/X (SVM_NR2_S_1)                     0.03       0.19 r
+  U346/X (SVM_AN3B_1)                      0.05       0.24 r
+  U243/X (SVM_NR2_S_1)                     0.02       0.26 f
+  U242/X (SVM_AO2BB2_0P75)                 0.05       0.31 f
+  U253/X (SVM_NR2_S_1)                     0.03       0.34 r
+  U252/X (SVM_ND2_0P5)                     0.03       0.36 f
+  U262/X (SVM_OAI21_1)                     0.04       0.41 r
+  empty_reg/D (SVM_FDPQ_V2_1)              0.00       0.41 r
+  data arrival time                                   0.41
+
+  clock clk (rise edge)                    0.50       0.50
+  clock network delay (ideal)              0.00       0.50
+  empty_reg/CK (SVM_FDPQ_V2_1)             0.00       0.50 r
+  library setup time                      -0.04       0.46
+  data required time                                  0.46
+  -----------------------------------------------------------
+  data required time                                  0.46
+  data arrival time                                  -0.41
+  -----------------------------------------------------------
+  slack (MET)                                         0.05
+
+
+1

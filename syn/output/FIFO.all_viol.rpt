@@ -1,0 +1,109 @@
+Information: Updating design information... (UID-85)
+ 
+****************************************
+Report : constraint
+        -all_violators
+        -verbose
+Design : FIFO
+Version: Q-2019.12-SP5-5
+Date   : Mon Jul  4 11:46:28 2022
+****************************************
+
+
+    Net: A_empty
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: A_full
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[0]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[1]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[2]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[3]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[4]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[5]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[6]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Net: read_data[7]
+
+    Capacitance        0.0000000000
+  - min_capacitance    0.0000500000
+  ------------------------------
+    Slack              -0.0000500000  (VIOLATED)
+
+
+    Design: FIFO
+
+    max_area           0.0000000000
+  - Current Area       209.0339965820
+  ------------------------------
+    Slack              -209.0339965820  (VIOLATED)
+
+
+    Design: FIFO
+
+    max_leakage_power      0.0000000000
+  - Current Leakage Power  7.2884125710
+  ----------------------------------
+    Slack                  -7.2884125710  (VIOLATED)
+
+
+1

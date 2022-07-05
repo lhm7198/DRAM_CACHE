@@ -3,7 +3,7 @@
 module FIFO_TB;
 
 reg clk = 1'b0;
-reg reset = 1'b0;
+reg rst_n;
 
 wire full, A_full;
 reg write_en;
@@ -22,14 +22,19 @@ always #(CLOCK_PERIOD/2) clk = ~clk;
 int i;
 initial
 begin
+    // drive the default values
+	write_en = 1'b0;
+	read_en = 1'b0;
+	rst_n = 1'b1;
+
 	#(CLOCK_PERIOD-100);
-	reset = 1'b1;
+	rst_n = 1'b0;
 	#(CLOCK_PERIOD);
-	reset = 1'b0;
+	rst_n = 1'b1;
 
 	#(CLOCK_PERIOD);
+
 	$display("\nWrite");
-	write_en = 1'b0;
 	#(CLOCK_PERIOD);
 	write_en = 1'b1;
 	for(i=0; i<16; i++) begin
@@ -44,7 +49,6 @@ begin
 	
 	#(CLOCK_PERIOD);
 	$display("Read");
-	read_en = 1'b0;
 	#(CLOCK_PERIOD);
 	read_en = 1'b1;
 	for(i=0; i<16; i++) begin
@@ -57,7 +61,8 @@ begin
 	$finish;
 end
 
-FIFO fifo(.clk(clk), .reset(reset), .full(full), .A_full(A_full), .write_en(write_en), .write_data(write_data),
+FIFO fifo(.clk(clk), .rst_n(rst_n), .full(full), .A_full(A_full), .write_en(write_en), .write_data(write_data),
 	.empty(empty), .A_empty(A_empty), .read_en(read_en), .read_data(read_data), .test(test));
 
 endmodule
+

@@ -1,0 +1,39 @@
+ 
+****************************************
+Report : hierarchy
+        -full
+Design : FIFO
+Version: Q-2019.12-SP5-5
+Date   : Mon Jul  4 11:46:28 2022
+****************************************
+
+Attributes:
+    r - licensed design
+
+FIFO               r
+    SVM_AN3B_1               um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AO2BB2_0P75          um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AO21_1               um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOAI211_0P5          um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI21_S_0P5          um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI22_T_0P5          um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI31_1              um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI211_1             um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI221_1             um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI222_1             um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_AOI2222_V2_1         um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_EN2_V2_0P5           um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_FDPQ_V2_1            um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_INV_1                um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_MUXI2_MG_0P5         um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_ND2B_V1_1            um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_ND2_0P5              um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_ND2_1                um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_NR2B_V1_1            um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_NR2_S_1              um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_OAI21_1              um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_OAI21_S_1            um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_OAI31_G_1            um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVM_OAOI211_V2_1         um28nchhlogl35udl140f_ssgwc0p9v0c
+    SVP_INV_1                um28nchslogl35udl140f_ssgwc0p9v0c
+1

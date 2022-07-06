@@ -27,7 +27,7 @@ begin
 	read_en = 1'b0;
 	rst_n = 1'b1;
 
-	#(CLOCK_PERIOD-100);
+	#(CLOCK_PERIOD);
 	rst_n = 1'b0;
 	#(CLOCK_PERIOD);
 	rst_n = 1'b1;

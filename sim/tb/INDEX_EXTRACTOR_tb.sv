@@ -1,6 +1,6 @@
 `timescale 1ps/1ps
 
-module INDEX_EXTRACTOR_TB
+module INDEX_EXTRACTOR_TB;
 
 reg clk = 1'b0;
 reg rst_n;
@@ -48,17 +48,17 @@ begin
 	$display("\nStart");
 
 	#(CLOCK_PERIOD);
-	$display("ready_o = %d, slave_i = %d, fifo_write_enable = %d, fifo_i = %d\n");	
+	$display("ready_o = %d, slave_i = %d, fifo_write_enable = %d, fifo_i = %d\n", ready_o, slave_i, fifo_write_enable, fifo_i);	
 	
 	arid_i = 1;
 	arvalid_i = 1;
 	araddr_i = 100;
 
-	$display("ready_o = %d, slave_i = %d, fifo_write_enable = %d, fifo_i = %d\n");	
+	$display("ready_o = %d, slave_i = %d, fifo_write_enable = %d, fifo_i = %d\n", ready_o, slave_i, fifo_write_enable, fifo_i);	
 	#(CLOCK_PERIOD);
 	
-	$display("ready_o = %d, slave_i = %d, fifo_write_enable = %d, fifo_i = %d\n");
 
+	$display("ready_o = %d, slave_i = %d, fifo_write_enable = %d, fifo_i = %d\n", ready_o, slave_i, fifo_write_enable, fifo_i);	
 	$finish;
 end
 

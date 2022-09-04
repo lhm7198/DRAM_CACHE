@@ -24,8 +24,8 @@ module INDEX_EXTRACTOR # (
 
 	// Index extractor -> FIFO
 	input 	wire				fifo_Afull,
-	output 	wire				fifo_write_enable
-	output 	wire 	[127 : 0] 			fifo_i, 		// 1 + 32 + 32 bit
+	output 	wire				fifo_write_enable,
+	output 	wire 	[127 : 0] 			fifo_i 		// 1 + 32 + 32 bit
 );
 
 reg				ready;
@@ -57,8 +57,8 @@ always @(posedge clk) begin
 			write_en <= 1;
 		end
 		else begin
+			ready <= 0;
 			index <= 0;
-			slave_i <= 0;
 			fifo_in[127:0] <= 0;
 			write_en <= 0;
 		end

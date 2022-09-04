@@ -56,10 +56,12 @@ begin
 			arid_i = i;
 			arvalid_i = 1;
 			araddr_i = $urandom % 256;
+			$display("araddr = %d ",araddr_i);
 		end else
 			awid_i = i;
 			awvalid_i = 1;
 			awaddr_i = $urandom % 256;
+			$display("awaddr = %d ",awaddr_i);
 		end
 		#(CLOCK_PERIOD);
 

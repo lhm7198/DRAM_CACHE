@@ -7,90 +7,96 @@ module FIFO # (
 	input clk,
 	input rst_n,
 
-	output full,
-	output A_full,
-	input write_en,
-	input [DATA_BIT_SIZE-1:0] write_data,
+	output full_o,
+	output A_full_o,
+	input write_en_i,
+	input [DATA_BIT_SIZE-1:0] write_data_i,
 
-	output empty,
-	output A_empty,
-	input read_en,
-	output [DATA_BIT_SIZE-1:0] read_data,
+	output empty_o,
+	output A_empty_o,
+	input read_en_i,
+	output [DATA_BIT_SIZE-1:0] read_data_o,
 
 	output [3:0] test
 );
 
 localparam PTR_WIDTH = $clog2(FIFO_SIZE);
 
-reg                     full,
-                        A_full,
-                        empty,
-                        A_empty;
+reg                     	full,
+                        	A_full,
+                        	empty,
+                        	A_empty;
 // internals 
-reg     [DATA_BIT_SIZE-1:0] mem[FIFO_SIZE-1:0];
-reg     [PTR_WIDTH-1:0] tail,   tail_nxt;
-reg     [PTR_WIDTH-1:0] head,   head_nxt;
-reg 	[PTR_WIDTH:0]   cnt,    cnt_nxt;
+reg     [DATA_BIT_SIZE-1:0] 	mem[FIFO_SIZE-1:0];
+reg     [PTR_WIDTH-1:0] 	tail,   tail_n;
+reg     [PTR_WIDTH-1:0] 	head,   head_n;
+reg 	[PTR_WIDTH:0]   	cnt,    cnt_n;
 
-wire                    write   = !full & write_en;
-wire                    read    = !empty & read_en;
+wire                    	write   = !full & write_en_i;
+wire                    	read    = !empty & read_en_i;
 
 // write ptr next 
 always @(*) begin
-    head_nxt    = head;
-    tail_nxt    = tail;
-    cnt_nxt     = cnt;
+    head_n    = head;
+    tail_n    = tail;
+    cnt_n     = cnt;
+
     if (read) begin
 	    if (head == (FIFO_SIZE-1)) begin 
-		    head_nxt = 0;
+		    head_n = 0;
 	    end else begin 
-		    head_nxt = head + 1;        
+		    head_n = head + 1;        
 	    end
     end
 
     if (write) begin
 	    if (tail == (FIFO_SIZE-1)) begin 
-		    tail_nxt = 0;
+		    tail_n = 0;
 	    end else begin 
-		    tail_nxt = tail + 1;        
+		    tail_n = tail + 1;        
 	    end
     end
 
     if (write & !read) begin
-        cnt_nxt = cnt + 1;
+        cnt_n = cnt + 1;
     end
     else if (!write & read) begin
-        cnt_nxt = cnt - 1;
+        cnt_n = cnt - 1;
     end
 end
 
 int i;
 always @(posedge clk) begin
 	if (!rst_n) begin 
-		head <= 0;
-		tail <= 0;
-		cnt <= 0;
+		head 	<= 0;
+		tail 	<= 0;
+		cnt 	<= 0;
+
 		for (i=0; i < FIFO_SIZE; i++)
-			mem[i] <= 0;
-        full <= 1'b0;
-        A_full <= 1'b0;
-        empty <= 1'b1;
-        A_empty <= 1'b1;
-	end else begin 
-        head    <= head_nxt;
-        tail    <= tail_nxt;
-        cnt     <= cnt_nxt;
+			mem[i]	<= 0;
+
+        	full <= 1'b0;
+       		A_full <= 1'b0;
+        	empty <= 1'b1;
+        	A_empty <= 1'b1;
+	end 
+	else begin 
+        	head    <= head_n;
+        	tail    <= tail_n;
+        	cnt     <= cnt_n;
+
 		if (write) begin
-			mem[tail] <= write_data;        
+			mem[tail] <= write_data_i;        
 		end
-        full <= (cnt_nxt==FIFO_SIZE);
-        A_full <= (cnt_nxt>=A_FULL_THR);
-        empty <= (cnt_nxt==0);
-        A_empty <= (cnt_nxt<=A_EMPTY_THR);
+
+        	full <= (cnt_n==FIFO_SIZE);
+        	A_full <= (cnt_n>=A_FULL_THR);
+        	empty <= (cnt_n==0);
+        	A_empty <= (cnt_n<=A_EMPTY_THR);
 	end
 end
 
-assign read_data = mem[head]; 
+assign read_data_o = mem[head]; 
 
 assign test = cnt;
 

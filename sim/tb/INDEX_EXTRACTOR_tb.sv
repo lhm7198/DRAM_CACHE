@@ -19,7 +19,7 @@ wire [3 : 0]	index_o;
 
 reg 		fifo_afull_i;
 wire 		fifo_write_en_o;
-wire [127 : 0]	fifo_data_o;
+wire [80 : 0]	fifo_data_o;
 
 localparam CLOCK_PERIOD = 1000;
 always #(CLOCK_PERIOD/2) clk = ~clk;
@@ -57,10 +57,10 @@ begin
 	for(i=0 ; i<10 ; i++) begin
 		#(CLOCK_PERIOD);
 	
-		$display("%d repetition\n",i);
+		$display("%1d repetition\n",i);
 		rand_r = $urandom % 156 + 100;
 		rand_w = $urandom % 156 + 100;
-		$display("rand_r = %d, rand_w = %d\n",rand_r,rand_w);
+		$display("rand_r = %x, rand_w = %x\n", rand_r, rand_w);
 
 		arvalid_i = 0;
 		arid_i = 0;
@@ -85,8 +85,8 @@ begin
 
 		#(CLOCK_PERIOD);
 
-		$display("index = %d, fifo_data = %d\n", index_o, fifo_data_o);	
-		$display("---------------------------------------------\n");
+		$display("index = %x, fifo_data = %x\n", index_o, fifo_data_o);	
+		$display("-----------------------------------------------------------------------\n");
 	end
 	$finish;
 end

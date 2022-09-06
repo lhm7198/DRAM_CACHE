@@ -71,6 +71,26 @@ begin
 	$finish;
 end
 
-INDEX_EXTRACTOR index_extractor(.clk(clk), .rst_n(rst_n), .arid_i(arid_i), .araddr_i(araddr_i), .arvalid_i(arvalid_i), .arready_o(arready_o), .awid_i(awid_i), .awaddr_i(awaddr_i), .awvalid_i(awvalid_i), .awready_o(awready_o), .index_o(index_o), .fifo_afull_i(fifo_afull_i), .fifo_write_en_o(fifo_write_en_o), .fifo_data_o(fifo_data_o));
+INDEX_EXTRACTOR index_extractor
+(
+	.clk(clk), 
+	.rst_n(rst_n),
+
+	.arid_i(arid_i),
+	.araddr_i(araddr_i),
+	.arvalid_i(arvalid_i),
+	.arready_o(arready_o),
+       
+	.awid_i(awid_i), 
+	.awaddr_i(awaddr_i), 
+	.awvalid_i(awvalid_i), 
+	.awready_o(awready_o), 
+	
+	.index_o(index_o),
+
+	.fifo_afull_i(fifo_afull_i), 
+	.fifo_write_en_o(fifo_write_en_o), 
+	.fifo_data_o(fifo_data_o)
+);
 
 endmodule

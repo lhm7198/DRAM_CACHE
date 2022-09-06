@@ -52,15 +52,15 @@ begin
 	
 	#(CLOCK_PERIOD);
 
-	$display("\nStart");
+	$display("\nStart\n");
 
 	for(i=0 ; i<10 ; i++) begin
 		#(CLOCK_PERIOD);
 	
-		$display("%d repeatition\n",i);
+		$display("%d repetition\n",i);
 		rand_r = $urandom % 156 + 100;
 		rand_w = $urandom % 156 + 100;
-		$display("rand_r = %d, rand_w = %d",rand_r,rand_w);
+		$display("rand_r = %d, rand_w = %d\n",rand_r,rand_w);
 
 		arvalid_i = 0;
 		arid_i = 0;
@@ -86,6 +86,7 @@ begin
 		#(CLOCK_PERIOD);
 
 		$display("index = %d, fifo_data = %d\n", index_o, fifo_data_o);	
+		$display("---------------------------------------------\n");
 	end
 	$finish;
 end

@@ -75,11 +75,11 @@ begin
 
 	case (state)
 		S_IDLE: begin
-			if(arvalid_i & !arbiter) begin
+			if(arvalid_i && (!awvalid_i || !arbiter)) begin
 				state_n					= S_RREQ;
 				arbiter_n 				= 1'b1;
 			end
-			else if(awvalid_i & arbiter) begin
+			else if(awvalid_i && (!arvalid_i || arbiter)) begin
 				state_n					= S_WREQ;
 				arbiter_n 				= 1'b0;
 			end

@@ -39,7 +39,7 @@ localparam 			S_IDLE	= 2'd0,
 reg	[1:0]			state,		state_n;
 
 reg 	[INDEX_WIDTH-1 : 0] 	index,		index_n;
-reg	[127 : 0]		fifo_data,	fifo_data_n;	// 1 + 64 + 16 bit
+reg	[80 : 0]		fifo_data,	fifo_data_n;	// 1 + 64 + 16 bit
 reg				fifo_write_en,	fifo_write_en_n;
 reg				arbiter,	arbiter_n;
 

@@ -4,20 +4,20 @@ module FIFO # (
 	parameter A_FULL_THR = 6,
 	parameter A_EMPTY_THR = 2
 )(
-	input clk,
-	input rst_n,
+	input	wire				clk,
+	input 	wire				rst_n,
 
-	output full_o,
-	output A_full_o,
-	input write_en_i,
-	input [DATA_BIT_SIZE-1:0] write_data_i,
+	output 	wire				full_o,
+	output 	wire				A_full_o,
+	input 	wire				write_en_i,
+	input 	wire	[DATA_BIT_SIZE-1:0] 	write_data_i,
 
-	output empty_o,
-	output A_empty_o,
-	input read_en_i,
-	output [DATA_BIT_SIZE-1:0] read_data_o,
+	output 	wire				empty_o,
+	output 	wire				A_empty_o,
+	input 	wire				read_en_i,
+	output 	wire	[DATA_BIT_SIZE-1:0] 	read_data_o,
 
-	output [3:0] test
+	output	wire	[3:0]			remain_o
 );
 
 localparam PTR_WIDTH = $clog2(FIFO_SIZE);
@@ -52,7 +52,8 @@ always @(*) begin
     if (write) begin
 	    if (tail == (FIFO_SIZE-1)) begin 
 		    tail_n = 0;
-	    end else begin 
+	    end 
+	    else begin 
 		    tail_n = tail + 1;        
 	    end
     end
@@ -75,9 +76,9 @@ always @(posedge clk) begin
 		for (i=0; i < FIFO_SIZE; i++)
 			mem[i]	<= 0;
 
-        	full <= 1'b0;
-       		A_full <= 1'b0;
-        	empty <= 1'b1;
+        	full 	<= 1'b0;
+       		A_full 	<= 1'b0;
+        	empty 	<= 1'b1;
         	A_empty <= 1'b1;
 	end 
 	else begin 
@@ -89,16 +90,21 @@ always @(posedge clk) begin
 			mem[tail] <= write_data_i;        
 		end
 
-        	full <= (cnt_n==FIFO_SIZE);
-        	A_full <= (cnt_n>=A_FULL_THR);
-        	empty <= (cnt_n==0);
+        	full 	<= (cnt_n==FIFO_SIZE);
+        	A_full 	<= (cnt_n>=A_FULL_THR);
+        	empty 	<= (cnt_n==0);
         	A_empty <= (cnt_n<=A_EMPTY_THR);
 	end
 end
 
-assign read_data_o = mem[head]; 
+assign read_data_o 	= mem[head];
 
-assign test = cnt;
+assign full_o 		= full;
+assign A_full_o 	= A_full;
+assign empty_o		= empty;
+assign A_empty_o	= A_empty;
+
+assign remain_o 	= cnt;
 
 endmodule
 

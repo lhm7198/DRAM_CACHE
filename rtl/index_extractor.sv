@@ -15,7 +15,7 @@ module INDEX_EXTRACTOR
 	input	wire 	[ID_WIDTH-1 : 0] 		arid_i,
 	input	wire 	[ADDR_WIDTH-1 : 0] 		araddr_i,
 	input	wire					arvalid_i,
-	output  	wire				arready_o,
+	output  wire					arready_o,
 
 	// AMBA AXI interface (AW channel)
 	input 	wire 	[ID_WIDTH-1 : 0] 		awid_i,

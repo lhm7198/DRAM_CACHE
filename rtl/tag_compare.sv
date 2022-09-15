@@ -19,13 +19,10 @@ module TAG_COMPARE
 	// ? input 	wire	[? : ?]			data_i,
 
 	// Tag comparator -> Reordering Buffer
-	output 	wire	[? : ?]			r_hit_data_o,
-
-	// Tag comparator -> Fill AR FIFO
-	output 	wire				r_hit_o,
-	output	wire				r_miss_o,
-	output	wire				w_hit_o,
-	output 	wire				w_miss_o
+	output 	wire	[80 : 0]		r_hit_data_o,
+	output 	wire	[80 : 0]		r_miss_data_o,
+	output 	wire	[80 : 0]		w_hit_data_o,
+	output 	wire	[80 : 0]		w_miss_data_o,
 );
 
 localparam		S_IDLE	= 3'd0,
@@ -37,11 +34,20 @@ localparam		S_IDLE	= 3'd0,
 reg	[2:0]		state,		state_n;
 
 reg 			rready;
-			
+
+reg	[80:0]		r_hit_data,
+			r_miss_data,
+			w_hit_data,
+			w_miss_data;
 
 always_ff @(posedge clk)
 	if (!rst_n) begin
 		state		<= S_IDLE;
+
+		r_hit_data	<= 80'd0;
+		r_miss_data	<= 80'd0;
+		w_hit_data	<= 80'd0;
+		w_miss_data	<= 80'd0;
 	end
 	else begin
 		state		<= state_n;
@@ -50,8 +56,13 @@ always_ff @(posedge clk)
 always_comb begin
 	state_n 	= state;
 	
+	r_hit_data	= 80'd0;
+	r_miss_data	= 80'd0;
+	w_hit_data	= 80'd0;
+	w_miss_data	= 80'd0;
+	
 	rready		= 1'b1;
-
+	
 	case (state)
 		S_IDLE: begin
 			if(fifo_data_i[80:80] == 0) begin
@@ -72,16 +83,24 @@ always_comb begin
 			end
 		end
 		S_RHIT: begin
-
+			r_hit_data		= fifo_data_i;
 		end
 		S_RMISS: begin
-
+			r_miss_data		= fifo_data_i;
 		end
 		S_WHIT: begin
-
+			w_hit_data		= fifo_data_i;
 		end
 		S_WMISS: begin
-
+			w_miss_data		= fifo_data_i;
 		end
 	endcase
 end
+
+assign rready_o		= rready;
+assign r_hit_data_o	= r_hit_data;
+assign r_hit_data_o	= r_miss_data;
+assign w_hit_data_o	= r_hit_data;
+assign w_hit_data_o	= r_miss_data;
+
+endmodule

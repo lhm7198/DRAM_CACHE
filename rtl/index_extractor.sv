@@ -1,4 +1,4 @@
-`include "../rtl/AXI_TYPEDEF.svh"
+`include "AXI_TYPEDEF.svh"
 
 module INDEX_EXTRACTOR
 #(

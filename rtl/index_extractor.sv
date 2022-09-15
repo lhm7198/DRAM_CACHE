@@ -1,11 +1,11 @@
-//`include "../rtl/AXI_TYPEDEF.svh"
+`include "../rtl/AXI_TYPEDEF.svh"
 
 module INDEX_EXTRACTOR
 #(
-	parameter ADDR_WIDTH	= 64, //`AXI_ADDR_WIDTH,
-	parameter DATA_WIDTH	= 32, //`AXI_DATA_WIDTH,
-	parameter ID_WIDTH	= 16, //`AXI_ID_WIDTH,
-	parameter INDEX_WIDTH	= 4 //`INDEX_WIDTH
+	parameter ADDR_WIDTH	= `AXI_ADDR_WIDTH, // 64
+	parameter DATA_WIDTH	= `AXI_DATA_WIDTH, // 32
+	parameter ID_WIDTH	= `AXI_ID_WIDTH, // 16
+	parameter INDEX_WIDTH	= `INDEX_WIDTH // 4
 )
 (
 	input	wire					clk,

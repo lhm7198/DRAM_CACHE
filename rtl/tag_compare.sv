@@ -1,6 +1,7 @@
 module TAG_COMPARE
 #(
-	parameter TAG_BIT_SIZE = 8
+	parameter INDEX_BIT_SIZE = 8,
+	parameter TAG_BIT_SIZE	= 56
 )
 (
 	input	wire				clk,
@@ -8,6 +9,7 @@ module TAG_COMPARE
 
 	// AMBA AXI interface (R channel)
 	input	wire	[71 : 0]		rdata_i,
+	input 	wire	[TAG_BIT_SIZE-1 : 0]	rtag_i,
 	input	wire				rvalid_i,
 	output 	wire				rready_o,
 
@@ -18,10 +20,10 @@ module TAG_COMPARE
 	// ? input 	wire	[? : ?]			data_i,
 
 	// Tag comparator -> Reordering Buffer
-	output 	wire	[80 : 0]		r_hit_data_o,
-	output 	wire	[80 : 0]		r_miss_data_o,
-	output 	wire	[80 : 0]		w_hit_data_o,
-	output 	wire	[80 : 0]		w_miss_data_o
+	output 	wire	[71 : 0]		r_hit_data_o,
+	output 	wire	[71 : 0]		r_miss_data_o,
+	output 	wire	[71 : 0]		w_hit_data_o,
+	output 	wire	[71 : 0]		w_miss_data_o
 );
 
 localparam		S_IDLE	= 3'd0,
@@ -32,7 +34,7 @@ localparam		S_IDLE	= 3'd0,
 
 reg	[2:0]		state,		state_n;
 
-reg	[80:0]		r_hit_data,	r_hit_data_n,
+reg	[71:0]		r_hit_data,	r_hit_data_n,
 			r_miss_data,	r_miss_data_n,
 			w_hit_data,	w_hit_data_n,
 			w_miss_data,	w_miss_data_n;
@@ -71,7 +73,7 @@ always_comb begin
 	case (state)
 		S_IDLE: begin
 			if(fifo_data_i[80:80] == 0) begin
-				if(fifo_data_i[63 : TAG_BIT_SIZE] == rdata_i[]) begin
+				if(fifo_data_i[63 : INDEX_BIT_SIZE] == rtag_i) begin
 					state_n		= S_RHIT;
 				end
 				else begin
@@ -79,7 +81,7 @@ always_comb begin
 				end
 			end
 			else begin
-				if(fifo_data_i[63 : TAG_BIT_SIZE] == rtag_i) begin
+				if(fifo_data_i[63 : INDEX_BIT_SIZE] == rtag_i) begin
 					state_n		= S_WHIT;
 				end
 				else begin
@@ -89,31 +91,45 @@ always_comb begin
 		end
 		S_RHIT: begin
 			rready			= 1'b0;
-			r_hit_data_n		= fifo_data_i;
+			r_hit_data_n		= rdata_i;
+			r_miss_data_n		= 0;
+			w_hit_data_n		= 0;
+			w_miss_data_n		= 0;
 			state_n			= S_IDLE;
 		end
 		S_RMISS: begin
 			rready			= 1'b0;
-			r_miss_data_n		= fifo_data_i;
+			r_hit_data_n		= 0;
+			r_miss_data_n		= rdata_i;
+			w_hit_data_n		= 0;
+			w_miss_data_n		= 0;
 			state_n			= S_IDLE;
 		end
 		S_WHIT: begin
 			rready			= 1'b0;
-			w_hit_data_n		= fifo_data_i;
+			r_hit_data_n		= 0;
+			r_miss_data_n		= 0;
+			w_hit_data_n		= rdata_i;
+			w_miss_data_n		= 0;
 			state_n			= S_IDLE;
+	
 		end
 		S_WMISS: begin
 			rready			= 1'b0;
-			w_miss_data_n		= fifo_data_i;
+			r_hit_data_n		= 0;
+			r_miss_data_n		= 0;
+			w_hit_data_n		= 0;
+			w_miss_data_n		= rdata_i;
 			state_n			= S_IDLE;
+
 		end
 	endcase
 end
 
 assign rready_o		= rready;
 assign r_hit_data_o	= r_hit_data;
-assign r_hit_data_o	= r_miss_data;
-assign w_hit_data_o	= r_hit_data;
-assign w_hit_data_o	= r_miss_data;
+assign r_miss_data_o	= r_miss_data;
+assign w_hit_data_o	= w_hit_data;
+assign w_miss_data_o	= w_miss_data;
 
 endmodule

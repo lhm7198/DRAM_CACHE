@@ -1,14 +1,14 @@
 module TAG_COMPARE
 #(
-	parameter TAG_BIT_SIZE = 4
+	parameter TAG_BIT_SIZE = 8
 )
 (
 	input	wire				clk,
 	input 	wire				rst_n,
 
 	// AMBA AXI interface (R channel)
-	input	wire	[ID_WIDTH-1 : 0]	rid_i,
-	input	wire	[? : ?]			rdata_i,
+	input	wire	[TAG_BIT_SIZE-1 : 0]	rtag_i,
+	input	wire	[63 : 0]		rdata_i,
 	input	wire				rvalid_i,
 	output 	wire				rready_o,
 
@@ -22,7 +22,7 @@ module TAG_COMPARE
 	output 	wire	[80 : 0]		r_hit_data_o,
 	output 	wire	[80 : 0]		r_miss_data_o,
 	output 	wire	[80 : 0]		w_hit_data_o,
-	output 	wire	[80 : 0]		w_miss_data_o,
+	output 	wire	[80 : 0]		w_miss_data_o
 );
 
 localparam		S_IDLE	= 3'd0,
@@ -66,7 +66,7 @@ always_comb begin
 	case (state)
 		S_IDLE: begin
 			if(fifo_data_i[80:80] == 0) begin
-				if(fifo_data_i[63 : TAG_BIT_SIZE] == tag_i[63-TAG_BIT_SIZE : 0]) begin
+				if(fifo_data_i[63 : TAG_BIT_SIZE] == rtag_i) begin
 					state_n		= S_RHIT;
 				end
 				else begin
@@ -74,7 +74,7 @@ always_comb begin
 				end
 			end
 			else begin
-				if(fifo_data_i[63 : TAG_BIT_SIZE] == tag_i[63-TAG_BIT_SIZE : 0]) begin
+				if(fifo_data_i[63 : TAG_BIT_SIZE] == rtag_i) begin
 					state_n		= S_WHIT;
 				end
 				else begin

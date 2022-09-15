@@ -33,33 +33,39 @@ localparam		S_IDLE	= 3'd0,
 
 reg	[2:0]		state,		state_n;
 
-reg 			rready;
+reg	[80:0]		r_hit_data,	r_hit_data_n,
+			r_miss_data,	r_miss_data_n,
+			w_hit_data,	w_hit_data_n,
+			w_miss_data,	w_miss_data_n;
 
-reg	[80:0]		r_hit_data,
-			r_miss_data,
-			w_hit_data,
-			w_miss_data;
+
+reg 			rready;
 
 always_ff @(posedge clk)
 	if (!rst_n) begin
 		state		<= S_IDLE;
 
-		r_hit_data	<= 80'd0;
-		r_miss_data	<= 80'd0;
-		w_hit_data	<= 80'd0;
-		w_miss_data	<= 80'd0;
+		r_hit_data	<= 0;
+		r_miss_data	<= 0;
+		w_hit_data	<= 0;
+		w_miss_data	<= 0;
 	end
 	else begin
 		state		<= state_n;
+
+		r_hit_data	<= r_hit_data_n;
+		r_miss_data	<= r_miss_data_n;
+		w_hit_data	<= w_hit_data_n;
+		w_miss_data	<= w_miss_data_n;
 	end
 
 always_comb begin
 	state_n 	= state;
 	
-	r_hit_data	= 80'd0;
-	r_miss_data	= 80'd0;
-	w_hit_data	= 80'd0;
-	w_miss_data	= 80'd0;
+	r_hit_data_n	= r_hit_data;
+	r_miss_data_n	= r_miss_data;
+	w_hit_data_n	= w_hit_data;
+	w_miss_data_n	= w_miss_data;
 	
 	rready		= 1'b1;
 	
@@ -83,16 +89,24 @@ always_comb begin
 			end
 		end
 		S_RHIT: begin
-			r_hit_data		= fifo_data_i;
+			rready			= 1'b0;
+			r_hit_data_n		= fifo_data_i;
+			state_n			= S_IDLE;
 		end
 		S_RMISS: begin
-			r_miss_data		= fifo_data_i;
+			rready			= 1'b0;
+			r_miss_data_n		= fifo_data_i;
+			state_n			= S_IDLE;
 		end
 		S_WHIT: begin
-			w_hit_data		= fifo_data_i;
+			rready			= 1'b0;
+			w_hit_data_n		= fifo_data_i;
+			state_n			= S_IDLE;
 		end
 		S_WMISS: begin
-			w_miss_data		= fifo_data_i;
+			rready			= 1'b0;
+			w_miss_data_n		= fifo_data_i;
+			state_n			= S_IDLE;
 		end
 	endcase
 end

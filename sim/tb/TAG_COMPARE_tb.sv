@@ -43,7 +43,7 @@ begin
 	rtag		[7 : 0]			= 10;
 	rdata		[63 : 0]		= 100;
 
-	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
+	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d\n", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
 	#(CLOCK_PERIOD);
 
 	fifo_data	[80 : 80] 		= 0;
@@ -51,7 +51,7 @@ begin
 	rtag		[7 : 0]			= 11;
 	rdata		[63 : 0]		= 200;
 
-	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
+	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d\n", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
 	#(CLOCK_PERIOD);
 
 
@@ -60,7 +60,7 @@ begin
 	rtag		[7 : 0]			= 10;
 	rdata		[63 : 0]		= 100;
 	
-	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
+	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d\n", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
 	#(CLOCK_PERIOD);
 
 	fifo_data	[80 : 80] 		= 1;
@@ -68,7 +68,7 @@ begin
 	rtag		[7 : 0]			= 11;
 	rdata		[63 : 0]		= 100;
 	
-	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
+	$display("r hit data : %d, r miss data : %d, w hit data : %d, r miss data : %d\n", r_hit_data, r_miss_data, w_hit_data, w_miss_data);
 	#(CLOCK_PERIOD);
 	
 	$finish;

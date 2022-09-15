@@ -44,51 +44,61 @@ begin
 
 	$display("START\n");
 
+	rvalid_i 	= 1'b1;
+	#(CLOCK_PERIOD);
+
 	// read hit
 	fifo_data_i	[80 : 80] 		= 1'd0;
 	fifo_data_i	[63 : 8] 		= 56'd10;
 	rtag_i		[55 : 0]		= 56'd10;
 	rdata_i		[71 : 0]		= 72'd100;
-
-	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	
 	
 	// read miss
 	fifo_data_i	[80 : 80] 		= 1'd0;
 	fifo_data_i	[63 : 8] 		= 56'd10;
-	rtag_i		[55 : 0]		= 56'd11;
+	rtag_i		[55 : 0]		= 56'd20;
 	rdata_i		[71 : 0]		= 72'd200;
-
-	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
-
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	
 	// write hit
 	fifo_data_i	[80 : 80] 		= 1'd1;
 	fifo_data_i	[63 : 8] 		= 56'd10;
 	rtag_i		[55 : 0]		= 56'd10;
 	rdata_i		[71 : 0]		= 72'd300;
-
-	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
+	
 	// write miss
 	fifo_data_i	[80 : 80] 		= 1'd1;
 	fifo_data_i	[63 : 8] 		= 56'd10;
-	rtag_i		[55 : 0]		= 56'd11;
+	rtag_i		[55 : 0]		= 56'd20;
 	rdata_i		[71 : 0]		= 72'd400;
+	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 	
-	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
-	
-	#(CLOCK_PERIOD);
-	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
-	
+/*	
 	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
 	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
 	#(CLOCK_PERIOD);
 	$display("r hit data : %d, r miss data : %d, w hit data : %d, w miss data : %d\n", r_hit_data_o, r_miss_data_o, w_hit_data_o, w_miss_data_o);
+	*/
+
 	$finish;
 end
 

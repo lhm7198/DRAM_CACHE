@@ -5,17 +5,20 @@ module INDEX_EXTRACTOR_TB;
 reg clk = 1'b0;
 reg rst_n;
 
-reg [31 : 0]	arid_i;
-reg [31 : 0]	araddr_i;
+reg [15 : 0]	arid_i;
+reg [63 : 0]	araddr_i;
 reg		arvalid_i;
 wire		arready_o;
 
-reg [31 : 0]	awid_i;
-reg [31 : 0]	awaddr_i;
+reg [15 : 0]	awid_i;
+reg [63 : 0]	awaddr_i;
 reg		awvalid_i;
 wire		awready_o;
 
-wire [3 : 0]	index_o;
+wire [15 : 0]	arid_o;
+wire [3 : 0] 	araddr_o;
+wire		arvalid_o;
+reg		arready_i;
 
 reg 		fifo_afull_i;
 wire 		fifo_write_en_o;
@@ -27,7 +30,7 @@ always #(CLOCK_PERIOD/2) clk = ~clk;
 int read_index;
 int write_index;
 int i;
-int rand_r, rand_w;
+int r_addr, w_addr;
 
 initial
 begin
@@ -41,7 +44,10 @@ begin
 	awaddr_i = 0;
 	awvalid_i = 0;
 
+	arready_i = 0;
+
 	fifo_afull_i = 0;
+
 	read_index = 0;
 	write_index = 0;
 	
@@ -58,9 +64,9 @@ begin
 		#(CLOCK_PERIOD);
 	
 		$display("%1d repetition\n",i);
-		rand_r = $urandom % 156 + 100;
-		rand_w = $urandom % 156 + 100;
-		$display("rand_r = %x, rand_w = %x\n", rand_r, rand_w);
+		r_addr = $urandom % 156 + 100;
+		w_addr = $urandom % 156 + 100;
+		$display("r_addr = %x, w_addr = %x\n", r_addr, w_addr);
 
 		arvalid_i = 0;
 		arid_i = 0;
@@ -69,23 +75,25 @@ begin
 		awvalid_i = 0;
 		awid_i = 0;
 		awaddr_i = 0;
+
+
 		
-		if(rand_r % 2 == 0) begin
+		if(r_addr % 2 == 0) begin
 			arid_i = read_index;
 			arvalid_i = 1;
-			araddr_i = rand_r;
+			araddr_i = r_addr;
 			read_index++;
 		end
-		if(rand_w % 2 == 0) begin
+		if(w_addr % 2 == 0) begin
 			awid_i = write_index;
 			awvalid_i = 1;
-			awaddr_i = rand_w;
+			awaddr_i = w_addr;
 			write_index++;
 		end
 
 		#(CLOCK_PERIOD);
 
-		$display("index = %x, fifo_data = %x\n", index_o, fifo_data_o);	
+		$display("index = %x, fifo_data = %x\n", araddr_o, fifo_data_o);	
 		$display("-----------------------------------------------------------------------\n");
 	end
 	$finish;
@@ -105,9 +113,12 @@ INDEX_EXTRACTOR index_extractor
 	.awaddr_i(awaddr_i), 
 	.awvalid_i(awvalid_i), 
 	.awready_o(awready_o), 
-	
-	.index_o(index_o),
 
+	.arid_o(arid_o),
+	.araddr_o(araddr_o),
+	.arvalid_o(arvalid_o),
+	.arready_i(arready_i),
+	
 	.fifo_afull_i(fifo_afull_i), 
 	.fifo_write_en_o(fifo_write_en_o), 
 	.fifo_data_o(fifo_data_o)

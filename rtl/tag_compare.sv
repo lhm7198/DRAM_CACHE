@@ -16,9 +16,6 @@ module TAG_COMPARE
 	// FIFO -> Tag comparator
 	input	wire	[80 : 0]		fifo_data_i,
 	
-	// ? input 	wire	[63-TAG_BIT_SIZE : 0]	tag_i,
-	// ? input 	wire	[? : ?]			data_i,
-
 	// Tag comparator -> Reordering Buffer
 	output 	wire	[71 : 0]		r_hit_data_o,
 	output 	wire	[71 : 0]		r_miss_data_o,
@@ -72,7 +69,10 @@ always_comb begin
 	
 	case (state)
 		S_IDLE: begin
-			if(fifo_data_i[80:80] == 0) begin
+			if(!rvalid_i) begin
+				state_n			= state;
+			end
+			else if(fifo_data_i[80:80] == 0) begin
 				if(fifo_data_i[63 : INDEX_BIT_SIZE] == rtag_i) begin
 					state_n		= S_RHIT;
 				end
@@ -80,7 +80,7 @@ always_comb begin
 					state_n		= S_RMISS;
 				end
 			end
-			else begin
+			else if(fifo_data_i[80:80] == 1) begin
 				if(fifo_data_i[63 : INDEX_BIT_SIZE] == rtag_i) begin
 					state_n		= S_WHIT;
 				end
@@ -127,6 +127,7 @@ always_comb begin
 end
 
 assign rready_o		= rready;
+
 assign r_hit_data_o	= r_hit_data;
 assign r_miss_data_o	= r_miss_data;
 assign w_hit_data_o	= w_hit_data;

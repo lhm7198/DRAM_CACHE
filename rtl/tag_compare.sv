@@ -7,8 +7,7 @@ module TAG_COMPARE
 	input 	wire				rst_n,
 
 	// AMBA AXI interface (R channel)
-	input	wire	[TAG_BIT_SIZE-1 : 0]	rtag_i,
-	input	wire	[63 : 0]		rdata_i,
+	input	wire	[71 : 0]		rdata_i,
 	input	wire				rvalid_i,
 	output 	wire				rready_o,
 
@@ -72,7 +71,7 @@ always_comb begin
 	case (state)
 		S_IDLE: begin
 			if(fifo_data_i[80:80] == 0) begin
-				if(fifo_data_i[63 : TAG_BIT_SIZE] == rtag_i) begin
+				if(fifo_data_i[63 : TAG_BIT_SIZE] == rdata_i[]) begin
 					state_n		= S_RHIT;
 				end
 				else begin

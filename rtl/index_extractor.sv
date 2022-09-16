@@ -42,7 +42,7 @@ localparam 			S_IDLE	= 2'd0,
 reg	[1:0]					state,		state_n;
 
 reg 	[INDEX_WIDTH-1 : 0] 			index,		index_n;
-reg	[ID_WIDTH-1 : 0] 				tid,		tid_n;
+reg	[ID_WIDTH-1 : 0] 			tid,		tid_n;
 reg	[ADDR_WIDTH + ID_WIDTH : 0]		fifo_data,	fifo_data_n;	// 1 + 64 + 16 bit
 reg						fifo_write_en,	fifo_write_en_n;
 reg						arbiter,	arbiter_n;
@@ -86,6 +86,8 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			fifo_write_en_n					= 1'b0;
+
 			if(fifo_afull_i) begin
 				state_n					= state;
 				arbiter_n				= arbiter;
@@ -104,7 +106,7 @@ always_comb begin
 			arvalid								= 1'b1;
 
 			index_n 							= araddr_i[INDEX_WIDTH-1 : 0];
-			tid_n								= araddr_i;
+			tid_n								= arid_i;
 
 			fifo_write_en_n							= 1'b1;
 
@@ -119,7 +121,7 @@ always_comb begin
 			arvalid								= 1'b1;
 
 			index_n 							= awaddr_i[INDEX_WIDTH-1 : 0];
-			tid_n								= awaddr_i;
+			tid_n								= awid_i;
 
 			fifo_write_en_n							= 1'b1;
 		

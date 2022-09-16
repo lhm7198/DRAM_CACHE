@@ -14,6 +14,8 @@ module TAG_COMPARE
 	output 	wire				rready_o,
 
 	// FIFO -> Tag comparator
+	input	wire				fifo_aempty_i,
+	//input	wire				fifo_read_en_i,
 	input	wire	[80 : 0]		fifo_data_i,
 	
 	// Tag comparator -> Reordering Buffer

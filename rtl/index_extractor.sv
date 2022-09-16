@@ -104,7 +104,9 @@ always_comb begin
 			arvalid								= 1'b1;
 
 			index_n 							= araddr_i[INDEX_WIDTH-1 : 0];
-			tid_n							= araddr_i;
+			tid_n								= araddr_i;
+
+			fifo_write_en_n							= 1'b1;
 
 			fifo_data_n[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]	= 1'b0; 	//read
 			fifo_data_n[ADDR_WIDTH + ID_WIDTH - 1 : ADDR_WIDTH]		= arid_i;
@@ -117,8 +119,10 @@ always_comb begin
 			arvalid								= 1'b1;
 
 			index_n 							= awaddr_i[INDEX_WIDTH-1 : 0];
-			tid_n							= awaddr_i;
+			tid_n								= awaddr_i;
 
+			fifo_write_en_n							= 1'b1;
+		
 			fifo_data_n[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]	= 1'b1; 	//write
 			fifo_data_n[ADDR_WIDTH + ID_WIDTH - 1 : ADDR_WIDTH]		= awid_i;
 			fifo_data_n[ADDR_WIDTH -1 : 0]					= awaddr_i;

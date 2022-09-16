@@ -42,7 +42,9 @@ module DRAM_CACHE_TOP
 	wire 	[ADDR_WIDTH + ID_WIDTH : 0] 	fifo_wdata; 	// 1 + 64 + 16 bit
 
 	// FIFO -> Tag compare
-	wire	[ADDR_WIDTH + ID_WIDTH : 0]	fifo_rdata;	
+	wire					fifo_aempty;
+	wire					fifo_read_en;
+	wire	[ADDR_WIDTH + ID_WIDTH : 0]	fifo_rdata;	// 1 + 64 + 16 bit
 	
 	// Tag compare -> FIFO
 	wire	[71 : 0]			r_hit_data;
@@ -97,4 +99,16 @@ module DRAM_CACHE_TOP
 		.clk(clk),
 		.rst_n(rst_n),
 
+		.rdata_i(rdata_i),
+		.rtag_i(rtag_i),
+		.rvalid_i(rvalid_i),
+		.rready_o(rready_o),
+
+		.fifo_aempty_i(fifo_aempty),
+		.fifo_data_i(fifo_rdata),
+
+		.r_hit_data_o(r_hit_data),
+		.r_miss_data_o(r_miss_data),
+		.w_hit_data_o(w_hit_data),
+		.w_miss_data_o(w_miss_data)
 	);

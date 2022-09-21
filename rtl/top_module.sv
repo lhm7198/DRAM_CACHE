@@ -78,7 +78,7 @@ module DRAM_CACHE_TOP
 		.fifo_data_o(fifo_data)
 	);
 
-	FIFO u_fifo(
+	FIFO u_tag_fifo(
 		.clk(clk),
 		.rst_n(rst_n),
 

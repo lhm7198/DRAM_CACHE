@@ -1,7 +1,7 @@
 `include "TYPEDEF.svh"
 
 module FIFO # (
-	parameter DATA_BIT_SIZE = `FIFO_DATA_WIDTH, // 8
+	parameter DATA_WIDTH = `FIFO_DATA_WIDTH, // 8
 	parameter FIFO_SIZE = `FIFO_SIZE, // 8
 	parameter A_FULL_THR = `FIFO_A_FULL_THR, // 6
 	parameter A_EMPTY_THR = `FIFO_A_EMPTY_THR // 2
@@ -12,24 +12,24 @@ module FIFO # (
 	output 	wire				full_o,
 	output 	wire				A_full_o,
 	input 	wire				write_en_i,
-	input 	wire	[DATA_BIT_SIZE-1:0] 	write_data_i,
+	input 	wire	[DATA_WIDTH - 1 : 0] 	write_data_i,
 
 	output 	wire				empty_o,
 	output 	wire				A_empty_o,
 	input 	wire				read_en_i,
-	output 	wire	[DATA_BIT_SIZE-1:0] 	read_data_o,
+	output 	wire	[DATA_WIDTH - 1 : 0] 	read_data_o,
 
 	output	wire	[3:0]			remain_o
 );
 
-localparam PTR_WIDTH = $clog2(FIFO_SIZE);
+localparam PTR_WIDTH = $clog2(FIFO_SIZE + 1);
 
 reg                     	full,
                         	A_full,
                         	empty,
                         	A_empty;
 // internals 
-reg     [DATA_BIT_SIZE-1:0] 	mem[FIFO_SIZE-1:0];
+reg     [DATA_WIDTH-1:0] 	mem[FIFO_SIZE-1:0];
 reg     [PTR_WIDTH-1:0] 	tail,   tail_n;
 reg     [PTR_WIDTH-1:0] 	head,   head_n;
 reg 	[PTR_WIDTH:0]   	cnt,    cnt_n;

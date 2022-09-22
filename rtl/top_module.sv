@@ -78,7 +78,14 @@ module DRAM_CACHE_TOP
 		.fifo_data_o(fifo_data)
 	);
 
-	FIFO u_tag_fifo(
+	FIFO u_tag_fifo
+	#(
+		parameter DATA_WIDTH = ADDR_WIDTH + ID_WIDTH + 1,
+		parameter FIFO_SIZE = 8,
+		parameter A_FULL_THR = 6,
+		parameter A_EMPTY_THR = 2
+	)
+	(
 		.clk(clk),
 		.rst_n(rst_n),
 
@@ -91,8 +98,6 @@ module DRAM_CACHE_TOP
 		.A_empty_o(),
 		.read_en_i(),
 		.read_data_o(fifo_rdata),
-
-		.remain_o()
 	);	
 
 	TAG_COMPARE u_tag_compare(

@@ -2,17 +2,20 @@
 
 module TAG_COMPARE
 #(
-	parameter INDEX_WIDTH 		= `INDEX_WIDTH,
-	parameter OFFSET_WIDTH 		= `OFFSET_WIDTH,
 	parameter ADDR_WIDTH 		= `AXI_ADDR_WIDTH,
 	parameter ID_WIDTH 		= `AXI_ID_WIDTH,
-	parameter BURST_SIZE	 	= `BURST_SIZE
 	
-//	parameter DRAM_DATA_WIDTH 	= `DRAM_DATA_WIDTH
+	parameter INDEX_WIDTH 		= `INDEX_WIDTH,
+	parameter OFFSET_WIDTH 		= `OFFSET_WIDTH,
+	
+	parameter BURST_SIZE	 	= `BURST_SIZE,
+	parameter BLANK_WIDTH		= 'BLANK_WIDTH,
+
+	parameter TOTAL_CYCLE		= `TOTAL_CYCLE
 )
 (
-	input	wire				clk,
-	input 	wire				rst_n,
+	input	wire					clk,
+	input 	wire					rst_n,
 
 	// AMBA AXI interface (R channel)
 	input	wire	[ID_WIDTH - 1 : 0]		rid_i,
@@ -23,33 +26,36 @@ module TAG_COMPARE
 	output 	wire					rready_o,
 
 	// FIFO <-> Tag comparator
-	input	wire					fifo_aempty_i,
-	output	wire					fifo_read_en_o,
-	input	wire	[ADDR_WIDTH + ID_WIDTH : 0]	fifo_data_i,
+	input	wire					tag_fifo_aempty_i,
+	output	wire					tag_fifo_rden_o,
+	input	wire	[ADDR_WIDTH + ID_WIDTH : 0]	tag_fifo_data_i,
 	
 	// Tag comparator <-> Reordering Buffer
-	output 	wire	[71 : 0]			r_hit_data_o,
-	output 	wire	[71 : 0]			r_miss_data_o,
-	output 	wire	[71 : 0]			w_hit_data_o,
-	output 	wire	[71 : 0]			w_miss_data_o
+	output 	wire	[BURST_SIZE - 1 : 0]		r_hit_data_o,
+	output 	wire	[BURST_SIZE - 1 : 0]		r_miss_data_o,
+	output 	wire	[BURST_SIZE - 1 : 0]		w_hit_data_o,
+	output 	wire	[BURST_SIZE - 1 : 0]		w_miss_data_o
 );
 
-localparam		S_IDLE	= 3'd0,
-			S_RHIT	= 3'd1,
-			S_RMISS	= 3'd2,
-			S_WHIT	= 3'd3,
-			S_WMISS = 3'd4;
+localparam			S_IDLE	= 3'd0,
+				S_RHIT	= 3'd1,
+				S_RMISS	= 3'd2,
+				S_WHIT	= 3'd3,
+				S_WMISS = 3'd4;
 
-reg	[2:0]		state,		state_n;
+reg	[2:0]			state,		state_n;
 
-reg	[71:0]		r_hit_data,	r_hit_data_n,
-			r_miss_data,	r_miss_data_n,
-			w_hit_data,	w_hit_data_n,
-			w_miss_data,	w_miss_data_n;
+reg	[BURST_SIZE - 1 : 0]	r_hit_data,	r_hit_data_n,
+				r_miss_data,	r_miss_data_n,
+				w_hit_data,	w_hit_data_n,
+				w_miss_data,	w_miss_data_n;
+reg				tag_fifo_rden, 	tag_fifo_rden_n;
+reg 				rready;
 
+wire				read  = !fifo_data_i[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH];
+wire				valid = read_data_i[BURST_SIZE - 1 : BURST_SIZE - 1];
 
-reg 			rready;
-
+int				cycle_cnt;
 always_ff @(posedge clk)
 	if (!rst_n) begin
 		state		<= S_IDLE;
@@ -58,6 +64,9 @@ always_ff @(posedge clk)
 		r_miss_data	<= 0;
 		w_hit_data	<= 0;
 		w_miss_data	<= 0;
+		tag_fifo_rden	<= 0;
+
+		cycle_cnt	<= 0;
 	end
 	else begin
 		state		<= state_n;
@@ -66,6 +75,14 @@ always_ff @(posedge clk)
 		r_miss_data	<= r_miss_data_n;
 		w_hit_data	<= w_hit_data_n;
 		w_miss_data	<= w_miss_data_n;
+		tag_fifo_rden	<= tag_fifo_rden_n;
+
+		if(cycle_cnt < TOTAL_CYCLE && cycle_cnt >= 1) begin
+			cycle_cnt <= cycle_cnt + 1;
+		end
+		else begin
+			cycle_cnt <= 0;
+		end
 	end
 
 always_comb begin
@@ -75,26 +92,35 @@ always_comb begin
 	r_miss_data_n	= r_miss_data;
 	w_hit_data_n	= w_hit_data;
 	w_miss_data_n	= w_miss_data;
-	
-	rready		= 1'b1;
+	tag_fifo_rden_n = tag_fifo_rden;
+
+	rready		= 1;
 	
 	case (state)
 		S_IDLE: begin
 			if(!rvalid_i) begin
 				state_n			= state;
 			end
-			else if(fifo_data_i[80:80] == 0) begin
-				if(fifo_data_i[63 : INDEX_BIT_SIZE] == rtag_i) begin
+			else if(read) begin
+				cycle_cnt 		= 1;
+
+				// read hit(valid && same tag) 
+				if(valid && fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[BURST_SIZE - 3 : BLANK_WIDTH]) begin
 					state_n		= S_RHIT;
 				end
+				// read miss
 				else begin
 					state_n		= S_RMISS;
 				end
 			end
-			else if(fifo_data_i[80:80] == 1) begin
-				if(fifo_data_i[63 : INDEX_BIT_SIZE] == rtag_i) begin
+			else begin
+				cycle_cnt		= 1;
+
+				// write hit(valid && same tag)
+				if(valid && fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[BURST_SIZE - 3 : BLANK_WIDTH]) begin
 					state_n		= S_WHIT;
 				end
+				// write miss
 				else begin
 					state_n		= S_WMISS;
 				end
@@ -102,36 +128,52 @@ always_comb begin
 		end
 		S_RHIT: begin
 			rready			= 1'b0;
-			r_hit_data_n		= rdata_i;
-			r_miss_data_n		= 0;
-			w_hit_data_n		= 0;
-			w_miss_data_n		= 0;
-			state_n			= S_IDLE;
+
+			if(cycle_cnt == 1) begin
+				state_n		= S_RHIT;
+			end
+			else if(cycle_cnt >= 2 && cycle_cnt <= 9) begin
+				r_hit_data_n	= rdata_i;
+				state_n		= S_RHIT;
+			end
+			else begin
+				state_n		= S_IDLE;
+			end
 		end
 		S_RMISS: begin
 			rready			= 1'b0;
-			r_hit_data_n		= 0;
-			r_miss_data_n		= rdata_i;
-			w_hit_data_n		= 0;
-			w_miss_data_n		= 0;
-			state_n			= S_IDLE;
+			
+			if(cycle_cnt >= 2 && !rlast_i) begin
+				//r_miss_data_n	= 
+				state_n		= S_IDLE;
+			end
 		end
 		S_WHIT: begin
 			rready			= 1'b0;
-			r_hit_data_n		= 0;
-			r_miss_data_n		= 0;
-			w_hit_data_n		= rdata_i;
-			w_miss_data_n		= 0;
-			state_n			= S_IDLE;
-	
+
+			if(cycle_cnt == 1) begin
+				state_n		= S_WHIT;
+			end
+			else if(cycle_cnt >= 2 && cycle_cnt <= 9) begin
+				w_hit_data_n	= rdata_i;
+				state_n		= S_WHIT;
+			end
+			else begin
+				state_n		= S_IDLE;
+			end
 		end
 		S_WMISS: begin
 			rready			= 1'b0;
-			r_hit_data_n		= 0;
-			r_miss_data_n		= 0;
-			w_hit_data_n		= 0;
-			w_miss_data_n		= rdata_i;
-			state_n			= S_IDLE;
+			if(cycle_cnt == 1) begin
+				state_n		= S_WMISS;
+			end
+			else if(cycle_cnt >= 2 && cycle_cnt <= 9) begin
+				w_miss_data_n	= rdata_i;
+				state_n		= S_WMISS;
+			end
+			else begin
+				state_n		= S_IDLE;
+			end
 
 		end
 	endcase

@@ -12,8 +12,14 @@
 `define FIFO_A_FULL_THR		6
 `define FIFO_A_EMPTY_THR	2
 
-`define BURST_SIZE	 	64
+// ADDRESS
 `define INDEX_WIDTH		4
 `define OFFSET_WIDTH		6
+
+// DRAM TAG
+`define BURST_SIZE	 	64
+`define BLANK_WIDTH		46
+
+`define TOTAL_CYCLE		9
 
 `endif

@@ -1,8 +1,8 @@
-`include "FIFO_TYPEDEF.svh"
+`include "TYPEDEF.svh"
 
 module FIFO # (
 	parameter DATA_BIT_SIZE = `FIFO_DATA_WIDTH, // 8
-	parameter FIFO_SIZE = `FIFO_HEIGHT, // 8
+	parameter FIFO_SIZE = `FIFO_SIZE, // 8
 	parameter A_FULL_THR = `FIFO_A_FULL_THR, // 6
 	parameter A_EMPTY_THR = `FIFO_A_EMPTY_THR // 2
 )(

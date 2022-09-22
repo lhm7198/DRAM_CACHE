@@ -1,28 +1,37 @@
+`include "AXI_TYPEDEF.svh"
+
 module TAG_COMPARE
 #(
-	parameter INDEX_BIT_SIZE = 8,
-	parameter TAG_BIT_SIZE	= 56
+	parameter INDEX_WIDTH 		= `INDEX_WIDTH,
+	parameter OFFSET_WIDTH 		= `OFFSET_WIDTH,
+	parameter ADDR_WIDTH 		= `AXI_ADDR_WIDTH,
+	parameter ID_WIDTH 		= `AXI_ID_WIDTH,
+	parameter BURST_SIZE	 	= `BURST_SIZE
+	
+//	parameter DRAM_DATA_WIDTH 	= `DRAM_DATA_WIDTH
 )
 (
 	input	wire				clk,
 	input 	wire				rst_n,
 
 	// AMBA AXI interface (R channel)
-	input	wire	[71 : 0]		rdata_i,
-	input 	wire	[TAG_BIT_SIZE-1 : 0]	rtag_i,
-	input	wire				rvalid_i,
-	output 	wire				rready_o,
+	input	wire	[ID_WIDTH - 1 : 0]		rid_i,
+	input	wire	[BURST_SIZE - 1 : 0]		rdata_i,
+	input	wire					rresp_i,
+	input	wire					rlast_i,
+	input	wire					rvalid_i,
+	output 	wire					rready_o,
 
-	// FIFO -> Tag comparator
-	input	wire				fifo_aempty_i,
-	//input	wire				fifo_read_en_i,
-	input	wire	[80 : 0]		fifo_data_i,
+	// FIFO <-> Tag comparator
+	input	wire					fifo_aempty_i,
+	output	wire					fifo_read_en_o,
+	input	wire	[ADDR_WIDTH + ID_WIDTH : 0]	fifo_data_i,
 	
-	// Tag comparator -> Reordering Buffer
-	output 	wire	[71 : 0]		r_hit_data_o,
-	output 	wire	[71 : 0]		r_miss_data_o,
-	output 	wire	[71 : 0]		w_hit_data_o,
-	output 	wire	[71 : 0]		w_miss_data_o
+	// Tag comparator <-> Reordering Buffer
+	output 	wire	[71 : 0]			r_hit_data_o,
+	output 	wire	[71 : 0]			r_miss_data_o,
+	output 	wire	[71 : 0]			w_hit_data_o,
+	output 	wire	[71 : 0]			w_miss_data_o
 );
 
 localparam		S_IDLE	= 3'd0,

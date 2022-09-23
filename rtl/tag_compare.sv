@@ -38,10 +38,11 @@ module TAG_COMPARE
 );
 
 localparam			S_IDLE	= 3'd0,
-				S_RHIT	= 3'd1,
-				S_RMISS	= 3'd2,
-				S_WHIT	= 3'd3,
-				S_WMISS = 3'd4;
+				S_DEC	= 3'd1,
+				S_RHIT	= 3'd2,
+				S_RMISS	= 3'd3,
+				S_WHIT	= 3'd4,
+				S_WMISS = 3'd5;
 
 reg	[2:0]			state,		state_n;
 
@@ -49,7 +50,8 @@ reg	[BURST_SIZE - 1 : 0]	r_hit_data,	r_hit_data_n,
 				r_miss_data,	r_miss_data_n,
 				w_hit_data,	w_hit_data_n,
 				w_miss_data,	w_miss_data_n;
-reg				tag_fifo_rden, 	tag_fifo_rden_n;
+
+reg				tag_fifo_rden;
 reg 				rready;
 
 wire				read  = !fifo_data_i[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH];
@@ -64,7 +66,6 @@ always_ff @(posedge clk)
 		r_miss_data	<= 0;
 		w_hit_data	<= 0;
 		w_miss_data	<= 0;
-		tag_fifo_rden	<= 0;
 
 		cycle_cnt	<= 0;
 	end
@@ -75,7 +76,6 @@ always_ff @(posedge clk)
 		r_miss_data	<= r_miss_data_n;
 		w_hit_data	<= w_hit_data_n;
 		w_miss_data	<= w_miss_data_n;
-		tag_fifo_rden	<= tag_fifo_rden_n;
 
 		if(cycle_cnt < TOTAL_CYCLE && cycle_cnt >= 1) begin
 			cycle_cnt <= cycle_cnt + 1;
@@ -92,18 +92,22 @@ always_comb begin
 	r_miss_data_n	= r_miss_data;
 	w_hit_data_n	= w_hit_data;
 	w_miss_data_n	= w_miss_data;
-	tag_fifo_rden_n = tag_fifo_rden;
 
-	rready		= 1;
+	tag_fifo_rden	= 1'b0;
+	rready		= 1'b1;
 	
 	case (state)
 		S_IDLE: begin
-			if(!rvalid_i) begin
-				state_n			= state;
-			end
-			else if(read) begin
-				cycle_cnt 		= 1;
+			if(rvalid_i && tag_fifo_aempty_i) begin
+				tag_fifo_rden		= 1'b1;
 
+				state_n			= S_DEC;
+			end
+		end
+		S_DEC: begin
+			cycle_cnt	= 1;
+
+			if(read) begin
 				// read hit(valid && same tag) 
 				if(valid && fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[BURST_SIZE - 3 : BLANK_WIDTH]) begin
 					state_n		= S_RHIT;
@@ -114,8 +118,6 @@ always_comb begin
 				end
 			end
 			else begin
-				cycle_cnt		= 1;
-
 				// write hit(valid && same tag)
 				if(valid && fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[BURST_SIZE - 3 : BLANK_WIDTH]) begin
 					state_n		= S_WHIT;

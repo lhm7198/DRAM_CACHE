@@ -75,7 +75,7 @@ module DRAM_CACHE_TOP
 
 		.fifo_afull_i(fifo_afull),
 		.fifo_write_en_o(fifo_write_en),
-		.fifo_data_o(fifo_data)
+		.fifo_data_o(fifo_wdata)
 	);
 
 	FIFO u_tag_fifo

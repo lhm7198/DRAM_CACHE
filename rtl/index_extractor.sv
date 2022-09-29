@@ -15,15 +15,15 @@ module INDEX_EXTRACTOR
 	// AR channel (Processor -> DRAM $ Controller)
 	input	wire 	[ID_WIDTH-1 : 0] 		arid_i,
 	input	wire 	[ADDR_WIDTH-1 : 0] 		araddr_i,
-	input	wire					arvalid_i,
 	input	wire	[7 : 0]				arlen_i,
+	input	wire					arvalid_i,
 	output  wire					arready_o,
 
-	// (Processor -> DRAM $ Controller)
+	// AW channel (Processor -> DRAM $ Controller)
 	input 	wire 	[ID_WIDTH-1 : 0] 		awid_i,
 	input	wire 	[ADDR_WIDTH-1 : 0] 		awaddr_i,
-	input 	wire 					awvalid_i,
 	input	wire	[7 : 0]				awlen_i,
+	input 	wire 					awvalid_i,
 	output	wire					awready_o,
 
 	// AR channel (DRAM $ Controller -> Memory Controller)
@@ -34,9 +34,9 @@ module INDEX_EXTRACTOR
 	input	wire					arready_i,	
 
 	// Inner wire (Index extractor -> FIFO)
-	input 	wire					fifo_afull_i,
-	output 	wire					fifo_write_en_o,
-	output 	wire 	[ADDR_WIDTH + ID_WIDTH : 0] 	fifo_data_o 	// 1 + 64 + 16 bit
+	input 	wire					tag_fifo_afull_i,
+	output 	wire					tag_fifo_wren_o,
+	output 	wire 	[ADDR_WIDTH + ID_WIDTH : 0] 	tag_fifo_data_o 	// 1 + 64 + 16 bit
 );
 
 localparam 			S_IDLE	= 3'd0,
@@ -49,8 +49,8 @@ reg	[2:0]					state,		state_n;
 
 reg 	[INDEX_WIDTH-1 : 0] 			index,		index_n;
 reg	[ID_WIDTH-1 : 0] 			tid,		tid_n;
-reg	[ADDR_WIDTH + ID_WIDTH : 0]		fifo_data,	fifo_data_n;	// 1 + 64 + 16 bit
-reg						fifo_write_en,	fifo_write_en_n;
+reg	[ADDR_WIDTH + ID_WIDTH : 0]		tag_fifo_data,	tag_fifo_data_n; // 1 + 64 + 16 bit
+reg						tag_fifo_wren,	tag_fifo_wren_n;
 reg						arbiter,	arbiter_n;
 
 reg	[7 : 0]					axlen;
@@ -64,8 +64,8 @@ always_ff @(posedge clk)
 		
 		index		<= 4'd0;
 		tid		<= 0;
-		fifo_data	<= 0;
-		fifo_write_en	<= 1'b0;
+		tag_fifo_data	<= 0;
+		tag_fifo_wren	<= 1'b0;
 		arbiter		<= 1'b0;
 
 		arready		<= 1'b1;
@@ -79,8 +79,8 @@ always_ff @(posedge clk)
 		
 		index		<= index_n;
 		tid		<= tid_n;
-		fifo_data	<= fifo_data_n;
-		fifo_write_en	<= fifo_write_en_n;
+		tag_fifo_data	<= tag_fifo_data_n;
+		tag_fifo_wren	<= tag_fifo_wren_n;
 		arbiter		<= arbiter_n;
 		
 		arready		<= arready_n;
@@ -95,8 +95,8 @@ always_comb begin
 
 	index_n		= index;
 	tid_n		= tid;
-	fifo_data_n	= fifo_data;
-	fifo_write_en_n = fifo_write_en;
+	tag_fifo_data_n	= tag_fifo_data;
+	tag_fifo_wren_n = tag_fifo_wren;
         arbiter_n	= arbiter;
 	
 	arready_n	= arready;
@@ -105,7 +105,7 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
-			if(fifo_afull_i) begin
+			if(tag_fifo_afull_i) begin
 				state_n					= state;
 			end
 			else if(arvalid_i && (!awvalid_i || !arbiter)) begin
@@ -127,7 +127,6 @@ always_comb begin
 			end
 		end
 		S_RRE: begin
-
 			index_n[OFFSET_WIDTH-1 : 0]					= 6'b0;
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
 			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
@@ -135,24 +134,25 @@ always_comb begin
 			tid_n								= arid_i;
 			axlen_n								= arlen_i;
 
-			fifo_data_n[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]	= 1'b0; 	//read
-			fifo_data_n[ADDR_WIDTH + ID_WIDTH - 1 : ADDR_WIDTH]		= arid_i;
-			fifo_data_n[ADDR_WIDTH - 1 : 0]					= araddr_i;
+			tag_fifo_data_n[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]	= 1'b0; 	//read
+			tag_fifo_data_n[ADDR_WIDTH + ID_WIDTH - 1 : ADDR_WIDTH]		= arid_i;
+			tag_fifo_data_n[ADDR_WIDTH - 1 : 0]				= araddr_i;
 
 			if(arready_i) begin
-				fifo_write_en_n						= 1'b1;
-				state_n 						= S_RREQ;
+				tag_fifo_wren_n						= 1'b1;
 				arvalid_n						= 1'b0;
+				
+				state_n 						= S_RREQ;
 			end
 		end
 		S_RREQ: begin
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
-			fifo_write_en_n							= 1'b0;
+			tag_fifo_wren_n							= 1'b0;
+
 			state_n								= S_IDLE;
 		end
 		S_WRE: begin
-
 			index_n[OFFSET_WIDTH-1 : 0]					= 6'b0;
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
 			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
@@ -160,20 +160,22 @@ always_comb begin
 			tid_n								= awid_i;
 			axlen_n								= awlen_i;
 		
-			fifo_data_n[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]	= 1'b1; 	//write
-			fifo_data_n[ADDR_WIDTH + ID_WIDTH - 1 : ADDR_WIDTH]		= awid_i;
-			fifo_data_n[ADDR_WIDTH -1 : 0]					= awaddr_i;
+			tag_fifo_data_n[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]	= 1'b1; 	//write
+			tag_fifo_data_n[ADDR_WIDTH + ID_WIDTH - 1 : ADDR_WIDTH]		= awid_i;
+			tag_fifo_data_n[ADDR_WIDTH -1 : 0]				= awaddr_i;
 
 			if(arready_i) begin
-				fifo_write_en_n						= 1'b1;
-				state_n 						= S_WREQ;
+				tag_fifo_wren_n						= 1'b1;
 				arvalid_n						= 1'b0;
+		
+				state_n 						= S_WREQ;
 			end
 		end
 		S_WREQ: begin
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
-			fifo_write_en_n							= 1'b0;
+			tag_fifo_wren_n							= 1'b0;
+		
 			state_n								= S_IDLE;
 		end
 	endcase
@@ -187,7 +189,7 @@ assign araddr_o		= index;
 assign arvalid_o	= arvalid;
 assign axlen_o		= axlen;
 
-assign fifo_write_en_o  = fifo_write_en;
-assign fifo_data_o 	= fifo_data;
+assign tag_fifo_wren_o  = tag_fifo_wren;
+assign tag_fifo_data_o 	= tag_fifo_data;
 
 endmodule

@@ -15,6 +15,7 @@
 // ADDRESS
 `define INDEX_WIDTH		4
 `define OFFSET_WIDTH		6
+`define	TID_WIDTH		10
 
 // DRAM TAG
 `define BURST_SIZE	 	64

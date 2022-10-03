@@ -21,6 +21,6 @@
 `define BURST_SIZE	 	64
 `define BLANK_WIDTH		46
 
-`define TOTAL_CYCLE		9
+`define TOTAL_CYCLE		8
 
 `endif

@@ -15,35 +15,47 @@ module TAG_COMPARE
 	parameter TOTAL_CYCLE		= `TOTAL_CYCLE
 )
 (
-	input	wire					clk,
-	input 	wire					rst_n,
+	input	wire							clk,
+	input 	wire							rst_n,
 
-	// R channel (Memory Ctrl -> DRAM $ Controller)
-	input	wire	[ID_WIDTH - 1 : 0]			rid_i,
-	input	wire	[BURST_SIZE - 1 : 0]			rdata_i,
-	input	wire						rresp_i,
-	input	wire						rlast_i,
-	input	wire						rvalid_i,
-	output 	wire						rready_o,
+	// R channel (Memory Ctrl -> DRAM $ Ctrl)
+	input	wire	[ID_WIDTH - 1 : 0]				rid_i,
+	input	wire	[BURST_SIZE - 1 : 0]				rdata_i,
+	input	wire							rresp_i,
+	input	wire							rlast_i,
+	input	wire							rvalid_i,
+	output 	wire							rready_o,
 
 	// Inner wire (FIFO <-> Tag comparator)
-	input	wire						tag_fifo_aempty_i,
-	output	wire						tag_fifo_rden_o,
-	input	wire	[ADDR_WIDTH + TID_WIDTH : 0]		tag_fifo_data_i, // R/W(1) + TID(10) + FULL ADDR(64)
+	input	wire							tag_fifo_aempty_i,
+	output	wire							tag_fifo_rden_o,
+	input	wire	[TID_WIDTH + ADDR_WIDTH : 0]			tag_fifo_data_i,
 	
-	// Inner wire (Tag comparator <-> ROB)
-	input 	wire						rob_afull_i,
-	output	wire						rob_wren_o,
-	output	wire	[BURST_SIZE * 8 + TID_WIDTH - 1 : 0]	rob_data_o,
+	// Inner wire (Tag comparator <-> ROB), Read Hit
+	input 	wire							rob_afull_i,
+	output	wire							rob_wren_o,
+	output	wire	[TID_WIDTH + BURST_SIZE*TOTAL_CYCLE - 1 : 0]	rob_data_o,
 
-	// Inner wire (Tag comparator <-> Fill AR FIFO)
-	input	wire						arfifo_afull_i,
-	output	wire						arfifo_wren_o,
-	output	wire	[ADDR_WIDTH + TID_WIDTH - 1 : 0]	arfifo_data_o,
+	// Inner wire (Tag comparator <-> Fill AR FIFO), Read Miss
+	input	wire							ar_fifo_afull_i,
+	output	wire							ar_fifo_wren_o,
+	output	wire	[TID_WIDTH + ADDR_WIDTH - 1 : 0]		ar_fifo_data_o,
 
-	// Inner wire (Tag comparator <-> Reordering Buffer)
-	output 	wire	[BURST_SIZE - 1 : 0]			w_hit_data_o,
-	output 	wire	[BURST_SIZE - 1 : 0]			w_miss_data_o
+
+	// Inner wire (Tag comparator <-> Fix FIFO), Write Hit
+	input	wire							fix_fifo_afull_i,
+	output	wire							fix_fifo_wren_o,
+	output	wire	[ADDR_WIDTH - 1 : 0]				fix_fifo_data_o,
+
+	// Inner wire (Tag comparator <-> Evict AW FIFO), Write Miss
+	input	wire							aw_fifo_afull_i,
+	output	wire							aw_fifo_wren_o,
+	output	wire	[ADDR_WIDTH - 1 : 0]				aw_fifo_data_o,
+
+	// Inner wire (Tag comparator <-> Evict W FIFO), Write Miss
+	input	wire							w_fifo_afull_i,
+	output	wire							w_fifo_wren_o,
+	output	wire	[BURST_SIZE*TOTAL_CYCLE - 1 : 0]		w_fifo_data_o,
 );
 
 localparam			S_IDLE	= 3'd0,
@@ -58,16 +70,25 @@ reg	[2:0]						state,		state_n;
 reg							tag_fifo_rden,	tag_fifo_rden_n;
 
 reg							rob_wren,	rob_wren_n;
-reg	[TID_WIDTH + BURST_SIZE*(TOTAL_CYCLE-1)-1 : 0]	rob_data,	rob_data_n;
+reg	[TID_WIDTH + BURST_SIZE*TOTAL_CYCLE - 1 : 0]	rob_data,	rob_data_n;
 
-reg							arfifo_wren,	arfifo_wren_n;
-reg	[TID_WIDTH + ADDR_WIDTH - 1 : 0]		arfifo_data,	arfifo_data_n;
+reg							ar_fifo_wren,	ar_fifo_wren_n;
+reg	[TID_WIDTH + ADDR_WIDTH - 1 : 0]		ar_fifo_data,	ar_fifo_data_n;
+
+reg							fix_fifo_wren,	fix_fifo_wren_n;
+reg	[ADDR_WIDTH - 1 : 0]				fix_fifo_data, 	fix_fifo_data_n;
+
+reg							aw_fifo_wren,	aw_fifo_wren_n;
+reg	[ADDR_WIDTH - 1 : 0]				aw_fifo_data,	aw_fifo_data_n;
+
+reg							w_fifo_wren,	w_fifo_wren_n;
+reg	[BURST_SIZE*TOTAL_CYCLE - 1 : 0]		w_fifo_data,	w_fifo_data_n;
 
 reg 							rready,		rready_n;
 reg	[$clog2(TOTAL_CYCLE + 1) : 0]			cycle_cnt,	cycle_cnt_n;
 
-wire	read  = !fifo_data_i[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH];
-wire	valid = read_data_i[BURST_SIZE - 1 : BURST_SIZE - 1];
+wire	read  = !tag_fifo_data_i[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH];
+wire	valid = rdata_i[BURST_SIZE - 1 : BURST_SIZE - 1];
 
 always_ff @(posedge clk)
 	if (!rst_n) begin
@@ -78,8 +99,17 @@ always_ff @(posedge clk)
 		rob_wren	<= 1'b0;
 		rob_data	<= 0;
 
-		arfifo_wren	<= 1'b0;
-		arfifo_data	<= 0;
+		ar_fifo_wren	<= 1'b0;
+		ar_fifo_data	<= 0;
+
+		fix_fifo_wren	<= 1'b0;
+		fix_fifo_data	<= 0;
+
+		aw_fifo_wren	<= 1'b0;
+		aw_fifo_data	<= 0;
+
+		w_fifo_wren	<= 1'b0;
+		w_fifo_data	<= 0;
 
 		rready		<= 1'b1;
 		cycle_cnt	<= 0;
@@ -92,13 +122,22 @@ always_ff @(posedge clk)
 		rob_wren	<= rob_wren_n;
 		rob_data	<= rob_data_n;
 
-		arfifo_wren	<= arfifo_wren_n;
-		arfifo_data	<= arfifo_data_n;
+		ar_fifo_wren	<= ar_fifo_wren_n;
+		ar_fifo_data	<= ar_fifo_data_n;
+
+		fix_fifo_wren	<= fix_fifo_wren_n;
+		fix_fifo_data	<= fix_fifo_data_n;
+
+		aw_fifo_wren	<= aw_fifo_wren_n;
+		aw_fifo_data	<= aw_fifo_data_n;
+
+		w_fifo_wren	<= w_fifo_wren_n;
+		w_fifo_data	<= w_fifo_data_n;
 
 		rready		<= rready_n;
 		cycle_cnt	<= cycle_cnt_n;
 
-		if(cycle_cnt <= TOTAL_CYCLE && cycle_cnt >= 1) begin
+		if(cycle_cnt <= TOTAL_CYCLE + 1 && cycle_cnt >= 1) begin
 			cycle_cnt <= cycle_cnt + 1;
 		end
 		else begin
@@ -114,8 +153,17 @@ always_comb begin
 	rob_wren_n	= rob_wren;
 	rob_data_n	= rob_data;
 
-	arfifo_wren_n	= arfifo_wren;
-	arfifo_data_n	= arfifo_data;
+	ar_fifo_wren_n	= ar_fifo_wren;
+	ar_fifo_data_n	= ar_fifo_data;
+
+	fix_fifo_wren_n	= fix_fifo_wren;
+	fix_fifo_data_n	= fix_fifo_data;
+
+	aw_fifo_wren_n	= aw_fifo_wren;
+	aw_fifo_data_n	= aw_fifo_data;
+
+	w_fifo_wren_n	= w_fifo_wren;
+	w_fifo_data_n	= w_fifo_data;
 
 	rready_n	= rready;
 	cycle_cnt_n	= cycle_cnt;
@@ -123,11 +171,21 @@ always_comb begin
 	case (state)
 		S_IDLE: begin
 			cycle_cnt_n	= 0;
+
 			rob_wren_n	= 1'b0;
 			rob_data_n	= 0;
 
-			arfifo_wren_n	= 1'b0;
-			arfifo_data_n	= 0;
+			ar_fifo_wren_n	= 1'b0;
+			ar_fifo_data_n	= 0;
+
+			fix_fifo_wren_n	= 1'b0;
+			fix_fifo_data_n	= 0;
+
+			aw_fifo_wren_n	= 1'b0;
+			aw_fifo_data_n	= 0;
+
+			w_fifo_wren_n	= 1'b0;
+			w_fifo_data_n	= 0;
 
 			if(rvalid_i && !tag_fifo_aempty_i) begin
 				tag_fifo_rden_n		= 1'b1;
@@ -147,41 +205,53 @@ always_comb begin
 				end
 				// read miss
 				else begin
-					arfifo_data_n[TID_WIDTH + ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[ADDR_WIDTH + TID_WIDTH - 1 : 0];
+					ar_fifo_data_n[TID_WIDTH + ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[ADDR_WIDTH + TID_WIDTH - 1 : 0];
 					state_n		= S_RMISS;
 				end
 			end
 			else begin
 				// write hit(valid && same tag)
 				if(valid && tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[BURST_SIZE - 3 : BLANK_WIDTH]) begin
+					fix_fifo_data_n[ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0];
 					state_n		= S_WHIT;
 				end
 				// write miss
 				else begin
+					aw_fifo_data_n[ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0];
 					state_n		= S_WMISS;
 				end
 			end
 		end
 		S_RHIT: begin
-			if(cycle_cnt < TOTAL_CYCLE) begin
-				r_hit_data_n[BURST_SIZE * (TOTAL_CYCLE - cycle_cnt + 1) - 1 : BURST_SIZE * (TOTAL_CYCLE - cycle_cnt)] = rdata_i;
+			if(cycle_cnt < TOTAL_CYCLE + 1) begin
+				rob_data_n[BURST_SIZE * (TOTAL_CYCLE - cycle_cnt + 2) - 1 : BURST_SIZE * (TOTAL_CYCLE - cycle_cnt + 1)] = rdata_i;
 			end
-			else if(cycle_cnt >= TOTAL_CYCLE) begin
-				if(!rob_afull_i) begin
-					rob_wren_n	= 1'b1;
-					state_n		= S_IDLE;
-				end
+			else if(!rob_afull_i) begin
+				rob_wren_n	= 1'b1;
+				state_n		= S_IDLE;
 			end
 		end
 		S_RMISS: begin
-			if(!arfifo_afull_i) begin
-				arfifo_wren_n	= 1'b1;
+			if(!ar_fifo_afull_i) begin
+				ar_fifo_wren_n	= 1'b1;
 				state_n		= S_IDLE;
 			end
 		end
 		S_WHIT: begin
+			if(!fix_fifo_afull_i) begin
+				fix_fifo_wren_n	= 1'b1;
+				state_n		= S_IDLE;
+			end
 		end
 		S_WMISS: begin
+			if(cycle_cnt < TOTAL_CYCLE + 1) begin
+				w_fifo_data_n[BURST_SIZE * (TOTAL_CYCLE - cycle_cnt + 2) - 1 : BURST_SIZE * (TOTAL_CYCLE - cycle_cnt + 1)] = rdata_i;
+			end
+			else if(!(aw_fifo_afull_i || w_fifo_afull_i)) begin
+				aw_fifo_wren_n	= 1'b1;
+				w_fifo_wren_n	= 1'b1;
+				state_n		= S_IDLE;
+			end			
 		end
 	endcase
 end
@@ -197,7 +267,17 @@ assign rob_wren_o	= rob_wren;
 assign rob_data_o	= r_hit_data;
 
 // read miss
-assign arfifo_wren_o	= arfifo_wren;
-assign arfifo_data_o	= arfifo_data;
+assign ar_fifo_wren_o	= ar_fifo_wren;
+assign ar_fifo_data_o	= ar_fifo_data;
+
+// write hit
+assign fix_fifo_wren_o	= fix_fifo_wren;
+assign fix_fifo_data_o	= fix_fifo_data;
+
+// write miss
+assign aw_fifo_wren_o	= aw_fifo_wren;
+assign aw_fifo_data_o	= aw_fifo_data;
+assign w_fifo_wren_o	= w_fifo_wren;
+assign w_fifo_data_o	= w_fifo_data;
 
 endmodule

@@ -5,6 +5,7 @@
 `define AXI_ADDR_WIDTH		64
 `define AXI_DATA_WIDTH		32
 `define AXI_ID_WIDTH		16
+`define AXI_ID			1
 
 // FIFO
 `define FIFO_DATA_WIDTH		8

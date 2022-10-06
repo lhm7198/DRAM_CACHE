@@ -133,7 +133,7 @@ always_comb begin
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
 			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
 
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH:ADDR_WIDTH + TID_WIDTH]	= 1'b0; 	//read
+			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b0; 	//read
 			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= tid;
 			tag_fifo_data_n[ADDR_WIDTH - 1 : 0]				= araddr_i;
 
@@ -159,12 +159,9 @@ always_comb begin
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
 			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
 
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH:ADDR_WIDTH + TID_WIDTH]	= 1'b1; 	//write
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= tid;
+			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b1; 	//write
+			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= 10'b0;
 			tag_fifo_data_n[ADDR_WIDTH -1 : 0]				= awaddr_i;
-
-			tid_n								= tid + 1;
-			axlen_n								= awlen_i;
 
 			if(arready_i) begin
 				tag_fifo_wren_n						= 1'b1;

@@ -98,10 +98,7 @@ always_comb begin
 			en_hit_n		= 0;
 			en_missn		= 0;
 			if((!empty_hit && tID == tID_hit) || (!empty_miss && tID == tID_miss)) begin
-				if(tID == TID_MAX - 1)
-					tID_n		= 0;
-				else
-					tID_n		= tID + 1;
+				tID_n	= tID + 1;
 
 				if(tID == tID_hit) begin
 					flag_n		= 0;
@@ -111,7 +108,7 @@ always_comb begin
 					flag_n		= 1;
 					rdata_n		= read_data_miss;
 				end
-				state_n			= S_VALID;
+				state_n			= S_VAL;
 				valid_n			= 1;
 		end
 		S_VAL: begin

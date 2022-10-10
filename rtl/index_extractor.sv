@@ -54,7 +54,6 @@ reg	[ADDR_WIDTH + TID_WIDTH : 0]		tag_fifo_data,	tag_fifo_data_n; // 1 + 64 + 16
 reg						tag_fifo_wren,	tag_fifo_wren_n;
 reg						arbiter,	arbiter_n;
 
-reg	[7 : 0]					axlen,		axlen_n;
 reg						arready,	arready_n,
 						awready,	awready_n,
 						arvalid,	arvalid_n;
@@ -72,8 +71,6 @@ always_ff @(posedge clk)
 		arready		<= 1'b1;
 		awready		<= 1'b1;
 		arvalid		<= 1'b0;
-
-		axlen		<= 7'b0;
 	end
 	else begin
 		state		<= state_n;
@@ -87,8 +84,6 @@ always_ff @(posedge clk)
 		arready		<= arready_n;
 		awready		<= awready_n;
 		arvalid		<= arvalid_n;
-
-		axlen		<= axlen_n;
 	end
 
 always_comb begin
@@ -100,7 +95,6 @@ always_comb begin
 	tag_fifo_wren_n = tag_fifo_wren;
         arbiter_n	= arbiter;
 	
-	axlen_n		= axlen;
 	arready_n	= arready;
 	awready_n	= awready;
 	arvalid_n	= arvalid;
@@ -138,7 +132,6 @@ always_comb begin
 			tag_fifo_data_n[ADDR_WIDTH - 1 : 0]				= araddr_i;
 
 			tid_n								= tid + 1;
-			axlen_n								= arlen_i;
 
 			if(arready_i) begin
 				tag_fifo_wren_n						= 1'b1;
@@ -163,8 +156,6 @@ always_comb begin
 			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= 10'b0;
 			tag_fifo_data_n[ADDR_WIDTH -1 : 0]				= awaddr_i;
 
-			axlen_n								= awlen_i;
-
 			if(arready_i) begin
 				tag_fifo_wren_n						= 1'b1;
 				arvalid_n						= 1'b0;
@@ -188,7 +179,7 @@ assign awready_o 	= awready;
 assign arid_o		= arid_i;
 assign araddr_o		= index;
 assign arvalid_o	= arvalid;
-assign axlen_o		= axlen;
+assign axlen_o		= axlen_i;
 
 assign tag_fifo_wren_o  = tag_fifo_wren;
 assign tag_fifo_data_o 	= tag_fifo_data;

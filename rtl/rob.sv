@@ -4,7 +4,9 @@ module ROB # (
 	parameter DATA_WIDTH 	= `FIFO_DATA_WIDTH, // 8
 	parameter FIFO_SIZE 	= `FIFO_SIZE, // 8
 	parameter ID_WIDTH  	= `AXI_ID_WIDTH,
-	parameter TID_MAX	= `TID_MAX
+	parameter TID_MAX	= `TID_MAX,
+	parameter TID_WIDTH	= `TID_WIDTH,
+	parameter FIFO_WIDTH	= TID_WIDTH + DATA_WIDTH
 )(
 	input	wire					clk,
 	input 	wire					rst_n,
@@ -17,11 +19,11 @@ module ROB # (
 
 	output	wire					full_hit_o,
 	input	wire					write_en_hit_i,
-	input	wire	[DATA_WIDTH - 1 : 0]		rdata_hit_i,	
+	input	wire	[FIFO_WIDTH - 1 : 0]		rdata_hit_i,	
 
 	output	wire					full_miss_o,
 	input	wire					write_en_miss_i,
-	input	wire	[DATA_WIDTH - 1 : 0]		rdata_miss_i,	
+	input	wire	[FIFO_WIDTH - 1 : 0]		rdata_miss_i,	
 
 );
 
@@ -31,28 +33,29 @@ localparam 		S_IDLE		= 1'd0,
 // tag compare - rob
 wire					full_hit;
 wire					write_en_hit;
-wire	[DATA_WIDTH - 1 : 0]		write_data_hit;
+wire	[FIFO_WIDTH - 1 : 0]		write_data_hit;
 
 wire					empty_hit;
 wire					read_en_hit = en_hit;
-wire	[DATA_WIDTH - 1 : 0]		read_data_hit;
+wire	[FIFO_WIDTH - 1 : 0]		read_data_hit;
 
 // cxl controller - rob
 wire					full_miss;
 wire					write_en_miss;
-wire	[DATA_WIDTH - 1 : 0]		write_data_miss;
+wire	[FIFO_WIDTH - 1 : 0]		write_data_miss;
 
 wire					empty_miss;
 wire					read_en_miss = en_miss;
-wire	[DATA_WIDTH - 1 : 0]		read_data_miss;
+wire	[FIFO_WIDTH - 1 : 0]		read_data_miss;
 
 // registers
 reg	[2 : 0]				state, state_n;
 
-reg	[ID_WIDTH - 1 : 0]		tID;
-reg	[ID_WIDTH - 1 : 0]		tID_hit = read_data_hit[:];
-reg	[ID_WIDTH - 1 : 0]		tID_miss = read_data_miss[:];
-reg	[:]				rdata, rdata_n;
+reg	[TID_WIDTH - 1 : 0]		tID;
+reg	[TID_WIDTH - 1 : 0]		tID_hit = read_data_hit[FIFO_WIDTH-1 : DATA_WIDTH];
+reg	[TID_WIDTH - 1 : 0]		tID_miss = read_data_miss[FIFO_WIDHT-1 : DATA_WIDTH];
+
+reg	[FIFO_WIDTH - 1: 0]		rdata, rdata_n;
 
 reg					en_hit, en_hit_n;
 reg					en_miss, en_miss_n;
@@ -97,7 +100,7 @@ always_comb begin
 		S_IDLE: begin
 			en_hit_n		= 0;
 			en_missn		= 0;
-			if((!empty_hit && tID == tID_hit) || (!empty_miss && tID == tID_miss)) begin
+			if((!empty_hit & (tID == tID_hit)) ^ (!empty_miss & (tID == tID_miss))) begin
 				tID_n	= tID + 1;
 
 				if(tID == tID_hit) begin
@@ -112,7 +115,7 @@ always_comb begin
 				valid_n			= 1;
 		end
 		S_VAL: begin
-			if(ready_i)    //??
+			if(ready_i)
 				valid_n			= 0;
 				state_n			= S_IDLE;
 				if(flag == 0) begin

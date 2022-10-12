@@ -12,7 +12,7 @@
 `define TAG_WIDTH		16
 `define BLANK_WIDTH		TAG_SIZE - TAG_WIDTH - 2
 
-// ADDRESS
+// ADDRESS (32 bit)
 `define INDEX_WIDTH		10
 `define OFFSET_WIDTH		AXI_ADDR_WIDTH - TAG_WIDTH - INDEX_WIDTH
 
@@ -23,8 +23,6 @@
 `define FIFO_A_EMPTY_THR	2
 
 // TID
-`define INDEX_WIDTH		4
-`define OFFSET_WIDTH		6
 `define	TID_WIDTH		10
 
 `endif

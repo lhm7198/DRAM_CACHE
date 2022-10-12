@@ -104,14 +104,14 @@ always_comb begin
 			if(tag_fifo_afull_i) begin
 				state_n					= state;
 			end
-			else if(arvalid_i && (!awvalid_i || !arbiter)) begin
+			else if(arvalid_i & (!awvalid_i | !arbiter)) begin
 				state_n					= S_RRE;
 				arbiter_n 				= 1'b1;
 				arready_n				= 1'b0;
 				awready_n				= 1'b0;
 				arvalid_n				= 1'b1;
 			end
-			else if(awvalid_i && (!arvalid_i || arbiter)) begin
+			else if(awvalid_i & (!arvalid_i | arbiter)) begin
 				state_n					= S_WRE;
 				arbiter_n 				= 1'b0;
 				arready_n				= 1'b0;
@@ -179,7 +179,6 @@ assign awready_o 	= awready;
 assign arid_o		= arid_i;
 assign araddr_o		= index;
 assign arvalid_o	= arvalid;
-assign axlen_o		= axlen_i;
 
 assign tag_fifo_wren_o  = tag_fifo_wren;
 assign tag_fifo_data_o 	= tag_fifo_data;

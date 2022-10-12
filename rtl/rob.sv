@@ -100,7 +100,7 @@ always_comb begin
 		S_IDLE: begin
 			en_hit_n		= 0;
 			en_missn		= 0;
-			if((!empty_hit & (tID == tID_hit)) ^ (!empty_miss & (tID == tID_miss))) begin
+			if((!empty_hit & (tID == tID_hit)) | (!empty_miss & (tID == tID_miss))) begin
 				tID_n	= tID + 1;
 
 				if(tID == tID_hit) begin

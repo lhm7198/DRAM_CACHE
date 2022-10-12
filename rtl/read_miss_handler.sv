@@ -33,7 +33,7 @@ module READ_MISS_HANDLER
 
 localparam		S_IDLE	= 2'd0,
 			S_READY	= 2'd1,
-			S_TRAN	= 2'd2;
+			S_RUN	= 2'd2;
 
 reg	[1 : 0]				state, state_n;
 reg	[WDATA_WIDHT-1 : 0]		wdata, wdata_n;
@@ -75,7 +75,7 @@ always_comb begin
 		S_IDLE: begin
 			if(valid_i) begin
 				wdata_n[DATA_WIDTH-1 : 0] 		= data_i;
-				wdata_n[WDATA_WIDTH-1 : DATA_WIDHT]	= ar_i;
+				wdata_n[WDATA_WIDTH-1 : DATA_WIDTH]	= ar_i;
 				valid_n 				= 1;
 				ready_n					= 0;
 				read_en_n 				= 1;
@@ -86,11 +86,11 @@ always_comb begin
 			read_en_n		= 0;
 			if(ready_i) begin
 				write_en_n	= 1;
-				state_n		= S_TRAN;
+				state_n		= S_RUN;
 				valid_n		= 0;
 			end
 		end
-		S_TRAN: begin
+		S_RUN: begin
 			write_en_n		= 0;
 			if(!full_i) begin
 				ready_n		= 1;

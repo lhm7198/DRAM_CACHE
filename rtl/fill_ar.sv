@@ -5,9 +5,9 @@ module FILL_AR
 	parameter ADDR_WIDTH		= `AXI_ADDR_WIDTH,
 	parameter DATA_WIDTH 		= `AXI_DATA_WIDTH,
 	parameter ID_WIDTH		= `AXI_ID_WIDTH,
-	parameter ID			= `AXI_ID
+	parameter ID			= `AXI_ID,
 
-	parameter TID_WIDTH		= `TID_WIDTH,
+	parameter TID_WIDTH		= `TID_WIDTH
 )
 (
 	input	wire						clk,

@@ -6,8 +6,6 @@ module EVICT_AW_W
 	parameter DATA_WIDTH 		= `AXI_DATA_WIDTH,
 	parameter ID_WIDTH		= `AXI_ID_WIDTH,
 	parameter ID			= `AXI_ID
-
-	parameter TID_WIDTH		= `TID_WIDTH,
 )
 (
 	input	wire						clk,
@@ -24,6 +22,11 @@ module EVICT_AW_W
 	output	wire	[DATA_WIDTH - 1 : 0]			wdata_o,
 	output	wire						wvalid_o,
 	input	wire						wready_i,
+
+	// B channel (EVICT AW W FIFO <-> CXL Ctrl)
+	output	wire						bid_o,
+	output	wire						bvalid_o,
+	input	wire						bready_i,
 
 	// Inner wire (AW FIFO <-> Evict AW W)
 	input	wire						awfifo_aempty_i,
@@ -49,6 +52,7 @@ reg						wfifo_rden,	wfifo_rden_n;
 reg	[ADDR_WIDTH - 1 : 0]			awddr,		awaddr_n;
 reg						awvalid,	awvalid_n;
 reg						wvalid,		wvalid_n;
+reg						bvalid,		bvalid_n;
 
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
@@ -62,6 +66,7 @@ always_ff @(posedge clk) begin
 		awaddr		<= 0;
 		awvalid		<= 1'b0;
 		wvalid		<= 1'b0;
+		bvalid		<= 1'b0;
 	end
 	else begin
 		state		<= state_n;
@@ -74,6 +79,7 @@ always_ff @(posedge clk) begin
 		awaddr		<= awaddr_n;
 		awvalid		<= awvalid_n;
 		wvalid		<= wvalid_n;
+		bvalid		<= bvalid_n;
 	end
 end
 
@@ -88,6 +94,7 @@ always_comb begin
 	awaddr_n	= awaddr;
 	awvalid_n	= awvalid;
 	wvalid_n	= wvalid;
+	bvalid_n	= bvalid;
 
 	case (state)
 		S_IDLE: begin
@@ -122,6 +129,9 @@ assign awvalid_o	= awvalid;
 assign wid_o		= ID;
 assign wdata_o		= wdata;
 assign wvalid_o		= wvalid;
+
+assign bid_o		= ID;
+assign bvalid_o		= bvalid;
 
 assign awfifo_rden_o	= awfifo_rden;
 assign wfifo_rden_o	= wfifo_rden;

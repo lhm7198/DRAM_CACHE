@@ -40,7 +40,7 @@ module TOP_MODULE
 	output	wire				rready_o
 */
 	// Tag fifo -> Tag compare
-	output	wire					aemtpy_o,
+	output	wire					aempty_o,
 	input	wire					rden_i,
 	output 	wire 	[ADDR_WIDTH + TID_WIDTH : 0] 	data_o 	// 1 + 64 + 16 bit
 );

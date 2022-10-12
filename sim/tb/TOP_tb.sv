@@ -62,7 +62,7 @@ begin
 	$finish;
 end
 
-TOP	top
+TOP_MODULE	top
 (
 	.clk		(clk),
 	.rst_n		(rst_n),

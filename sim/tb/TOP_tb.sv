@@ -7,19 +7,16 @@ reg	rst_n;
 
 reg	[15 : 0]		arid_i;
 reg	[63 : 0]		araddr_i;
-reg	[7 : 0]			arlen_i;
 reg				arval_i;
 wire				arready_o;
 
 reg	[15 : 0]		awid_i;
 reg	[63 : 0]		awaddr_i;
-reg	[7 : 0]			awlen_i;
 reg				awval_i;
 wire				awready_o;
 
 wire	[15 : 0]		arid_o;
 wire	[63 : 0]		araddr_o;
-wire	[7 : 0]			arlen_o;
 wire				arval_o;
 reg				arready_i;
 
@@ -38,12 +35,10 @@ begin
 
 	arid_i 		= 0;
 	araddr_i 	= 0;
-	arlen_i		= 0;
 	arval_i		= 0;
 	
 	awid_i 		= 0;
 	awaddr_i 	= 0;
-	awlen_i		= 0;
 	awval_i 	= 0;
 
 	arready_i 	= 0;
@@ -59,34 +54,25 @@ begin
 
 	$display("\nStart\n");
 	
-	arid_i		= 7;
-	araddr_i	= 64'heeeeeeeeeeeeeeee;
-	arlen_i		= 10;
+	araddr_i	= 64'hffffffffffffffff;
 	arval_i		= 1;
 
 	arready_i	= 1;
 
 	#(CLOCK_PERIOD);
 	
-	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
+	$display("arid = %x, araddr = %x, arval = %x", arid_o, araddr_o, arval_o);
 	$display("aempty = %x, data = %x\n", aempty_o, data_o);
 	
 	#(CLOCK_PERIOD);
 	
-	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
+	$display("arid = %x, araddr = %x, arval = %x", arid_o, araddr_o, arval_o);
 	$display("aempty = %x, data = %x\n", aempty_o, data_o);
 
 	#(CLOCK_PERIOD);
 	
-	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
+	$display("arid = %x, araddr = %x, arval = %x", arid_o, araddr_o, arval_o);
 	$display("aempty = %x, data = %x\n", aempty_o, data_o);
-
-	#(CLOCK_PERIOD);
-
-	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
-	$display("aempty = %x, data = %x\n", aempty_o, data_o);
-
-
 
 	$finish;
 end
@@ -98,25 +84,25 @@ TOP_MODULE	top
 
 	.arid_i		(arid_i),
 	.araddr_i	(araddr_i),
-	.arlen_i	(arlen_i),
+	.arlen_i	(),
 	.arvalid_i	(arval_i),
 	.arready_o	(arready_o),
 
 	.awid_i		(awid_i),
 	.awaddr_i	(awaddr_i),
-	.awlen_i	(awlen_i),
+	.awlen_i	(),
 	.awvalid_i	(awval_i),
 	.awready_o	(awready_o),
 
 	.arid_o		(arid_o),
 	.araddr_o	(araddr_o),
-	.arlen_o	(arlen_o),
+	.arlen_o	(),
 	.arvalid_o	(arval_o),
 	.arready_i	(arready_i),
 
-	.aempty_o	(aempty_o),
-	.rden_i		(rden_i),
-	.data_o		(data_o)
+	.tag_fifo_aempty	(aempty_o),
+	.tag_fifo_rden		(rden_i),
+	.tag_fifo_rdata		(data_o)
 );
 
 endmodule

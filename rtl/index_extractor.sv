@@ -3,11 +3,12 @@
 module INDEX_EXTRACTOR
 #(
 	parameter ADDR_WIDTH	= `AXI_ADDR_WIDTH,	// 64
-	parameter ID_WIDTH	= `AXI_ID_WIDTH, 	// 16
+	parameter ID_WIDTH	= `AXI_ID_WIDTH, 	
+	parameter ID		= `AXI_ID,
 	
-	parameter INDEX_WIDTH	= `INDEX_WIDTH, 	// 4
-	parameter OFFSET_WIDTH	= `OFFSET_WIDTH, 	// 4
-	parameter TID_WIDTH	= `TID_WIDTH  		// 10
+	parameter INDEX_WIDTH	= `INDEX_WIDTH, 	
+	parameter OFFSET_WIDTH	= `OFFSET_WIDTH, 	
+	parameter TID_WIDTH	= `TID_WIDTH  		
 )
 (
 	input	wire					clk,
@@ -46,10 +47,10 @@ localparam 			S_IDLE	= 3'd0,
 				S_WRE	= 3'd3,
 				S_WREQ	= 3'd4;
 
-reg	[2:0]					state,		state_n;
+reg	[2 : 0]					state,		state_n;
 
-reg 	[ADDR_WIDTH-1 : 0] 			index,		index_n;
-reg	[9 : 0]		 			tid,		tid_n; 		 // 10 bit
+reg 	[ADDR_WIDTH - 1 : 0] 			index,		index_n;
+reg	[TID_WIDTH - 1 : 0]		 	tid,		tid_n; 		 // 10 bit
 reg	[ADDR_WIDTH + TID_WIDTH : 0]		tag_fifo_data,	tag_fifo_data_n; // 1 + 64 + 16 bit
 reg						tag_fifo_wren,	tag_fifo_wren_n;
 reg						arbiter,	arbiter_n;
@@ -101,38 +102,52 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			$display("S_IDLE\n");
 			if(tag_fifo_afull_i) begin
 				state_n					= state;
 			end
 			else if(arvalid_i & (!awvalid_i | !arbiter)) begin
-				state_n					= S_RRE;
-				arbiter_n 				= 1'b1;
+				index_n[OFFSET_WIDTH - 1 : 0]						= 0;
+				index_n[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH]			= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
+				index_n[ADDR_WIDTH - 1 : OFFSET_WIDTH + INDEX_WIDTH]			= 0;
+
+				tag_fifo_data_n[ADDR_WIDTH - 1 : 0]					= araddr_i;
+				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]		= tid;
+				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b0; 	
+
+				tid_n									= tid + 1;
+
 				arready_n				= 1'b0;
 				awready_n				= 1'b0;
 				arvalid_n				= 1'b1;
+
+				arbiter_n 				= 1'b1;
+				
+				state_n					= S_RRE;
 			end
 			else if(awvalid_i & (!arvalid_i | arbiter)) begin
-				state_n					= S_WRE;
-				arbiter_n 				= 1'b0;
+				index_n[OFFSET_WIDTH - 1 : 0]						= 0;
+				index_n[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH]			= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
+				index_n[ADDR_WIDTH - 1 : OFFSET_WIDTH + INDEX_WIDTH]			= 0;
+				
+				tag_fifo_data_n[ADDR_WIDTH - 1 : 0]					= awaddr_i;				
+				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]		= 0;
+				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b1;
+
 				arready_n				= 1'b0;
 				awready_n				= 1'b0;
 				arvalid_n				= 1'b1;
+				
+				arbiter_n 				= 1'b0;
+
+				state_n					= S_WRE;
 			end
 			else begin
 				state_n					= state;
 			end
 		end
 		S_RRE: begin
-			index_n[OFFSET_WIDTH-1 : 0]					= 0;
-			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
-			index_n[ADDR_WIDTH-1 : OFFSET_WIDTH + INDEX_WIDTH]		= 0;
-
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b0; 	//read
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= tid;
-			tag_fifo_data_n[ADDR_WIDTH - 1 : 0]				= araddr_i;
-
-			tid_n								= tid + 1;
-
+			$display("S_RRE\n");
 			if(arready_i) begin
 				tag_fifo_wren_n						= 1'b1;
 				arvalid_n						= 1'b0;
@@ -141,6 +156,7 @@ always_comb begin
 			end
 		end
 		S_RREQ: begin
+			$display("S_RREQ\n");
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
 			tag_fifo_wren_n							= 1'b0;
@@ -148,14 +164,7 @@ always_comb begin
 			state_n								= S_IDLE;
 		end
 		S_WRE: begin
-			index_n[OFFSET_WIDTH-1 : 0]					= 6'b0;
-			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
-			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
-
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b1; 	//write
-			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= 10'b0;
-			tag_fifo_data_n[ADDR_WIDTH -1 : 0]				= awaddr_i;
-
+			$display("S_WRE\n");
 			if(arready_i) begin
 				tag_fifo_wren_n						= 1'b1;
 				arvalid_n						= 1'b0;
@@ -164,6 +173,7 @@ always_comb begin
 			end
 		end
 		S_WREQ: begin
+			$display("S_WREQ\n");
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
 			tag_fifo_wren_n							= 1'b0;
@@ -176,7 +186,7 @@ end
 assign arready_o 	= arready; 
 assign awready_o 	= awready;
 
-assign arid_o		= arid_i;
+assign arid_o		= ID;
 assign araddr_o		= index;
 assign arvalid_o	= arvalid;
 

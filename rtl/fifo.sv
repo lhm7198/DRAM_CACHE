@@ -3,8 +3,8 @@
 module FIFO # (
 	parameter DATA_WIDTH = `FIFO_DATA_WIDTH, // 8
 	parameter FIFO_SIZE = `FIFO_SIZE, // 8
-	parameter A_FULL_THR = `FIFO_A_FULL_THR, // 6
-	parameter A_EMPTY_THR = `FIFO_A_EMPTY_THR // 2
+	parameter A_FULL_THR = `FIFO_AFULL_THR, // 6
+	parameter A_EMPTY_THR = `FIFO_AEMPTY_THR // 2
 )(
 	input	wire				clk,
 	input 	wire				rst_n,

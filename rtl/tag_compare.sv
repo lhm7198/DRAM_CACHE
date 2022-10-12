@@ -45,12 +45,6 @@ module TAG_COMPARE
 	output	wire							ar_fifo_wren_o,
 	output	wire	[TID_WIDTH + ADDR_WIDTH - 1 : 0]		ar_fifo_data_o,
 
-
-	// Inner wire (Tag comparator <-> Fill Arbiter), Write Hit & Write Miss
-	input	wire							fill_ready_i,
-	output	wire							fill_valid_o,
-	output	wire	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]		fill_data_o,
-
 	// Inner wire (Tag comparator <-> AW FIFO), Read Miss & Write Miss
 	input	wire							aw_fifo_afull_i,
 	output	wire							aw_fifo_wren_o,
@@ -59,7 +53,13 @@ module TAG_COMPARE
 	// Inner wire (Tag comparator <-> W FIFO), Read Miss & Write Miss
 	input	wire							w_fifo_afull_i,
 	output	wire							w_fifo_wren_o,
-	output	wire	[DATA_WIDTH - 1 : 0]				w_fifo_data_o
+	output	wire	[DATA_WIDTH - 1 : 0]				w_fifo_data_o,
+
+	// Inner wire (Tag comparator <-> Fill Arbiter), Write Hit & Write Miss
+	input	wire							fill_ready_i,
+	output	wire							fill_valid_o,
+	output	wire	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]		fill_data_o
+
 );
 
 localparam			S_IDLE	= 3'd0,

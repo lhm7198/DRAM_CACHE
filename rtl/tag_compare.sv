@@ -188,7 +188,7 @@ always_comb begin
 
 			rready_n		= 1'b1;
 
-			if(rvalid_i && !tag_fifo_aempty_i) begin
+			if(rvalid_i & !tag_fifo_aempty_i) begin
 				tag_fifo_rden_n		= 1'b1;
 				wbuffer_rden_n		= 1'b1;
 				rready_n		= 1'b0;

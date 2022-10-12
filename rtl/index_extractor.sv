@@ -48,7 +48,7 @@ localparam 			S_IDLE	= 3'd0,
 
 reg	[2:0]					state,		state_n;
 
-reg 	[INDEX_WIDTH-1 : 0] 			index,		index_n;
+reg 	[ADDR_WIDTH-1 : 0] 			index,		index_n;
 reg	[9 : 0]		 			tid,		tid_n; 		 // 10 bit
 reg	[ADDR_WIDTH + TID_WIDTH : 0]		tag_fifo_data,	tag_fifo_data_n; // 1 + 64 + 16 bit
 reg						tag_fifo_wren,	tag_fifo_wren_n;
@@ -101,6 +101,7 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			$display("IDLE");
 			if(tag_fifo_afull_i) begin
 				state_n					= state;
 			end
@@ -123,9 +124,10 @@ always_comb begin
 			end
 		end
 		S_RRE: begin
-			index_n[OFFSET_WIDTH-1 : 0]					= 6'b0;
-			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
-			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
+			$display("RRE");
+			index_n[OFFSET_WIDTH-1 : 0]					= 0;
+			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
+			index_n[ADDR_WIDTH-1 : OFFSET_WIDTH + INDEX_WIDTH]		= 0;
 
 			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b0; 	//read
 			tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]	= tid;
@@ -141,6 +143,7 @@ always_comb begin
 			end
 		end
 		S_RREQ: begin
+			$display("RREQ");
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
 			tag_fifo_wren_n							= 1'b0;
@@ -148,6 +151,7 @@ always_comb begin
 			state_n								= S_IDLE;
 		end
 		S_WRE: begin
+			$display("WRE");
 			index_n[OFFSET_WIDTH-1 : 0]					= 6'b0;
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
 			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
@@ -164,6 +168,7 @@ always_comb begin
 			end
 		end
 		S_WREQ: begin
+			$display("WREQ");
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
 			tag_fifo_wren_n							= 1'b0;

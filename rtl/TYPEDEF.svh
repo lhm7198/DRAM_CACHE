@@ -19,7 +19,7 @@
 `define OFFSET_WIDTH		10
 
 // FIFO
-`define FIFO_DATA_WIDTH		8
+`define FIFO_DATA_WIDTH		64*9
 `define FIFO_SIZE		8
 `define FIFO_A_FULL_THR		6
 `define FIFO_A_EMPTY_THR	2

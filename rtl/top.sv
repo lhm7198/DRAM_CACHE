@@ -28,7 +28,7 @@ module TOP_MODULE
 
 	// AR channel (DRAM $ Controller -> Memory Controller)
 	output	wire 	[ID_WIDTH-1 : 0] 	arid_o,
-	output	wire 	[INDEX_WIDTH-1 : 0] 	araddr_o,
+	output	wire 	[ADDR_WIDTH-1 : 0] 	araddr_o,
 	input	wire	[7 : 0]			arlen_o,
 	output	wire				arvalid_o,
 	input	wire				arready_i,

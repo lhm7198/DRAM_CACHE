@@ -101,7 +101,6 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
-			$display("IDLE");
 			if(tag_fifo_afull_i) begin
 				state_n					= state;
 			end
@@ -124,7 +123,6 @@ always_comb begin
 			end
 		end
 		S_RRE: begin
-			$display("RRE");
 			index_n[OFFSET_WIDTH-1 : 0]					= 0;
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
 			index_n[ADDR_WIDTH-1 : OFFSET_WIDTH + INDEX_WIDTH]		= 0;
@@ -143,7 +141,6 @@ always_comb begin
 			end
 		end
 		S_RREQ: begin
-			$display("RREQ");
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
 			tag_fifo_wren_n							= 1'b0;
@@ -151,7 +148,6 @@ always_comb begin
 			state_n								= S_IDLE;
 		end
 		S_WRE: begin
-			$display("WRE");
 			index_n[OFFSET_WIDTH-1 : 0]					= 6'b0;
 			index_n[OFFSET_WIDTH + INDEX_WIDTH -1 : OFFSET_WIDTH]		= araddr_i[15 : 6];
 			index_n[ADDR_WIDTH : OFFSET_WIDTH + INDEX_WIDTH]		= 48'b0;
@@ -168,7 +164,6 @@ always_comb begin
 			end
 		end
 		S_WREQ: begin
-			$display("WREQ");
 			arready_n							= 1'b1;
 			awready_n							= 1'b1;
 			tag_fifo_wren_n							= 1'b0;

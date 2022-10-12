@@ -71,49 +71,17 @@ begin
 	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
 	$display("aempty = %x, data = %x\n", aempty_o, data_o);
 	
-	arid_i		= 5;
-	araddr_i	= 64'h0;
-	arlen_i		= 10;
-	arval_i		= 1;
-
-	arready_i	= 1;
-
+	#(CLOCK_PERIOD);
+	
+	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
+	$display("aempty = %x, data = %x\n", aempty_o, data_o);
 
 	#(CLOCK_PERIOD);
 	
 	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
 	$display("aempty = %x, data = %x\n", aempty_o, data_o);
-	
-	arid_i		= 3;
-	araddr_i	= 64'hccccccccccc;
-	arlen_i		= 10;
-	arval_i		= 1;
-
-	arready_i	= 1;
-
 
 	#(CLOCK_PERIOD);
-	
-	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
-	$display("aempty = %x, data = %x\n", aempty_o, data_o);
-		
-	arid_i		= 2;
-	araddr_i	= 64'hddddddddddd;
-	arlen_i		= 10;
-	arval_i		= 1;
-
-	arready_i	= 1;
-
-
-	#(CLOCK_PERIOD);
-		
-	arid_i		= 1;
-	araddr_i	= 64'heeeeeeeeeeee;
-	arlen_i		= 10;
-	arval_i		= 1;
-
-	arready_i	= 1;
-
 
 	$display("arid = %x, araddr = %x, arlen = %x, arval = %x", arid_o, araddr_o, arlen_o, arval_o);
 	$display("aempty = %x, data = %x\n", aempty_o, data_o);

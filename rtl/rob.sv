@@ -1,8 +1,8 @@
 `include "TYPEDEF.svh"
 
 module ROB # (
-	parameter DATA_WIDTH 	= `FIFO_DATA_WIDTH, // 8
-	parameter FIFO_SIZE 	= `FIFO_SIZE, // 8
+	parameter DATA_WIDTH 	= `AXI_DATA_WIDTH,
+	parameter FIFO_SIZE 	= `FIFO_SIZE,
 	parameter ID_WIDTH  	= `AXI_ID_WIDTH,
 	parameter TID_MAX	= `TID_MAX,
 	parameter TID_WIDTH	= `TID_WIDTH,
@@ -19,16 +19,15 @@ module ROB # (
 
 	output	wire					full_hit_o,
 	input	wire					write_en_hit_i,
-	input	wire	[FIFO_WIDTH - 1 : 0]		rdata_hit_i,	
+	input	wire	[FIFO_WIDTH - 1 : 0]		wdata_hit_i,	
 
 	output	wire					full_miss_o,
 	input	wire					write_en_miss_i,
-	input	wire	[FIFO_WIDTH - 1 : 0]		rdata_miss_i,	
-
+	input	wire	[FIFO_WIDTH - 1 : 0]		wdata_miss_i
 );
 
 localparam 		S_IDLE		= 1'd0,
-			S_VALID		= 1'd1,
+			S_VAL		= 1'd1;
 
 // tag compare - rob
 wire					full_hit;
@@ -36,7 +35,6 @@ wire					write_en_hit;
 wire	[FIFO_WIDTH - 1 : 0]		write_data_hit;
 
 wire					empty_hit;
-wire					read_en_hit = en_hit;
 wire	[FIFO_WIDTH - 1 : 0]		read_data_hit;
 
 // cxl controller - rob
@@ -45,15 +43,14 @@ wire					write_en_miss;
 wire	[FIFO_WIDTH - 1 : 0]		write_data_miss;
 
 wire					empty_miss;
-wire					read_en_miss = en_miss;
 wire	[FIFO_WIDTH - 1 : 0]		read_data_miss;
 
 // registers
 reg	[2 : 0]				state, state_n;
 
-reg	[TID_WIDTH - 1 : 0]		tID;
-reg	[TID_WIDTH - 1 : 0]		tID_hit = read_data_hit[FIFO_WIDTH-1 : DATA_WIDTH];
-reg	[TID_WIDTH - 1 : 0]		tID_miss = read_data_miss[FIFO_WIDHT-1 : DATA_WIDTH];
+reg	[TID_WIDTH - 1 : 0]		tID, tID_n;
+reg	[TID_WIDTH - 1 : 0]		tID_hit, tID_hit_n;
+reg	[TID_WIDTH - 1 : 0]		tID_miss, tID_miss_n;
 
 reg	[FIFO_WIDTH - 1: 0]		rdata, rdata_n;
 
@@ -61,19 +58,19 @@ reg					en_hit, en_hit_n;
 reg					en_miss, en_miss_n;
 
 reg					valid, valid_n;
-reg	[ID_WIDTH - 1 : 0]		rid, rdi_n;
+reg	[ID_WIDTH - 1 : 0]		rid, rid_n;
 
-reg					flag;
 
 
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
-		tID		<= 0;
+		tID		<= 1;
 		valid		<= 0;
 		rid		<= 0;
-		flag		<= 0;
 		rdata		<= 0;
+		tID_hit		<= 0;
+		tID_miss	<= 0;
 		en_hit		<= 0;
 		en_miss		<= 0;
 	end
@@ -82,48 +79,46 @@ always_ff @(posedge clk) begin
 		tID		<= tID_n;
 		valid		<= valid_n;
 		rid		<= rid_n;
-		flag		<= flag_n;
 		rdata		<= rdata_n;
+		tID_hit		<= tID_hit_n;
+		tID_miss	<= tID_miss_n;
 		en_hit		<= en_hit_n;
 		en_miss		<= en_hit_n;
 	end
 end
 
 always_comb begin
+
+	$display("tID %d hit %d miss %d",tID,tID_hit,tID_miss);
 	state_n		= state;
 	tID_n		= tID;
 	valid_n		= valid;
 	rid_n		= rid;
-	flag_n		= flag;
-
+	tID_hit_n	= read_data_hit[FIFO_WIDTH-1 : DATA_WIDTH];
+	tID_miss_n	= read_data_miss[FIFO_WIDTH-1 : DATA_WIDTH];
 	case (state)
 		S_IDLE: begin
 			en_hit_n		= 0;
-			en_missn		= 0;
+			en_miss_n		= 0;
 			if((!empty_hit & (tID == tID_hit)) | (!empty_miss & (tID == tID_miss))) begin
 				tID_n	= tID + 1;
 
 				if(tID == tID_hit) begin
-					flag_n		= 0;
 					rdata_n		= read_data_hit;
+					en_hit_n	= 1;
 				end
 				else begin
-					flag_n		= 1;
 					rdata_n		= read_data_miss;
+					en_miss_n	= 1;
 				end
 				state_n			= S_VAL;
 				valid_n			= 1;
+			end
 		end
 		S_VAL: begin
 			if(ready_i)
 				valid_n			= 0;
 				state_n			= S_IDLE;
-				if(flag == 0) begin
-					en_hit_n		= 1;
-				end
-				else begin
-					en_miss_n		= 1;
-				end
 		end
 	endcase
 end
@@ -136,10 +131,10 @@ FIFO	hit_fifo
 
 	.full_o		(full_hit),
 	.write_en_i	(write_en_hit_i),
-	.write_data_i	(write_data_hit_i),
+	.write_data_i	(wdata_hit_i),
 
 	.empty_o	(empty_hit),
-	.read_en_i	(read_en_hit),
+	.read_en_i	(en_hit),
 	.read_data_o	(read_data_hit)
 );
 
@@ -151,10 +146,10 @@ FIFO	miss_fifo
 
 	.full_o		(full_miss),
 	.write_en_i	(write_en_miss_i),
-	.write_data_i	(write_data_miss_i),
+	.write_data_i	(wdata_miss_i),
 
 	.empty_o	(empty_miss),
-	.read_en_i	(read_en_miss),
+	.read_en_i	(en_miss),
 	.read_data_o	(read_data_miss)
 );
 

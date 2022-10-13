@@ -1,12 +1,10 @@
 `include "TYPEDEF.svh"
 
-module READ_MISS_HANDLER
-#(
+module READ_MISS_HANDLER # (
 	parameter	ADDR_WIDTH	= `AXI_ADDR_WIDTH,
 	parameter	DATA_WIDTH	= `AXI_DATA_WIDTH,
 	parameter	WDATA_WIDTH	= ADDR_WIDTH + DATA_WIDTH
-)
-(
+)(
 	input	wire		clk,
 	input	wire		rst_n,
 
@@ -36,7 +34,8 @@ localparam		S_IDLE	= 2'd0,
 			S_RUN	= 2'd2;
 
 reg	[1 : 0]				state, state_n;
-reg	[WDATA_WIDHT-1 : 0]		wdata, wdata_n;
+reg					ready, ready_n;
+reg	[WDATA_WIDTH-1 : 0]		wdata, wdata_n;
 reg					valid, valid_n;
 reg					write_en, write_en_n;
 reg					read_en, read_en_n;

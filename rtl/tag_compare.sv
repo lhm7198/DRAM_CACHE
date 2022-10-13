@@ -1,4 +1,4 @@
-`include "AXI_TYPEDEF.svh"
+`include "TYPEDEF.svh"
 
 module TAG_COMPARE
 #(
@@ -13,7 +13,7 @@ module TAG_COMPARE
 	parameter INDEX_WIDTH 		= `INDEX_WIDTH,
 	parameter OFFSET_WIDTH 		= `OFFSET_WIDTH,
 	
-	parameter TID_WIDTH		= `TID_WIDTH,
+	parameter TID_WIDTH		= `TID_WIDTH
 )
 (
 	input	wire							clk,
@@ -92,7 +92,7 @@ reg	[DATA_WIDTH - 1 : 0]				w_fifo_data,	w_fifo_data_n;
 
 reg 							rready,		rready_n;
 
-wire	read  = !tag_fifo_data_i[ADDR_WIDTH + ID_WIDTH : ADDR_WIDTH + ID_WIDTH]; // read = 0, write = 1
+wire	read  = !tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH : TID_WIDTH + ADDR_WIDTH]; // read = 0, write = 1
 wire	valid = rdata_i[TAG_SIZE + DATA_WIDTH - 1 : TAG_SIZE + DATA_WIDTH - 1]; // tag = VALID + DIRTY + TAG DATA + BLANK
 
 always_ff @(posedge clk)
@@ -171,6 +171,7 @@ always_comb begin
 	
 	case (state)
 		S_IDLE: begin
+			$display("S_IDLE\n");
 			rob_wren_n		= 1'b0;
 			rob_data_n		= 0;
 
@@ -197,12 +198,17 @@ always_comb begin
 			end
 		end
 		S_DEC: begin
+			$display("S_DEC\n");
 			tag_fifo_rden_n	= 1'b0;
 			wbuffer_rden_n	= 1'b0;
 
+			$display("valid : %x, read : %x\n", valid, read); 
+				
 			if(read) begin
 				// read hit(valid && same tag) 
-				if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
+				//valid, tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH], rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH]);
+				//$display("tag_tid : %x, tag_addr : %x\n", tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : ADDR_WIDTH], tag_fifo_data_i[ADDR_WIDTH - 1 : 0]);
+				if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 					rob_data_n[TID_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : ADDR_WIDTH]; // tid
 					rob_data_n[DATA_WIDTH - 1 : 0] = rdata_i[DATA_WIDTH - 1 : 0];
 					
@@ -213,7 +219,7 @@ always_comb begin
 					ar_fifo_data_n[TID_WIDTH + ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : 0]; // tid + addr
 					
 					aw_fifo_data_n[ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
-					aw_fifo_data_n[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] = read_data_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH]; // tag in addr
+					aw_fifo_data_n[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] = rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH]; // tag in addr
 					
 					w_fifo_data_n = rdata_i[DATA_WIDTH - 1 : 0];
 
@@ -222,7 +228,7 @@ always_comb begin
 			end
 			else begin
 				// write hit(valid && same tag)
-				if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == read_data_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
+				if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 					fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 					fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
 					fill_valid_n = 1'b1;
@@ -232,7 +238,7 @@ always_comb begin
 				// write miss
 				else begin
 					aw_fifo_data_n[ADDR_WIDTH - 1 : 0] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
-					aw_fifo_data_n[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] = read_data_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH]; // tag in addr
+					aw_fifo_data_n[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] = rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH]; // tag in addr
 					
 					w_fifo_data_n = rdata_i[DATA_WIDTH - 1 : 0];
 					
@@ -245,6 +251,7 @@ always_comb begin
 			end
 		end
 		S_RHIT: begin			
+			$display("S_RHIT\n");
 			if(!rob_afull_i) begin
 				rob_wren_n	= 1'b1;
 
@@ -252,6 +259,7 @@ always_comb begin
 			end
 		end
 		S_RMISS: begin
+			$display("S_RMISS\n");
 			if(!ar_fifo_afull_i & !aw_fifo_afull_i & !w_fifo_afull_i) begin
 				ar_fifo_wren_n	= 1'b1;
 				aw_fifo_wren_n	= 1'b1;
@@ -261,12 +269,14 @@ always_comb begin
 			end
 		end
 		S_WHIT: begin
+			$display("S_WHIT\n");
 			if(fill_ready_i) begin
 				state_n		= S_IDLE;
 			end
 		end
 		S_WMISS: begin
-			if(!aw_fifo_afull_i & !w_fifo_afull_i)) begin
+			$display("S_WMISS\n");
+			if(!aw_fifo_afull_i & !w_fifo_afull_i & fill_ready_i) begin
 				aw_fifo_wren_n	= 1'b1;
 				w_fifo_wren_n	= 1'b1;
 
@@ -284,7 +294,7 @@ assign tag_fifo_rden_o	= tag_fifo_rden;
 
 // rob
 assign rob_wren_o	= rob_wren;
-assign rob_data_o	= r_hit_data;
+assign rob_data_o	= rob_data;
 
 // ar fifo
 assign ar_fifo_wren_o	= ar_fifo_wren;

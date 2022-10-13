@@ -14,12 +14,12 @@ module FILL_AR
 	input 	wire						rst_n,
 
 	// AR channel (Fill AR <-> CXL Ctrl)
-	output	wire	[ID_WIDTH - 1 : 0]			arid_o
+	output	wire	[ID_WIDTH - 1 : 0]			arid_o,
 	output	wire	[ADDR_WIDTH - 1 : 0]			araddr_o,
 	output	wire						arvalid_o,
 	input	wire						arready_i,
 
-	// Inner wire (AR FIFO <-> FILL AR)
+	// Inner wire (AR FIFO <-> Fill AR)
 	input	wire						arfifo_aempty_i,
 	output	wire						arfifo_rden_o,
 	input	wire	[TID_WIDTH + ADDR_WIDTH - 1 : 0] 	arfifo_data_i,
@@ -31,7 +31,7 @@ module FILL_AR
 );
 
 localparam 		S_IDLE		= 1'd0,
-			S_RUN		= 1'd1,
+			S_RUN		= 1'd1;
 
 reg						state,		state_n;
 
@@ -60,8 +60,8 @@ always_ff @(posedge clk) begin
 
 		rmfifo_data	<= rmfifo_data_n;
 
-		arfifo_rden	<= rden_n;
-		rmfifo_wren	<= wren_n;
+		arfifo_rden	<= arfifo_rden_n;
+		rmfifo_wren	<= rmfifo_wren_n;
 
 		araddr		<= araddr_n;
 		arvalid		<= arvalid_n;
@@ -81,6 +81,7 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			$display("S_IDLE\n");
 			rmfifo_wren_n	= 1'b0;
 			arvalid_n	= 1'b0;
 
@@ -91,6 +92,7 @@ always_comb begin
 			end
 		end
 		S_RUN: begin
+			$display("S_RUN\n");
 			arfifo_rden_n	= 1'b0;
 			rmfifo_wren_n	= 1'b1;
 			arvalid_n	= 1'b1;

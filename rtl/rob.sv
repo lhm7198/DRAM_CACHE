@@ -4,7 +4,6 @@ module ROB # (
 	parameter DATA_WIDTH 	= `AXI_DATA_WIDTH,
 	parameter FIFO_SIZE 	= `FIFO_SIZE,
 	parameter ID_WIDTH  	= `AXI_ID_WIDTH,
-	parameter TID_MAX	= `TID_MAX,
 	parameter TID_WIDTH	= `TID_WIDTH,
 	parameter FIFO_WIDTH	= TID_WIDTH + DATA_WIDTH
 )(

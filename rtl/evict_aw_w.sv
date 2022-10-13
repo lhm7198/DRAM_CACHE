@@ -40,7 +40,7 @@ module EVICT_AW_W
 );
 
 localparam 		S_IDLE		= 1'd0,
-			S_RUN		= 1'd1,
+			S_RUN		= 1'd1;
 
 reg						state,		state_n;
 
@@ -49,7 +49,7 @@ reg	[DATA_WIDTH - 1 : 0]			wdata,		wdata_n;
 reg						awfifo_rden,	awfifo_rden_n;		
 reg						wfifo_rden,	wfifo_rden_n;
 
-reg	[ADDR_WIDTH - 1 : 0]			awddr,		awaddr_n;
+reg	[ADDR_WIDTH - 1 : 0]			awaddr,		awaddr_n;
 reg						awvalid,	awvalid_n;
 reg						wvalid,		wvalid_n;
 reg						bvalid,		bvalid_n;
@@ -98,10 +98,11 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			$display("S_IDLE\n");
 			awvalid_n	= 1'b0;
 			wvalid_n	= 1'b0;
-
-			if(awready_i & wready_i) begin
+			$display("%x %x %x %x\n", awready_i, wready_i, awfifo_aempty_i, wfifo_aempty_i);
+			if(awready_i & wready_i & !awfifo_aempty_i & !wfifo_aempty_i) begin
 				awfifo_rden_n	= 1'b1;
 				wfifo_rden_n	= 1'b1;
 				
@@ -109,6 +110,7 @@ always_comb begin
 			end
 		end
 		S_RUN: begin
+			$display("S_RUN\n");
 			awfifo_rden_n	= 1'b0;
 			wfifo_rden_n	= 1'b0;
 			awvalid_n	= 1'b1;

@@ -85,7 +85,7 @@ always_comb begin
 			rmfifo_wren_n	= 1'b0;
 			arvalid_n	= 1'b0;
 
-			if(arready_i && !arfifo_aempty_i) begin
+			if(arready_i & !arfifo_aempty_i) begin
 				arfifo_rden_n	= 1'b1;
 				
 				state_n		= S_RUN;

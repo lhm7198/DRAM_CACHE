@@ -6,7 +6,7 @@
 
 `timescale 1ps/1ps
 
-module FILL_AR_TB;
+module EVICT_AW_W_TB;
 
 reg clk = 1'b0;
 reg rst_n;
@@ -46,7 +46,7 @@ initial
 begin
 	rst_n = 1'b0;
 
-	arready_i = 1'b1;
+	awready_i = 1'b1;
 	wready_i = 1'b1;
 	bready_i = 1'b1;
 		
@@ -68,21 +68,27 @@ begin
 	//////////////////////////////////////////////
 	$display("-------- READ MISS START ---------\n");
 	
-	arfifo_aempty_i = 1'b0;
+	awfifo_aempty_i = 1'b0;
 
-	arfifo_data_i[`TID_W + `ADDR_W - 1 : `ADDR_W] = 1; // tid
-	arfifo_data_i[`ADDR_W - 1 : 0] = 1; // addr
+	awfifo_data_i[`TID_W + `ADDR_W - 1 : `ADDR_W] = 1; // tid
+	awfifo_data_i[`ADDR_W - 1 : 0] = 1; // addr
+
+	wfifo_aempty_i = 1'b0;
+
+	wfifo_data_i = 12; // data
 	
 	// S_IDLE -> S_RUN
-	arfifo_aempty_i = 1'b0;
-	arready_i = 1'b1;
+	awready_i = 1'b1;
+	wready_i = 1'b1;
+
 	#(CLOCK_PERIOD);
 
 	// S_RUN -> S_IDLE
 	#(CLOCK_PERIOD);
 
-	$display("rmfifo_data : %x\naraddr : %x\n", 
-		rmfifo_data_o, araddr_o);
+	#(CLOCK_PERIOD);
+	$display("awaddr : %x\nwdata : %x\n", 
+		awaddr_o, wdata_o);
 
 	$display("---------------------------------\n");
 
@@ -91,23 +97,32 @@ begin
 	$finish;
 end
 
-FILL_AR fill_ar
+EVICT_AW_W evict_aw_w
 (
 	.clk(clk), 
 	.rst_n(rst_n),
 
-	.arid_o(arid_o),
-	.araddr_o(araddr_o),
-	.arvalid_o(arvalid_o),
-	.arready_i(arready_i),
+	.awid_o(awid_o),
+	.awaddr_o(awaddr_o),
+	.awvalid_o(awvalid_o),
+	.awready_i(awready_i),
 
-	.arfifo_aempty_i(arfifo_aempty_i),
-	.arfifo_rden_o(arfifo_rden_o),
-	.arfifo_data_i(arfifo_data_i),
+	.wid_o(wid_o),
+	.wdata_o(wdata_o),
+	.wvalid_o(wvalid_o),
+	.wready_i(wready_i),
 
-	.rmfifo_afull_i(rmfifo_afull_i),
-	.rmfifo_wren_o(rmfifo_wren_o),
-	.rmfifo_data_o(rmfifo_data_o)
+	.bid_o(bid_o),
+	.bvalid_o(bvalid_o),
+	.bready_i(bready_i),
+
+	.awfifo_aempty_i(awfifo_aempty_i),
+	.awfifo_rden_o(awfifo_rden_o),
+	.awfifo_data_i(awfifo_data_i),
+
+	.wfifo_aempty_i(wfifo_aempty_i),
+	.wfifo_rden_o(wfifo_rden_o),
+	.wfifo_data_i(wfifo_data_i)
 );
 
 endmodule

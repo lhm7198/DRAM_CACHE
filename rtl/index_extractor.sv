@@ -17,21 +17,18 @@ module INDEX_EXTRACTOR
 	// AR channel (Processor -> DRAM $ Controller)
 	input	wire 	[ID_WIDTH - 1 : 0] 		arid_i,
 	input	wire 	[ADDR_WIDTH - 1 : 0] 		araddr_i,
-	//input	wire	[7 : 0]				arlen_i,
 	input	wire					arvalid_i,
 	output  wire					arready_o,
 
 	// AW channel (Processor -> DRAM $ Controller)
 	input 	wire 	[ID_WIDTH - 1 : 0] 		awid_i,
 	input	wire 	[ADDR_WIDTH - 1 : 0] 		awaddr_i,
-	//input	wire	[7 : 0]				awlen_i,
 	input 	wire 					awvalid_i,
 	output	wire					awready_o,
 
 	// AR channel (Index extractor <-> Memory Controller)
 	output	wire 	[ID_WIDTH - 1 : 0] 		arid_o,
 	output	wire 	[ADDR_WIDTH - 1 : 0] 		araddr_o,
-	//output	wire	[7 : 0]				arlen_o,
 	output	wire					arvalid_o,
 	input	wire					arready_i,	
 
@@ -65,8 +62,8 @@ always_ff @(posedge clk)
 		tag_fifo_wren	<= 1'b0;
 		arbiter		<= 1'b0;
 
-		arready		<= 1'b1;
-		awready		<= 1'b1;
+		arready		<= 1'b0;
+		awready		<= 1'b0;
 		arvalid		<= 1'b0;
 	end
 	else begin
@@ -106,7 +103,7 @@ always_comb begin
 				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]		= tid;
 				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b0; 	
 
-				tid_n									= tid + 1;
+				tid_n					= tid + 1;
 
 				arready					= 1'b0;
 				awready					= 1'b0;
@@ -144,8 +141,8 @@ always_comb begin
 			arready					= 1'b1;
 			awready					= 1'b1;
 			if(arready_i) begin
-				arvalid_n						= 1'b0;
-				state_n 						= S_IDLE;
+				arvalid_n			= 1'b0;
+				state_n 			= S_IDLE;
 			end
 		end
 	endcase

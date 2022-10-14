@@ -1,6 +1,6 @@
 `include "TYPEDEF.svh"
 
-module FILL_AR 
+module ARBITER 
 #(
 	parameter ADDR_WIDTH		= `AXI_ADDR_WIDTH,
 	parameter DATA_WIDTH 		= `AXI_DATA_WIDTH,
@@ -79,6 +79,7 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			$display("S_IDLE\n");
 			fill_fifo_wren_n	= 1'b0;
 			fill_fifo_data_n	= 0;
 
@@ -86,9 +87,13 @@ always_comb begin
 				state_n		= state;
 			end
 			else if(fill_valid_i & (!rmiss_valid_i | !arbiter)) begin
+				arbiter_n	= 1'b1;
+
 				state_n		= S_WREQ;
 			end
 			else if(rmiss_valid_i & (!fill_valid_i | arbiter)) begin
+				arbiter_n	= 1'b0;
+
 				state_n		= S_RREQ;
 			end
 			else begin
@@ -96,12 +101,14 @@ always_comb begin
 			end
 		end
 		S_WREQ: begin
+			$display("S_WREQ\n");
 			fill_fifo_wren_n	= 1'b1;
 			fill_fifo_data_n	= fill_data_i;
 			
 			state_n			= S_IDLE;
 		end
 		S_RREQ: begin
+			$display("S_RREQ\n");
 			fill_fifo_wren_n	= 1'b1;
 			fill_fifo_data_n	= rmiss_data_i;
 

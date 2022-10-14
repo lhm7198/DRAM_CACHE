@@ -20,9 +20,9 @@ wire [3 : 0] 	araddr_o;
 wire		arvalid_o;
 reg		arready_i;
 
-reg 		fifo_afull_i;
-wire 		fifo_write_en_o;
-wire [80 : 0]	fifo_data_o;
+reg 		tagfifo_afull_i;
+wire 		tagfifo_wren_o;
+wire [80 : 0]	tagfifo_data_o;
 
 localparam CLOCK_PERIOD = 1000;
 always #(CLOCK_PERIOD/2) clk = ~clk;
@@ -46,7 +46,7 @@ begin
 
 	arready_i = 0;
 
-	fifo_afull_i = 0;
+	tagfifo_afull_i = 0;
 
 	read_index = 0;
 	write_index = 0;
@@ -79,21 +79,19 @@ begin
 
 		
 		if(r_addr % 2 == 0) begin
-			arid_i = read_index;
+			arid_i = read_index++;
 			arvalid_i = 1;
 			araddr_i = r_addr;
-			read_index++;
 		end
 		if(w_addr % 2 == 0) begin
-			awid_i = write_index;
+			awid_i = write_index++;
 			awvalid_i = 1;
 			awaddr_i = w_addr;
-			write_index++;
 		end
 
 		#(CLOCK_PERIOD);
 
-		$display("index = %x, fifo_data = %x\n", araddr_o, fifo_data_o);	
+		$display("index = %x\ntagfifo_data = %x\n", araddr_o, tagfifo_data_o);	
 		$display("-----------------------------------------------------------------------\n");
 	end
 	$finish;
@@ -119,9 +117,9 @@ INDEX_EXTRACTOR index_extractor
 	.arvalid_o(arvalid_o),
 	.arready_i(arready_i),
 	
-	.fifo_afull_i(fifo_afull_i), 
-	.fifo_write_en_o(fifo_write_en_o), 
-	.fifo_data_o(fifo_data_o)
+	.tag_fifo_afull_i(tagfifo_afull_i), 
+	.tag_fifo_wren_o(tagfifo_wren_o), 
+	.tag_fifo_data_o(tagfifo_data_o)
 );
 
 endmodule

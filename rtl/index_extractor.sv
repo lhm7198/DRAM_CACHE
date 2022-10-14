@@ -17,21 +17,21 @@ module INDEX_EXTRACTOR
 	// AR channel (Processor -> DRAM $ Controller)
 	input	wire 	[ID_WIDTH - 1 : 0] 		arid_i,
 	input	wire 	[ADDR_WIDTH - 1 : 0] 		araddr_i,
-	input	wire	[7 : 0]				arlen_i,
+	//input	wire	[7 : 0]				arlen_i,
 	input	wire					arvalid_i,
 	output  wire					arready_o,
 
 	// AW channel (Processor -> DRAM $ Controller)
 	input 	wire 	[ID_WIDTH - 1 : 0] 		awid_i,
 	input	wire 	[ADDR_WIDTH - 1 : 0] 		awaddr_i,
-	input	wire	[7 : 0]				awlen_i,
+	//input	wire	[7 : 0]				awlen_i,
 	input 	wire 					awvalid_i,
 	output	wire					awready_o,
 
 	// AR channel (Index extractor <-> Memory Controller)
 	output	wire 	[ID_WIDTH - 1 : 0] 		arid_o,
 	output	wire 	[ADDR_WIDTH - 1 : 0] 		araddr_o,
-	output	wire	[7 : 0]				arlen_o,
+	//output	wire	[7 : 0]				arlen_o,
 	output	wire					arvalid_o,
 	input	wire					arready_i,	
 

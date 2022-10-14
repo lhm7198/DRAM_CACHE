@@ -16,13 +16,13 @@ reg		awvalid_i;
 wire		awready_o;
 
 wire [15 : 0]	arid_o;
-wire [3 : 0] 	araddr_o;
+wire [63 : 0] 	araddr_o;
 wire		arvalid_o;
 reg		arready_i;
 
 reg 		tagfifo_afull_i;
 wire 		tagfifo_wren_o;
-wire [80 : 0]	tagfifo_data_o;
+wire [74 : 0]	tagfifo_data_o;
 
 localparam CLOCK_PERIOD = 1000;
 always #(CLOCK_PERIOD/2) clk = ~clk;
@@ -60,7 +60,7 @@ begin
 
 	$display("\nStart\n");
 
-	for(i=0 ; i<10 ; i++) begin
+	for(i=0 ; i<20 ; i++) begin
 		#(CLOCK_PERIOD);
 	
 		$display("%1d repetition\n",i);
@@ -76,7 +76,7 @@ begin
 		awid_i = 0;
 		awaddr_i = 0;
 
-
+		arready_i = 1;
 		
 		if(r_addr % 2 == 0) begin
 			arid_i = read_index++;

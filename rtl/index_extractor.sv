@@ -86,7 +86,9 @@ always_comb begin
 	tag_fifo_data_n	= tag_fifo_data;
 	tag_fifo_wren_n = tag_fifo_wren;
         arbiter_n	= arbiter;
-	
+
+	arready 	= 1'b0;
+	awready		= 1'b0;	
 	arvalid_n	= arvalid;
 
 	case (state)
@@ -105,8 +107,8 @@ always_comb begin
 
 				tid_n					= tid + 1;
 
-				arready					= 1'b0;
-				awready					= 1'b0;
+				arready					= 1'b1;
+				awready					= 1'b1;
 				arvalid_n				= 1'b1;
 
 				arbiter_n 				= 1'b1;
@@ -123,8 +125,8 @@ always_comb begin
 				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]		= 0;
 				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b1;
 
-				arready					= 1'b0;
-				awready					= 1'b0;
+				arready					= 1'b1;
+				awready					= 1'b1;
 				arvalid_n				= 1'b1;
 				
 				arbiter_n 				= 1'b0;
@@ -138,8 +140,9 @@ always_comb begin
 		end
 		S_REQ: begin
 			tag_fifo_wren_n				= 1'b0;
-			arready					= 1'b1;
-			awready					= 1'b1;
+		
+			arready 				= 1'b0;
+			awready					= 1'b0;	
 			if(arready_i) begin
 				arvalid_n			= 1'b0;
 				state_n 			= S_IDLE;

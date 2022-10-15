@@ -71,9 +71,8 @@ localparam			S_IDLE	= 3'd0,
 
 reg	[2:0]						state,		state_n;
 
-reg							tag_fifo_rden,	tag_fifo_rden_n;
-
-reg							wbuffer_rden,	wbuffer_rden_n;
+reg							tag_fifo_rden;
+reg							wbuffer_rden;
 
 reg							rob_wren;
 reg	[TID_WIDTH + DATA_WIDTH - 1 : 0]		rob_data,	rob_data_n;
@@ -117,15 +116,11 @@ always_ff @(posedge clk)
 		fill_valid	<= 1'b0;
 		fill_data	<= 0;
 
-		rready		<= 1'b1;
+		rready		<= 1'b0;
 	end
 	else begin
 		state		<= state_n;
 
-		tag_fifo_rden	<= tag_fifo_rden_n;
-
-		wbuffer_rden	<= wbuffer_rden_n;
-		
 		rob_data	<= rob_data_n;
 		ar_fifo_data	<= ar_fifo_data_n;
 		aw_fifo_data	<= aw_fifo_data_n;
@@ -137,40 +132,40 @@ always_ff @(posedge clk)
 
 always_comb begin
 	state_n 		= state;
-	
-	tag_fifo_rden_n		= tag_fifo_rden;
-	wbuffer_rden_n		= wbuffer_rden;
 
+	tag_fifo_rden		= 1'b0;
+	wbuffer_rden		= 1'b0;
+
+	rob_wren		= 1'b0;
 	rob_data_n		= rob_data;
+
+	ar_fifo_wren		= 1'b0;
 	ar_fifo_data_n		= ar_fifo_data;
+
+	aw_fifo_wren		= 1'b0;
 	aw_fifo_data_n		= aw_fifo_data;
+
+	w_fifo_wren		= 1'b0;
 	w_fifo_data_n		= w_fifo_data;
 
 	fill_valid_n		= fill_valid;
 	fill_data_n		= fill_data;
+
+	rready			= 1'b0;
 	
 	case (state)
 		S_IDLE: begin
 			$display("S_IDLE\n");
-			rob_wren 		= 1'b0;
 			rob_data_n		= 0;
-
-			ar_fifo_wren 		= 1'b0;
 			ar_fifo_data_n		= 0;
-
-			aw_fifo_wren		= 1'b0;
 			aw_fifo_data_n		= 0;
-
-			w_fifo_wren		= 1'b0;
 			w_fifo_data_n		= 0;
 
-			fill_valid_n		= 1'b0;
 			fill_data_n		= 0;
 
 			if(rvalid_i & !tag_fifo_aempty_i) begin
-				tag_fifo_rden_n		= 1'b1;
-				wbuffer_rden_n		= 1'b1;
-				rready			= 1'b0;
+				tag_fifo_rden		= 1'b1;
+				rready			= 1'b1;
 
 				if(read) begin
 					// read hit(valid && same tag) 
@@ -193,6 +188,7 @@ always_comb begin
 					end
 				end
 				else begin
+					wbuffer_rden	= 1'b1;
 					// write hit(valid && same tag)
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
@@ -219,14 +215,11 @@ always_comb begin
 				state_n		= S_DEC;
 			end
 		end
-		S_DEC: begin
-			$display("S_DEC\n");
-			tag_fifo_rden_n	= 1'b0;
-			wbuffer_rden_n	= 1'b0;
-		end
 		S_RHIT: begin			
 			$display("S_RHIT\n");
-			rready = 1'b1;
+			tag_fifo_rden	= 1'b0;
+			rready 		= 1'b0;
+
 			if(!rob_afull_i) begin
 				rob_wren	= 1'b1;
 
@@ -235,7 +228,9 @@ always_comb begin
 		end
 		S_RMISS: begin
 			$display("S_RMISS\n");
-			rready = 1'b1;
+			tag_fifo_rden	= 1'b0;
+			rready		= 1'b0;
+
 			if(!ar_fifo_afull_i & !aw_fifo_afull_i & !w_fifo_afull_i) begin
 				ar_fifo_wren	= 1'b1;
 				aw_fifo_wren	= 1'b1;
@@ -246,17 +241,27 @@ always_comb begin
 		end
 		S_WHIT: begin
 			$display("S_WHIT\n");
-			rready = 1'b1;
+			tag_fifo_rden	= 1'b0;
+			wbuffer_rden	= 1'b0;
+			rready 		= 1'b0;
+
 			if(fill_ready_i) begin
+				fill_valid_n	= 1'b0;
+
 				state_n		= S_IDLE;
 			end
 		end
 		S_WMISS: begin
 			$display("S_WMISS\n");
-			rready = 1'b1;
+			tag_fifo_rden	= 1'b0;
+			wbuffer_rden	= 1'b0;
+			rready 		= 1'b0;
+
 			if(!aw_fifo_afull_i & !w_fifo_afull_i & fill_ready_i) begin
 				aw_fifo_wren	= 1'b1;
 				w_fifo_wren	= 1'b1;
+
+				fill_valid_n	= 1'b0;
 
 				state_n		= S_IDLE;
 			end			

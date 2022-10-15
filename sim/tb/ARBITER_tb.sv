@@ -4,7 +4,7 @@
 
 `timescale 1ps/1ps
 
-module TAG_COMPARE_TB;
+module ARBITER_TB;
 
 reg clk = 1'b0;
 reg rst_n;
@@ -55,7 +55,7 @@ begin
 	fill_data_i[`ADDR_W + `DATA_W - 1 : `DATA_W] = 15; // addr
 	fill_data_i[`DATA_W - 1 : 0] = 17; // data
 
-	// S_IDLE -> S_WREQ
+	// S_IDLE -> S_REQ
 	fill_valid_i = 1'b1;
 	rmiss_valid_i = 1'b0;
 	#(CLOCK_PERIOD);
@@ -75,7 +75,7 @@ begin
 	$display("-------- READ MISS START --------\n");
 	
 	// rmiss_data_i
-	rmiss_data_i[`ADDR_W + `DATA_W - 1 : `DATA_W] = 17; // addr
+	rmiss_data_i[`ADDR_W + `DATA_W - 1 : `DATA_W] = 18; // addr
 	rmiss_data_i[`DATA_W - 1 : 0] = 5; // data
 
 	// S_IDLE -> S_RREQ

@@ -106,7 +106,7 @@ always_comb begin
 				tid_n					= tid + 1;
 
 				arready					= 1'b1;
-				awready					= 1'b1;
+				awready					= 1'b0;
 				arvalid_n				= 1'b1;
 
 				arbiter_n 				= 1'b1;
@@ -123,7 +123,7 @@ always_comb begin
 				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH - 1 : ADDR_WIDTH]		= 0;
 				tag_fifo_data_n[ADDR_WIDTH + TID_WIDTH : ADDR_WIDTH + TID_WIDTH]	= 1'b1;
 
-				arready					= 1'b1;
+				arready					= 1'b0;
 				awready					= 1'b1;
 				arvalid_n				= 1'b1;
 				
@@ -143,6 +143,7 @@ always_comb begin
 			awready					= 1'b0;	
 			if(arready_i) begin
 				arvalid_n			= 1'b0;
+
 				state_n 			= S_IDLE;
 			end
 		end

@@ -28,16 +28,15 @@ module ARBITER
 );
 
 localparam 		S_IDLE		= 2'd0,
-			S_WREQ		= 2'd1,
-			S_RREQ		= 2'd2;
+			S_REQ		= 2'd1;
 
-reg	[1 : 0]					state,		state_n;
+reg						state,		state_n;
 
-reg						fill_ready,	fill_ready_n;
-reg						rmiss_ready,	rmiss_ready_n;
+reg						fill_ready;
+reg						rmiss_ready;
 
-reg						fill_fifo_wren,	fill_fifo_wren_n;
-reg	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]	fill_fifo_data,	fill_fifo_data_n;
+reg						fill_fifo_wren;
+reg	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]	fill_fifo_data, fill_fifo_data_n;
 
 reg						arbiter,	arbiter_n;
 
@@ -45,10 +44,6 @@ always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
 	
-		fill_ready	<= 1'b0;
-		rmiss_ready	<= 1'b0;
-
-		fill_fifo_wren	<= 1'b0;
 		fill_fifo_data	<= 0;
 
 		arbiter		<= 1'b0;
@@ -56,12 +51,8 @@ always_ff @(posedge clk) begin
 	else begin
 		state		<= state_n;
 
-		fill_ready	<= fill_ready_n;
-		rmiss_ready	<= rmiss_ready_n;
-
-		fill_fifo_wren	<= fill_fifo_wren_n;
-		fill_fifo_data	<= fill_fifo_data_n;
-
+		fill_fifo_data  <= fill_fifo_data_n;
+		
 		arbiter		<= arbiter_n;
 	end
 end
@@ -69,10 +60,10 @@ end
 always_comb begin
 	state_n			= state;
 
-	fill_ready_n		= fill_ready;
-	rmiss_ready_n		= rmiss_ready;
+	fill_ready		= 1'b0;
+	rmiss_ready		= 1'b0;
 
-	fill_fifo_wren_n	= fill_fifo_wren;
+	fill_fifo_wren		= 1'b0;
 	fill_fifo_data_n	= fill_fifo_data;
 
 	arbiter_n		= arbiter;
@@ -80,39 +71,41 @@ always_comb begin
 	case (state)
 		S_IDLE: begin
 			$display("S_IDLE\n");
-			fill_fifo_wren_n	= 1'b0;
 			fill_fifo_data_n	= 0;
 
 			if(fill_fifo_afull_i) begin
-				state_n		= state;
+				state_n			= state;
 			end
 			else if(fill_valid_i & (!rmiss_valid_i | !arbiter)) begin
-				arbiter_n	= 1'b1;
+				fill_ready		= 1'b1;
+				arbiter_n		= 1'b1;
 
-				state_n		= S_WREQ;
+				fill_fifo_data_n	= fill_data_i;
+
+				state_n			= S_REQ;
 			end
 			else if(rmiss_valid_i & (!fill_valid_i | arbiter)) begin
-				arbiter_n	= 1'b0;
+				rmiss_ready		= 1'b1;
+				arbiter_n		= 1'b0;
 
-				state_n		= S_RREQ;
+				fill_fifo_data_n	= rmiss_data_i;
+
+				state_n			= S_REQ;
 			end
 			else begin
-				state_n		= state;
+				state_n			= state;
 			end
 		end
-		S_WREQ: begin
-			$display("S_WREQ\n");
-			fill_fifo_wren_n	= 1'b1;
-			fill_fifo_data_n	= fill_data_i;
+		S_REQ: begin
+			$display("S_REQ\n");
+			fill_ready = 1'b0;
+			rmiss_ready = 1'b0;
 			
-			state_n			= S_IDLE;
-		end
-		S_RREQ: begin
-			$display("S_RREQ\n");
-			fill_fifo_wren_n	= 1'b1;
-			fill_fifo_data_n	= rmiss_data_i;
-
-			state_n			= S_IDLE;
+			if(!fill_fifo_afull_i) begin
+				fill_fifo_wren	= 1'b1;
+			
+				state_n		= S_IDLE;
+			end
 		end
 	endcase
 end

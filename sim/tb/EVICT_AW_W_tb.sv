@@ -78,7 +78,7 @@ begin
 	#(CLOCK_PERIOD);
 
 	// S_RUN -> S_IDLE
-	awready_i = 1'b1;
+	awready_i = 1'b0;
 	wready_i = 1'b1;
 	#(CLOCK_PERIOD);
 	

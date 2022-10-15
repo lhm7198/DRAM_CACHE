@@ -52,7 +52,7 @@ wire [`ADDR_W - 1 : 0] 	 		aw_fifo_data_o;
 // AR FIFO
 reg 					w_fifo_afull_i;
 wire					w_fifo_wren_o;
-wire [`ADDR_W + `DATA_W - 1 : 0]	w_fifo_data_o;
+wire [`DATA_W - 1 : 0]			w_fifo_data_o;
 
 // Arbiter
 reg					fill_ready_i;
@@ -120,12 +120,9 @@ begin
 	rdata_i[`DATA_W - 1 : 0] = 15; // data
 	rdata_i[`TAG_S + `DATA_W - 1 : `DATA_W] = tmp_tag; // tag
 
-	// S_IDLE -> S_DEC
+	// S_IDLE -> S_RHIT
 	rvalid_i = 1'b1;
 	tag_fifo_aempty_i = 1'b0;
-	#(CLOCK_PERIOD);
-
-	// S_DEC -> S_RHIT
 	#(CLOCK_PERIOD);
 
 	// S_RHIT -> S_IDLE
@@ -156,15 +153,12 @@ begin
 	tmp_tag[`TAG_S - 3 : `BLANK_W] = 7; // tag data
 	tmp_tag[`BLANK_W - 1 : 0] = 46'b0; // blank
 
-	rdata_i[`DATA_W - 1 : 0] = 15; // data
+	rdata_i[`DATA_W - 1 : 0] = 16; // data
 	rdata_i[`TAG_S + `DATA_W - 1 : `DATA_W] = tmp_tag; // tag
 
-	// S_IDLE -> S_DEC
+	// S_IDLE -> S_RMISS
 	rvalid_i = 1'b1;
 	tag_fifo_aempty_i = 1'b0;
-	#(CLOCK_PERIOD);
-
-	// S_DEC -> S_RMISS
 	#(CLOCK_PERIOD);
 
 	// S_RMISS -> S_IDLE
@@ -172,9 +166,9 @@ begin
 	aw_fifo_afull_i = 1'b0;
 	w_fifo_afull_i = 1'b0;
 	#(CLOCK_PERIOD);
-	$display("ar_wren_o : %x, aw_wren_o : %x, w_wren_o : %x\nar_tid : %x, ar_addr : %x\naw_addr : %x\nw_data : %x\n", 
+	$display("ar_wren_o : %x, aw_wren_o : %x, w_wren_o : %x\nar_addr : %x\naw_addr : %x\nw_data : %x\n", 
 		  ar_fifo_wren_o, aw_fifo_wren_o, w_fifo_wren_o, 
-		  ar_fifo_data_o[`TID_W + `ADDR_W - 1 : `ADDR_W], ar_fifo_data_o[`ADDR_W - 1 : 0],
+		  ar_fifo_data_o[`ADDR_W - 1 : 0],
 		  aw_fifo_data_o[`ADDR_W - 1 : 0],
 		  w_fifo_data_o[`DATA_W - 1 : 0]);
 	
@@ -200,32 +194,32 @@ begin
 	tmp_tag[`TAG_S - 3 : `BLANK_W] = 3; // tag data
 	tmp_tag[`BLANK_W - 1 : 0] = 46'b0; // blank
 
-	rdata_i[`DATA_W - 1 : 0] = 15; // data
+	rdata_i[`DATA_W - 1 : 0] = 10; // data
 	rdata_i[`TAG_S + `DATA_W - 1 : `DATA_W] = tmp_tag; // tag
 
 	// wbuffer
 	wbuffer_data_i = 14;
 
-	// S_IDLE -> S_DEC
+	// S_IDLE -> S_WHIT
 	rvalid_i = 1'b1;
 	tag_fifo_aempty_i = 1'b0;
 	#(CLOCK_PERIOD);
 
-	// S_DEC -> S_WHIT
-	#(CLOCK_PERIOD);
-
-	// S_WHIT -> S_IDLE
-	fill_ready_i = 1'b1;
-	#(CLOCK_PERIOD);
 	$display("fill_valid_o : %x\nfill_addr : %x\nfill_data : %x\n", 
 		  fill_valid_o, 
 		  fill_data_o[`ADDR_W + `DATA_W - 1 : `DATA_W],
 		  fill_data_o[`DATA_W - 1 : 0]);
 	
+
+	// S_WHIT -> S_IDLE
+	fill_ready_i = 1'b1;
+	#(CLOCK_PERIOD);
+	/*$display("fill_valid_o : %x\nfill_addr : %x\nfill_data : %x\n", 
+		  fill_valid_o, 
+		  fill_data_o[`ADDR_W + `DATA_W - 1 : `DATA_W],
+		  fill_data_o[`DATA_W - 1 : 0]);*/
+	
 	$display("-----------------------------------\n");
-
-
-	$display("\n$$$$$$$$$$$$$$$  End  $$$$$$$$$$$$$$$\n");
 
 	//////////////////////////////////////////////////
 	/////////////////  write miss  ///////////////////
@@ -247,21 +241,18 @@ begin
 	tmp_tag[`TAG_S - 3 : `BLANK_W] = 7; // tag data
 	tmp_tag[`BLANK_W - 1 : 0] = 46'b0; // blank
 
-	rdata_i[`DATA_W - 1 : 0] = 15; // data
+	rdata_i[`DATA_W - 1 : 0] = 5; // data
 	rdata_i[`TAG_S + `DATA_W - 1 : `DATA_W] = tmp_tag; // tag
 
 	// wbuffer
-	wbuffer_data_i = 13;
+	wbuffer_data_i = 9;
 
-	// S_IDLE -> S_DEC
+	// S_IDLE -> S_WMISS
 	rvalid_i = 1'b1;
 	tag_fifo_aempty_i = 1'b0;
 	#(CLOCK_PERIOD);
-
-	// S_DEC -> S_WHIT
-	#(CLOCK_PERIOD);
-
-	// S_WHIT -> S_IDLE
+	
+	// S_WMISS -> S_IDLE
 	aw_fifo_afull_i = 1'b0;
 	w_fifo_afull_i = 1'b0;
 	fill_ready_i = 1'b1;
@@ -273,7 +264,6 @@ begin
 		  fill_data_o[`DATA_W - 1 : 0]);
 	
 	$display("-----------------------------------\n");
-
 
 	$display("\n$$$$$$$$$$$$$$$  End  $$$$$$$$$$$$$$$\n");
 

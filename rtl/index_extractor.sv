@@ -62,8 +62,6 @@ always_ff @(posedge clk)
 		tag_fifo_wren	<= 1'b0;
 		arbiter		<= 1'b0;
 
-		arready		<= 1'b0;
-		awready		<= 1'b0;
 		arvalid		<= 1'b0;
 	end
 	else begin

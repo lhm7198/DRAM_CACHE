@@ -2,5 +2,5 @@
 
 -sverilog
 $ROOT_PATH/rtl/TYPEDEF.svh
-$ROOT_PATH/rtl/index_extractor.sv
+$ROOT_PATH/rtl/tag_compare.sv
 

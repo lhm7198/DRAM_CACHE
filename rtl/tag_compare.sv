@@ -63,11 +63,10 @@ module TAG_COMPARE
 );
 
 localparam			S_IDLE	= 3'd0,
-				S_DEC	= 3'd1,
-				S_RHIT	= 3'd2,
-				S_RMISS	= 3'd3,
-				S_WHIT	= 3'd4,
-				S_WMISS = 3'd5;
+				S_RHIT	= 3'd1,
+				S_RMISS	= 3'd2,
+				S_WHIT	= 3'd3,
+				S_WMISS = 3'd4;
 
 reg	[2:0]						state,		state_n;
 
@@ -98,25 +97,13 @@ always_ff @(posedge clk)
 	if (!rst_n) begin
 		state		<= S_IDLE;
 
-		tag_fifo_rden	<= 1'b0;
-		wbuffer_rden	<= 1'b0;
-
-		rob_wren	<= 1'b0;
 		rob_data	<= 0;
-
-		ar_fifo_wren	<= 1'b0;
 		ar_fifo_data	<= 0;
-
-		aw_fifo_wren	<= 1'b0;
 		aw_fifo_data	<= 0;
-
-		w_fifo_wren	<= 1'b0;
 		w_fifo_data	<= 0;
 
 		fill_valid	<= 1'b0;
 		fill_data	<= 0;
-
-		rready		<= 1'b0;
 	end
 	else begin
 		state		<= state_n;
@@ -211,8 +198,6 @@ always_comb begin
 						state_n		= S_WMISS;
 					end
 				end
-
-				state_n		= S_DEC;
 			end
 		end
 		S_RHIT: begin			

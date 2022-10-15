@@ -55,19 +55,22 @@ begin
 	
 	arfifo_aempty_i = 1'b0;
 
-	arfifo_data_i[`TID_W + `ADDR_W - 1 : `ADDR_W] = 1; // tid
-	arfifo_data_i[`ADDR_W - 1 : 0] = 1; // addr
+	arfifo_data_i[`TID_W + `ADDR_W - 1 : `ADDR_W] = 3; // tid
+	arfifo_data_i[`ADDR_W - 1 : 0] = 17; // addr
 	
 	// S_IDLE -> S_RUN
 	arfifo_aempty_i = 1'b0;
-	arready_i = 1'b1;
 	#(CLOCK_PERIOD);
 
 	// S_RUN -> S_IDLE
+	arready_i = 1'b1;
+	rmfifo_afull_i = 1'b0;
 	#(CLOCK_PERIOD);
 
-	$display("rmfifo_data : %x\naraddr : %x\n", 
-		rmfifo_data_o, araddr_o);
+	$display("rmfifo_tid : %x\nrmfifo_addr : %x\naraddr : %x\n", 
+		rmfifo_data_o[`TID_W + `ADDR_W - 1 : `ADDR_W],
+		rmfifo_data_o[`ADDR_W - 1 : 0],
+		araddr_o);
 
 	$display("---------------------------------\n");
 

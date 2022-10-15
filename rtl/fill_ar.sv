@@ -37,11 +37,11 @@ reg						state,		state_n;
 
 reg	[TID_WIDTH + ADDR_WIDTH - 1 : 0]	rmfifo_data,	rmfifo_data_n;
 
-reg						arfifo_rden,	arfifo_rden_n;		
-reg						rmfifo_wren,	rmfifo_wren_n;
+reg						arfifo_rden;		
+reg						rmfifo_wren;
 
 reg	[ADDR_WIDTH - 1 : 0]			araddr,		araddr_n;
-reg						arvalid,	arvalid_n;
+reg						arvalid;
 
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
@@ -49,22 +49,14 @@ always_ff @(posedge clk) begin
 		
 		rmfifo_data	<= 0;
 		
-		arfifo_rden	<= 1'b0;
-		rmfifo_wren	<= 1'b0;
-
 		araddr		<= 0;
-		arvalid		<= 1'b0;
 	end
 	else begin
 		state		<= state_n;
 
 		rmfifo_data	<= rmfifo_data_n;
 
-		arfifo_rden	<= arfifo_rden_n;
-		rmfifo_wren	<= rmfifo_wren_n;
-
 		araddr		<= araddr_n;
-		arvalid		<= arvalid_n;
 	end
 end
 
@@ -73,34 +65,35 @@ always_comb begin
 
 	rmfifo_data_n	= rmfifo_data;
 
-	arfifo_rden_n	= arfifo_rden;
-	rmfifo_wren_n	= rmfifo_wren;
+	arfifo_rden	= 1'b0;
+	rmfifo_wren	= 1'b0;
 
 	araddr_n	= araddr;
-	arvalid_n	= arvalid;
+	arvalid		= 1'b0;
 
 	case (state)
 		S_IDLE: begin
 			$display("S_IDLE\n");
-			rmfifo_wren_n	= 1'b0;
-			arvalid_n	= 1'b0;
+			if(!arfifo_aempty_i) begin
+				arfifo_rden	= 1'b1;
 
-			if(arready_i & !arfifo_aempty_i) begin
-				arfifo_rden_n	= 1'b1;
+				rmfifo_data_n   = arfifo_data_i;
+				araddr_n	= arfifo_data_i[ADDR_WIDTH - 1 : 0];
 				
 				state_n		= S_RUN;
 			end
 		end
 		S_RUN: begin
 			$display("S_RUN\n");
-			arfifo_rden_n	= 1'b0;
-			rmfifo_wren_n	= 1'b1;
-			arvalid_n	= 1'b1;
+			arfifo_rden	= 1'b0;
 
-			rmfifo_data_n   = arfifo_data_i;
-			araddr_n	= arfifo_data_i[ADDR_WIDTH - 1 : 0];
+			arvalid		= 1'b1;
 
-			state_n		= S_IDLE;
+			if(arready_i & !rmfifo_afull_i) begin
+				rmfifo_wren 	= 1'b1;
+
+				state_n		= S_IDLE;
+			end
 		end
 	endcase
 end

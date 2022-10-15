@@ -46,13 +46,13 @@ reg						state,		state_n;
 
 reg	[DATA_WIDTH - 1 : 0]			wdata,		wdata_n;
 
-reg						awfifo_rden,	awfifo_rden_n;		
-reg						wfifo_rden,	wfifo_rden_n;
+reg						awfifo_rden;		
+reg						wfifo_rden;
 
 reg	[ADDR_WIDTH - 1 : 0]			awaddr,		awaddr_n;
-reg						awvalid,	awvalid_n;
-reg						wvalid,		wvalid_n;
-reg						bvalid,		bvalid_n;
+reg						awvalid;
+reg						wvalid;
+reg						bvalid;
 
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
@@ -60,26 +60,14 @@ always_ff @(posedge clk) begin
 		
 		wdata		<= 0;
 
-		awfifo_rden	<= 1'b0;
-		wfifo_rden	<= 1'b0;
-
 		awaddr		<= 0;
-		awvalid		<= 1'b0;
-		wvalid		<= 1'b0;
-		bvalid		<= 1'b0;
 	end
 	else begin
 		state		<= state_n;
 
 		wdata		<= wdata_n;
 
-		awfifo_rden	<= awfifo_rden_n;
-		wfifo_rden	<= wfifo_rden_n;
-
 		awaddr		<= awaddr_n;
-		awvalid		<= awvalid_n;
-		wvalid		<= wvalid_n;
-		bvalid		<= bvalid_n;
 	end
 end
 
@@ -88,38 +76,38 @@ always_comb begin
 
 	wdata_n		= wdata;
 
-	awfifo_rden_n	= awfifo_rden;
-	wfifo_rden_n	= wfifo_rden;
+	awfifo_rden	= 1'b0;
+	wfifo_rden	= 1'b0;
 
 	awaddr_n	= awaddr;
-	awvalid_n	= awvalid;
-	wvalid_n	= wvalid;
-	bvalid_n	= bvalid;
+	awvalid		= 1'b0;
+	wvalid		= 1'b0;
+	bvalid		= 1'b0;
 
 	case (state)
 		S_IDLE: begin
 			$display("S_IDLE\n");
-			awvalid_n	= 1'b0;
-			wvalid_n	= 1'b0;
-			$display("%x %x %x %x\n", awready_i, wready_i, awfifo_aempty_i, wfifo_aempty_i);
-			if(awready_i & wready_i & !awfifo_aempty_i & !wfifo_aempty_i) begin
-				awfifo_rden_n	= 1'b1;
-				wfifo_rden_n	= 1'b1;
-				
+			if(!awfifo_aempty_i & !wfifo_aempty_i) begin
+				awfifo_rden	= 1'b1;
+				wfifo_rden	= 1'b1;
+
+				awaddr_n	= awfifo_data_i[ADDR_WIDTH - 1 : 0];
+				wdata_n		= wfifo_data_i;		
+
 				state_n	= S_RUN;
 			end
 		end
 		S_RUN: begin
 			$display("S_RUN\n");
-			awfifo_rden_n	= 1'b0;
-			wfifo_rden_n	= 1'b0;
-			awvalid_n	= 1'b1;
-			wvalid_n	= 1'b1;
+			awfifo_rden	= 1'b0;
+			wfifo_rden	= 1'b0;
+			
+			awvalid		= 1'b1;
+			wvalid		= 1'b1;
 
-			awaddr_n	= awfifo_data_i[ADDR_WIDTH - 1 : 0];
-			wdata_n		= wfifo_data_i;
-
-			state_n		= S_IDLE;
+			if(awready_i & wready_i) begin
+				state_n		= S_IDLE;
+			end
 		end
 	endcase
 end

@@ -85,7 +85,7 @@ reg	[ADDR_WIDTH - 1 : 0]				aw_fifo_data,	aw_fifo_data_n;
 reg							w_fifo_wren;
 reg	[DATA_WIDTH - 1 : 0]				w_fifo_data,	w_fifo_data_n;
 
-reg							fill_valid,	fill_valid_n;
+reg							fill_valid;
 reg	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]		fill_data, 	fill_data_n;
 
 reg 							rready;
@@ -102,7 +102,6 @@ always_ff @(posedge clk)
 		aw_fifo_data	<= 0;
 		w_fifo_data	<= 0;
 
-		fill_valid	<= 1'b0;
 		fill_data	<= 0;
 	end
 	else begin
@@ -113,7 +112,6 @@ always_ff @(posedge clk)
 		aw_fifo_data	<= aw_fifo_data_n;
 		w_fifo_data	<= w_fifo_data_n;
 		
-		fill_valid	<= fill_valid_n;
 		fill_data	<= fill_data_n;
 	end
 
@@ -135,7 +133,7 @@ always_comb begin
 	w_fifo_wren		= 1'b0;
 	w_fifo_data_n		= w_fifo_data;
 
-	fill_valid_n		= fill_valid;
+	fill_valid		= 1'b0;
 	fill_data_n		= fill_data;
 
 	rready			= 1'b0;
@@ -180,7 +178,6 @@ always_comb begin
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
-						fill_valid_n = 1'b1;
 
 						state_n		= S_WHIT;
 					end
@@ -193,7 +190,6 @@ always_comb begin
 						
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
-						fill_valid_n = 1'b1;
 	
 						state_n		= S_WMISS;
 					end
@@ -228,11 +224,11 @@ always_comb begin
 			$display("S_WHIT\n");
 			tag_fifo_rden	= 1'b0;
 			wbuffer_rden	= 1'b0;
+
+			fill_valid	= 1'b1;
 			rready 		= 1'b0;
 
 			if(fill_ready_i) begin
-				fill_valid_n	= 1'b0;
-
 				state_n		= S_IDLE;
 			end
 		end
@@ -240,13 +236,13 @@ always_comb begin
 			$display("S_WMISS\n");
 			tag_fifo_rden	= 1'b0;
 			wbuffer_rden	= 1'b0;
+
+			fill_valid 	= 1'b1;
 			rready 		= 1'b0;
 
 			if(!aw_fifo_afull_i & !w_fifo_afull_i & fill_ready_i) begin
 				aw_fifo_wren	= 1'b1;
 				w_fifo_wren	= 1'b1;
-
-				fill_valid_n	= 1'b0;
 
 				state_n		= S_IDLE;
 			end			

@@ -68,27 +68,23 @@ begin
 	//////////////////////////////////////////////
 	$display("-------- READ MISS START ---------\n");
 	
-	awfifo_aempty_i = 1'b0;
-
-	awfifo_data_i[`TID_W + `ADDR_W - 1 : `ADDR_W] = 1; // tid
-	awfifo_data_i[`ADDR_W - 1 : 0] = 1; // addr
-
-	wfifo_aempty_i = 1'b0;
+	awfifo_data_i[`ADDR_W - 1 : 0] = 11; // addr
 
 	wfifo_data_i = 12; // data
 	
 	// S_IDLE -> S_RUN
-	awready_i = 1'b1;
-	wready_i = 1'b1;
-
+	awfifo_aempty_i = 1'b0;
+	wfifo_aempty_i = 1'b0;
 	#(CLOCK_PERIOD);
 
 	// S_RUN -> S_IDLE
+	awready_i = 1'b1;
+	wready_i = 1'b1;
 	#(CLOCK_PERIOD);
-
-	#(CLOCK_PERIOD);
+	
 	$display("awaddr : %x\nwdata : %x\n", 
-		awaddr_o, wdata_o);
+		awaddr_o,
+		wdata_o);
 
 	$display("---------------------------------\n");
 

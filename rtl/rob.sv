@@ -87,10 +87,14 @@ always_comb begin
 	rid_n		= rid;
 	tID_hit_n	= read_data_hit[FIFO_WIDTH-1 : DATA_WIDTH];
 	tID_miss_n	= read_data_miss[FIFO_WIDTH-1 : DATA_WIDTH];
+	
+	/*valid 	= 1'b0;
+	en_hit	= 1'b0;
+	en_miss	= 1'b0;*/
 	case (state)
 		S_IDLE: begin
-			en_hit			= 0;
-			en_miss			= 0;
+			en_hit = 1'b0;
+			en_miss = 1'b0;
 			if((!empty_hit & (tID == tID_hit)) | (!empty_miss & (tID == tID_miss))) begin
 				tID_n	= tID + 1;
 
@@ -103,15 +107,13 @@ always_comb begin
 					en_miss		= 1;
 				end
 				state_n			= S_VAL;
-				valid			= 1;
+				valid	= 1'b1;
 			end
 		end
 		S_VAL: begin
 			if(ready_i) begin
-				en_hit			= 1;
-				en_miss			= 1;
-				valid			= 0;
 				state_n			= S_IDLE;
+				valid	= 1'b0;
 			end
 		end
 	endcase

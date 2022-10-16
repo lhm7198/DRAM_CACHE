@@ -2,5 +2,6 @@
 
 -sverilog
 $ROOT_PATH/rtl/TYPEDEF.svh
-$ROOT_PATH/rtl/arbiter.sv
+$ROOT_PATH/rtl/rob.sv
+$ROOT_PATH/rtl/fifo.sv
 

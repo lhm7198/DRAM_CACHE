@@ -53,10 +53,9 @@ reg	[TID_WIDTH - 1 : 0]		tID_miss, tID_miss_n;
 
 reg	[FIFO_WIDTH - 1: 0]		rdata, rdata_n;
 
-reg					en_hit, en_hit_n;
-reg					en_miss, en_miss_n;
+reg					en_hit, en_miss;
 
-reg					valid, valid_n;
+reg					valid;
 reg	[ID_WIDTH - 1 : 0]		rid, rid_n;
 
 
@@ -65,59 +64,55 @@ always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
 		tID		<= 1;
-		valid		<= 0;
 		rid		<= 0;
 		rdata		<= 0;
 		tID_hit		<= 0;
 		tID_miss	<= 0;
-		en_hit		<= 0;
-		en_miss		<= 0;
 	end
 	else begin
 		state		<= state_n;
 		tID		<= tID_n;
-		valid		<= valid_n;
 		rid		<= rid_n;
 		rdata		<= rdata_n;
 		tID_hit		<= tID_hit_n;
 		tID_miss	<= tID_miss_n;
-		en_hit		<= en_hit_n;
-		en_miss		<= en_hit_n;
 	end
 end
 
 always_comb begin
 
-	$display("tID %d hit %d miss %d",tID,tID_hit,tID_miss);
+	$display("%d %d %d", tID, tID_hit, tID_miss);
 	state_n		= state;
 	tID_n		= tID;
-	valid_n		= valid;
 	rid_n		= rid;
 	tID_hit_n	= read_data_hit[FIFO_WIDTH-1 : DATA_WIDTH];
 	tID_miss_n	= read_data_miss[FIFO_WIDTH-1 : DATA_WIDTH];
 	case (state)
 		S_IDLE: begin
-			en_hit_n		= 0;
-			en_miss_n		= 0;
+			en_hit			= 0;
+			en_miss			= 0;
 			if((!empty_hit & (tID == tID_hit)) | (!empty_miss & (tID == tID_miss))) begin
 				tID_n	= tID + 1;
 
 				if(tID == tID_hit) begin
 					rdata_n		= read_data_hit;
-					en_hit_n	= 1;
+					en_hit		= 1;
 				end
 				else begin
 					rdata_n		= read_data_miss;
-					en_miss_n	= 1;
+					en_miss		= 1;
 				end
 				state_n			= S_VAL;
-				valid_n			= 1;
+				valid			= 1;
 			end
 		end
 		S_VAL: begin
-			if(ready_i)
-				valid_n			= 0;
+			if(ready_i) begin
+				en_hit			= 1;
+				en_miss			= 1;
+				valid			= 0;
 				state_n			= S_IDLE;
+			end
 		end
 	endcase
 end

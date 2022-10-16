@@ -53,7 +53,8 @@ reg	[TID_WIDTH - 1 : 0]		tID_miss, tID_miss_n;
 
 reg	[FIFO_WIDTH - 1: 0]		rdata, rdata_n;
 
-reg					en_hit, en_miss;
+reg					en_hit, //en_hit_n,
+					en_miss;//, en_miss_n;
 
 reg					valid;
 reg	[ID_WIDTH - 1 : 0]		rid, rid_n;
@@ -81,20 +82,15 @@ end
 
 always_comb begin
 
-	$display("%d %d %d", tID, tID_hit, tID_miss);
 	state_n		= state;
 	tID_n		= tID;
 	rid_n		= rid;
 	tID_hit_n	= read_data_hit[FIFO_WIDTH-1 : DATA_WIDTH];
 	tID_miss_n	= read_data_miss[FIFO_WIDTH-1 : DATA_WIDTH];
-	
-	/*valid 	= 1'b0;
-	en_hit	= 1'b0;
-	en_miss	= 1'b0;*/
+	en_hit		= 0;
+	en_miss		= 0;
 	case (state)
 		S_IDLE: begin
-			en_hit = 1'b0;
-			en_miss = 1'b0;
 			if((!empty_hit & (tID == tID_hit)) | (!empty_miss & (tID == tID_miss))) begin
 				tID_n	= tID + 1;
 
@@ -107,14 +103,18 @@ always_comb begin
 					en_miss		= 1;
 				end
 				state_n			= S_VAL;
-				valid	= 1'b1;
+				valid			= 1'b1;
 			end
+			else
+				valid			= 1'b0;
 		end
 		S_VAL: begin
 			if(ready_i) begin
 				state_n			= S_IDLE;
-				valid	= 1'b0;
+				valid			= 1'b0;
 			end
+			else
+				valid			= 1'b1;
 		end
 	endcase
 end

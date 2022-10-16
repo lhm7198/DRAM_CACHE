@@ -44,57 +44,55 @@ always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
 
-		ready		<= 1;
 		wdata		<= 0;
-		valid		<= 0;
-		write_en	<= 0;
-		read_en		<= 0;
 	end
 	else begin
 		state		<= state_n;
 
-		ready		<= ready_n;
 		wdata		<= wdata_n;
-		valid		<= valid_n;
-		write_en	<= write_en_n;
-		read_en		<= read_en_n;
 	end
 end
 
 always_comb begin
 	state_n		= state;
 
-	ready_n		= ready;
 	wdata_n		= wdata;
-	valid_n		= valid;
-	write_en_n	= write_en;
-	read_en_n	= read_en;
+	write_en	= 0;
+	read_en		= 0;
 
 	case(state)
 		S_IDLE: begin
 			if(valid_i) begin
 				wdata_n[DATA_WIDTH-1 : 0] 		= data_i;
 				wdata_n[WDATA_WIDTH-1 : DATA_WIDTH]	= ar_i;
-				valid_n 				= 1;
-				ready_n					= 0;
-				read_en_n 				= 1;
+				valid	 				= 1;
+				ready					= 0;
+				read_en 				= 1;
 				state_n 				= S_READY;
+			end
+			else begin
+				valid					= 0;
+				ready					= 1;
 			end
 		end
 		S_READY: begin
-			read_en_n		= 0;
+			ready			= 0;
 			if(ready_i) begin
-				write_en_n	= 1;
+				write_en	= 1;
 				state_n		= S_RUN;
-				valid_n		= 0;
+				valid		= 0;
 			end
+			else
+				valid		= 1;
 		end
 		S_RUN: begin
-			write_en_n		= 0;
+			valid 			= 0;
 			if(!full_i) begin
-				ready_n		= 1;
+				ready		= 1;
 				state_n		= S_IDLE;
 			end
+			else
+				ready		= 0;
 		end
 	endcase
 end

@@ -1,2 +1,2 @@
 -sveriliog
-$ROOT_PATH/sim/tb/ROB_tb.sv
+$ROOT_PATH/sim/tb/RMH_tb.sv

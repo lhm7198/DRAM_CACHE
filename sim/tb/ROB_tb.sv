@@ -49,6 +49,7 @@ begin
 	write_en_hit_i			= 1;
 
 	#(CLOCK_PERIOD);
+	write_en_hit_i			= 0;
 	#(CLOCK_PERIOD);
 	
 	wdata_hit_i[521 : 512]		= 10'd3;
@@ -56,6 +57,7 @@ begin
 	write_en_hit_i			= 1;
 
 	#(CLOCK_PERIOD);
+	write_en_hit_i			= 0;
 	#(CLOCK_PERIOD);
 		
 	wdata_hit_i[521 : 512]		= 10'd4;
@@ -70,6 +72,8 @@ begin
 	$display("a in");
 
 	#(CLOCK_PERIOD);
+	write_en_hit_i			= 0;
+	write_en_miss_i			= 0;
 	$display("valid = %d, rdata = %x",valid_o,rdata_o);
 	
 	#(CLOCK_PERIOD);
@@ -88,6 +92,7 @@ begin
 	#(CLOCK_PERIOD);
 	$display("valid = %d, rdata = %x",valid_o,rdata_o);
 	
+	ready_i				= 0;
 	#(CLOCK_PERIOD);
 	$display("valid = %d, rdata = %x",valid_o,rdata_o);
 	

@@ -52,17 +52,29 @@ module TOP_MODULE
 	////////////////  DRAM $ Ctrl <-> Memory Ctrl  ///////////////////
 	//////////////////////////////////////////////////////////////////
 
-	// AR channel (Index extractor -> Memory Controller)
+	// AR channel (Index extractor -> Memory Ctrl)
 	output	wire 	[ID_WIDTH - 1 : 0] 		m_arid_o,
 	output	wire 	[ADDR_WIDTH - 1 : 0] 		m_araddr_o,
 	output	wire					m_arvalid_o,
 	input	wire					m_arready_i,
 
-	// R channel (Memory Controller -> Tag comparator)
+	// R channel (Memory Ctrl -> Tag comparator)
 	input	wire					m_rid_i,
 	input	wire	[TAG_SIZE + DATA_WIDTH - 1 : 0]	m_rdata_i,
 	input	wire					m_rvalid_i,
 	output	wire					m_rready_o,
+
+	// AW channel (Fill fifo <-> Memory Ctrl)
+	output 	wire 	[ID_WIDTH - 1 : 0] 		m_awid_o,
+	output	wire 	[ADDR_WIDTH - 1 : 0] 		m_awaddr_o,
+	output 	wire 					m_awvalid_o,
+	input	wire					m_awready_i,
+
+	// W channel (Fill fifo <-> Memory Ctrl)
+	output	wire	[ID_WIDTH - 1 : 0]		m_wid_o,
+	output	wire	[DATA_WIDTH - 1 : 0]		m_wdata_o,
+	output	wire					m_wvalid_o,
+	input	wire					m_wready_i,	
 
 	//////////////////////////////////////////////////////////////////
 	////////////////   DRAM $ Ctrl <-> CXL Ctrl   ////////////////////
@@ -211,17 +223,17 @@ INDEX_EXTRACTOR	index_extractor
 	.clk			(clk),
 	.rst_n			(rst_n),
 
-	.arid_i			(ID),
+	.arid_i			(),
 	.araddr_i		(araddr_i),
 	.arvalid_i		(arvalid_i),
 	.arready_o		(arready_o),
 
-	.awid_i			(ID),
+	.awid_i			(),
 	.awaddr_i		(awaddr_i),
 	.awvalid_i		(awvalid_i),
 	.awready_o		(awready_o),
 
-	.arid_o			(ID),
+	.arid_o			(),
 	.araddr_o		(m_araddr_o),
 	.arvalid_o		(m_arvalid_o),
 	.arready_i		(m_arready_i),
@@ -236,7 +248,7 @@ TAG_COMPARE tag_compare
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.rid_i		(ID),
+	.rid_i		(),
 	.rdata_i	(rdata_i),
 	.rvalid_i	(rvalid_i),
 	.rready_o	(rready_o),
@@ -268,17 +280,17 @@ TAG_COMPARE tag_compare
 	.fill_ready_i		(fill_ready),
 	.fill_valid_o		(fill_valid),
 	.fill_data_o		(fill_wdata)
-)
+);
 
-FILL_AR fill_ar
+FILL_AR	 fill_ar
 (
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.arid_i			(ID),
-	.araddr_i		(c_araddr_i),
-	.arvalid_i		(c_arvalid_i),
-	.arready_o		(c_arready_o),
+	.arid_o			(),
+	.araddr_o		(c_araddr_o),
+	.arvalid_o		(c_arvalid_o),
+	.arready_i		(c_arready_i),
 
 	.arfifo_aempty_i	(arfifo_aempty),
 	.arfifo_rden_o		(arfifo_rden),
@@ -287,24 +299,24 @@ FILL_AR fill_ar
 	.rmfifo_afull_i		(rmfifo_afull),
 	.rmfifo_wren_o		(rmfifo_wren),
 	.rmfifo_data_o		(rmfifo_wdata)
-)
+);
 
 EVICT_AW_W evict_aw_w
 (
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.awid_o			(ID),
+	.awid_o			(),
 	.awaddr_o		(c_awaddr_o),
 	.awvalid_o		(c_awvalid_o),
 	.awready_i		(c_awready_i),
 
-	.wid_o			(ID),
+	.wid_o			(),
 	.wdata_o		(c_wdata_o),
 	.wvalid_o		(c_wvalid_o),
 	.wready_i		(c_wready_i),
 
-	.bid_o			(ID),
+	.bid_o			(),
 	.bvalid_o		(c_bvalid_o),
 	.bready_i		(c_bready_i),
 
@@ -315,7 +327,7 @@ EVICT_AW_W evict_aw_w
 	.wfifo_aempty_i		(wfifo_aempty),
 	.wfifo_rden_o		(wfifo_rden),
 	.wfifo_data_i		(wfifo_rdata)
-)
+);
 
 READ_MISS_HANDLER rmiss_handler
 (
@@ -337,7 +349,7 @@ READ_MISS_HANDLER rmiss_handler
 	.valid_o	(rmiss_valid),
 	.ready_i	(rmiss_ready),
 	.wdata_Arbiter_o (rmiss_data)
-)
+);
 
 ARBITER arbiter
 (
@@ -355,7 +367,7 @@ ARBITER arbiter
 	.fill_fifo_afull_i	(fill_fifo_afull),
 	.fill_fifo_wren_o	(fill_fifo_wren),
 	.fill_fifo_data_o	(fill_fifo_data)
-)
+);
 
 ROB rob
 (
@@ -364,7 +376,7 @@ ROB rob
 
 	.valid_o	(rvalid_o),
 	.ready_i	(rready_i),
-	.rid_o		(ID),
+	.rid_o		(),
 	.rdata_o	(rdata_o),
 
 	.full_hit_o	(rob_full_hit),
@@ -374,7 +386,7 @@ ROB rob
 	.full_miss_o	(rob_full_miss),
 	.write_en_miss_i (rob_wren_miss),
 	.wdata_miss_i   (rob_wdata_miss)
-)
+);
 
 FIFO
 #(

@@ -42,6 +42,12 @@ module TOP_MODULE
 	input	wire					wvalid_i,
 	output	wire					wready_o,	
 
+	// R channel (Processor -> ROB)
+	output	wire					rid_o,
+	output	wire	[DATA_WIDTH - 1 : 0]		rdata_o,
+	output	wire					rvalid_o,
+	input	wire					rready_i,
+
 	//////////////////////////////////////////////////////////////////
 	////////////////  DRAM $ Ctrl <-> Memory Ctrl  ///////////////////
 	//////////////////////////////////////////////////////////////////
@@ -56,11 +62,7 @@ module TOP_MODULE
 	input	wire					m_rid_i,
 	input	wire	[TAG_SIZE + DATA_WIDTH - 1 : 0]	m_rdata_i,
 	input	wire					m_rvalid_i,
-	output	wire					m_rready_o
-
-	output	wire					tag_fifo_aempty,
-	input	wire					tag_fifo_rden,
-	output	wire	[TID_WIDTH + ADDR_WIDTH : 0] 	tag_fifo_rdata,
+	output	wire					m_rready_o,
 
 	//////////////////////////////////////////////////////////////////
 	////////////////   DRAM $ Ctrl <-> CXL Ctrl   ////////////////////
@@ -72,18 +74,28 @@ module TOP_MODULE
 	output	wire					c_arvalid_o,
 	input	wire					c_arready_i,
 
-	// AW channel (Processor <-> Index extractor)
+	// AW channel (Evict AW W <-> CXL Ctrl)
 	output 	wire 	[ID_WIDTH - 1 : 0] 		c_awid_o,
 	output	wire 	[ADDR_WIDTH - 1 : 0] 		c_awaddr_o,
 	output 	wire 					c_awvalid_o,
 	input	wire					c_awready_i,
 
-	// W channel (Processor <-> Wbuffer)
+	// W channel (Evict AW W <-> CXL Ctrl)
+	output	wire	[ID_WIDTH - 1 : 0]		c_wid_o,
 	output	wire	[DATA_WIDTH - 1 : 0]		c_wdata_o,
 	output	wire					c_wvalid_o,
 	input	wire					c_wready_i,	
 
+	// R channel (RMiss Handler -> CXL Ctrl)
+	//input	wire					c_rid_i,
+	input	wire	[DATA_WIDTH - 1 : 0]		c_rdata_i,
+	input	wire					c_rvalid_i,
+	output	wire					c_rready_o,
 
+	// B channel (Evict AW W <-> CXL Ctrl)
+	output	wire	[ID_WIDTH - 1 : 0]		c_bid_o,
+	output	wire					c_bvalid_o,
+	input	wire					c_bready_i
 );
 
 ////////////////////////////////////////////////////////////////////
@@ -165,15 +177,25 @@ wire						wfifo_aempty;
 wire						wfifo_rden;
 wire	[DATA_WIDTH - 1 : 0]			wfifo_rdata;
 
+////////////////////////////////////////////////////////////////////
+//////////////////////   RMiss Handler   ///////////////////////////
+////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////
-/////////////////////////  Arbiter   ///////////////////////////////
-////////////////////////////////////////////////////////////////////
+
+
+// RMiss fifo
+wire						rmfifo_aempty;
+wire						rmfifo_rden;
+wire	[TID_WIDTH + DATA_WIDTH - 1 : 0]	rmfifo_rdata;
 
 // Rmiss handler
 wire						rmiss_ready;
 wire						rmiss_valid;
 wire	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]	rmiss_data;
+
+////////////////////////////////////////////////////////////////////
+/////////////////////////  Arbiter   ///////////////////////////////
+////////////////////////////////////////////////////////////////////
 
 // Fill fifo
 wire						fill_fifo_afull;
@@ -264,6 +286,56 @@ FILL_AR fill_ar
 	.rmfifo_data_o		(rmfifo_wdata)
 )
 
+EVICT_AW_W evict_aw_w
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.awid_o			(ID),
+	.awaddr_o		(c_awaddr_o),
+	.awvalid_o		(c_awvalid_o),
+	.awready_i		(c_awready_i),
+
+	.wid_o			(ID),
+	.wdata_o		(c_wdata_o),
+	.wvalid_o		(c_wvalid_o),
+	.wready_i		(c_wready_i),
+
+	.bid_o			(ID),
+	.bvalid_o		(c_bvalid_o),
+	.bready_i		(c_bready_i),
+
+	.awfifo_aempty_i	(awfifo_aempty),
+	.awfifo_rden_o		(awfifo_rden),
+	.awfifo_data_i		(awfifo_rdata),
+
+	.wfifo_aempty_i		(wfifo_aempty),
+	.wfifo_rden_o		(wfifo_rden),
+	.wfifo_data_i		(wfifo_rdata)
+)
+
+READ_MISS_HANDLER rmiss_handler
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.valid_i	(c_rvalid_i),
+	.ready_o	(c_rready_o),
+	.data_i		(c_rdata_i),
+
+	.read_en_o	(rmfifo_rden),
+	.empty_i	(rmfifo_empty),
+	.ar_i		(rmfifo_rdata),
+
+	.write_en_o	(rob_wren),
+	.full_i		(rob_full),
+	.wdata_ROB_o	(rob_wdata),
+
+	.valid_o	(rmiss_valid),
+	.ready_i	(rmiss_ready),
+	.wdata_Arbiter_o (rmiss_data)
+)
+
 ARBITER arbiter
 (
 	.clk		(clk),
@@ -280,6 +352,25 @@ ARBITER arbiter
 	.fill_fifo_afull_i	(fill_fifo_afull),
 	.fill_fifo_wren_o	(fill_fifo_wren),
 	.fill_fifo_data_o	(fill_fifo_data)
+)
+
+ROB rob
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.valid_o	(rvalid_o),
+	.ready_i	(rready_i),
+	.rid_o		(ID),
+	.rdata_o	(rdata_o),
+
+	.full_hit_o	(),
+	.write_en_hit_i (),
+	.wdata_hit_i	(),
+
+	.full_miss_o	(),
+	.write_en_miss_i (),
+	.wdata_miss_i   ()
 )
 
 FIFO
@@ -382,6 +473,47 @@ FIFO
 	.read_en_i	(wfifo_rden),
 	.read_data_o	(wfifo_rdata)	
 );
+
+FIFO
+#(
+	.DATA_WIDTH 	(TID_WIDTH + ADDR_WIDTH),
+	.FIFO_SIZE 	(64),
+	.A_FULL_THR 	(62),
+	.A_EMPTY_THR 	(2)
+) rmiss_fifo
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.A_full_o	(rmfifo_afull),
+	.write_en_i	(rmfifo_wren),
+	.write_data_i	(rmfifo_wdata),
+
+	.empty_o	(rmfifo_empty),
+	.read_en_i	(rmfifo_rden),
+	.read_data_o	(rmfifo_rdata)	
+);
+
+FIFO
+#(
+	.DATA_WIDTH 	(ADDR_WIDTH + DATA_WIDTH),
+	.FIFO_SIZE 	(64),
+	.A_FULL_THR 	(62),
+	.A_EMPTY_THR 	(2)
+) fill_fifo
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.A_full_o	(fill_fifo_afull),
+	.write_en_i	(fill_fifo_wren),
+	.write_data_i	(fill_fifo_wdata),
+
+	.A_empty_o	(),
+	.read_en_i	(),
+	.read_data_o	()	
+);
+
 
 endmodule
 

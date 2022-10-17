@@ -24,7 +24,7 @@ module EVICT_AW_W
 	input	wire						wready_i,
 
 	// B channel (EVICT AW W FIFO <-> CXL Ctrl)
-	output	wire						bid_o,
+	output	wire	[ID_WIDTH - 1 : 0]			bid_o,
 	output	wire						bvalid_o,
 	input	wire						bready_i,
 

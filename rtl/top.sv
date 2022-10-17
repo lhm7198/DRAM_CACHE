@@ -123,9 +123,9 @@ wire						wbuffer_rden;
 wire	[DATA_WIDTH - 1 : 0]			wbuffer_rdata;
 
 // ROB
-wire						rob_afull;
-wire						rob_wren;
-wire 	[TID_WIDTH + DATA_WIDTH - 1 : 0] 	rob_wdata;
+wire						rob_full_hit;
+wire						rob_wren_hit;
+wire 	[TID_WIDTH + DATA_WIDTH - 1 : 0] 	rob_wdata_hit;
 
 // AR fifo
 wire						arfifo_afull;
@@ -181,7 +181,10 @@ wire	[DATA_WIDTH - 1 : 0]			wfifo_rdata;
 //////////////////////   RMiss Handler   ///////////////////////////
 ////////////////////////////////////////////////////////////////////
 
-
+// ROB
+wire						rob_full_miss;
+wire						rob_wren_miss;
+wire 	[TID_WIDTH + DATA_WIDTH - 1 : 0] 	rob_wdata_miss;
 
 // RMiss fifo
 wire						rmfifo_aempty;
@@ -246,9 +249,9 @@ TAG_COMPARE tag_compare
 	.wbuffer_rden_o		(wbuffer_rden),
 	.wbuffer_data_i		(wbuffer_rdata),
 
-	.rob_afull_i		(rob_afull),
-	.rob_wren_o		(rob_wren),
-	.rob_data_o		(rob_wdata),
+	.rob_afull_i		(rob_full_hit),
+	.rob_wren_o		(rob_wren_hit),
+	.rob_data_o		(rob_wdata_hit),
 
 	.ar_fifo_afull_i	(arfifo_afull),
 	.ar_fifo_wren_o		(arfifo_wren),
@@ -327,9 +330,9 @@ READ_MISS_HANDLER rmiss_handler
 	.empty_i	(rmfifo_empty),
 	.ar_i		(rmfifo_rdata),
 
-	.write_en_o	(rob_wren),
-	.full_i		(rob_full),
-	.wdata_ROB_o	(rob_wdata),
+	.write_en_o	(rob_wren_miss),
+	.full_i		(rob_full_miss),
+	.wdata_ROB_o	(rob_data_miss),
 
 	.valid_o	(rmiss_valid),
 	.ready_i	(rmiss_ready),
@@ -364,13 +367,13 @@ ROB rob
 	.rid_o		(ID),
 	.rdata_o	(rdata_o),
 
-	.full_hit_o	(),
-	.write_en_hit_i (),
-	.wdata_hit_i	(),
+	.full_hit_o	(rob_full_hit),
+	.write_en_hit_i (rob_wren_hit),
+	.wdata_hit_i	(rob_wdata_hit),
 
-	.full_miss_o	(),
-	.write_en_miss_i (),
-	.wdata_miss_i   ()
+	.full_miss_o	(rob_full_miss),
+	.write_en_miss_i (rob_wren_miss),
+	.wdata_miss_i   (rob_wdata_miss)
 )
 
 FIFO

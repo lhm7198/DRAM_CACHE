@@ -11,11 +11,11 @@ reg	[511 : 0]	data_i;
 
 wire			read_en_o;
 reg			empty_i;
-reg	[63 : 0]	ar_i;
+reg	[73 : 0]	ar_i;
 
 wire			write_en_o;
 reg			full_i;
-wire	[575 : 0]	wdata_ROB_o;
+wire	[521 : 0]	wdata_ROB_o;
 
 wire			valid_o;
 reg			ready_i;

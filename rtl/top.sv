@@ -389,13 +389,7 @@ ROB rob
 	.wdata_miss_i   (rob_wdata_miss)
 );
 
-FIFO
-#(
-	.DATA_WIDTH 	(DATA_WIDTH),
-	.FIFO_SIZE 	(64),
-	.A_FULL_THR 	(62),
-	.A_EMPTY_THR 	(2)
-) wbuffer
+WBUFFER	wbuffer
 (
 	.clk		(clk),
 	.rst_n		(rst_n),

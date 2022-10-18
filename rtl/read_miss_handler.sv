@@ -4,7 +4,8 @@ module READ_MISS_HANDLER # (
 	parameter	ADDR_WIDTH	= `AXI_ADDR_WIDTH,
 	parameter	DATA_WIDTH	= `AXI_DATA_WIDTH,
 	parameter	WDATA_WIDTH	= ADDR_WIDTH + DATA_WIDTH,
-	parameter	TID_WIDTH	= `TID_WIDTH
+	parameter	TID_WIDTH	= `TID_WIDTH,
+	parameter	ID_WIDTH	= `AXI_ID_WIDTH
 )(
 	input	wire		clk,
 	input	wire		rst_n,

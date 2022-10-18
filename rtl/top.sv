@@ -399,15 +399,14 @@ FIFO
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.A_full_o	(),
-	.write_en_i	(),
-	.write_data_i	(rdata_i),
+	.valid_i	(wvalid_i),
+	.wdata_i	(wdata_i),
+	.ready_o	(wready_o),
 
-	.A_empty_o	(wbuffer_aempty),
-	.read_en_i	(wbuffer_rden),
-	.read_data_o	(wbuffer_rdata)	
+	.Aempty_o	(wbuffer_aempty),
+	.rden_i		(wbuffer_rden),
+	.rdata_o	(wbuffer_rdata)	
 );
-
 
 FIFO
 #(
@@ -531,5 +530,3 @@ FIFO
 
 
 endmodule
-
-

@@ -99,7 +99,7 @@ module TOP_MODULE
 	input	wire					c_wready_i,	
 
 	// R channel (RMiss Handler -> CXL Ctrl)
-	//input	wire					c_rid_i,
+	input	wire	[ID_WIDTH - 1 : 0]		c_rid_i,
 	input	wire	[DATA_WIDTH - 1 : 0]		c_rdata_i,
 	input	wire					c_rvalid_i,
 	output	wire					c_rready_o,
@@ -201,7 +201,7 @@ wire 	[TID_WIDTH + DATA_WIDTH - 1 : 0] 	rob_wdata_miss;
 // RMiss fifo
 wire						rmfifo_aempty;
 wire						rmfifo_rden;
-wire	[TID_WIDTH + DATA_WIDTH - 1 : 0]	rmfifo_rdata;
+wire	[TID_WIDTH + ADDR_WIDTH - 1 : 0]	rmfifo_rdata;
 
 // Rmiss handler
 wire						rmiss_ready;
@@ -337,6 +337,7 @@ READ_MISS_HANDLER rmiss_handler
 	.valid_i	(c_rvalid_i),
 	.ready_o	(c_rready_o),
 	.data_i		(c_rdata_i),
+	.rid_i		(c_rid_i),
 
 	.read_en_o	(rmfifo_rden),
 	.empty_i	(rmfifo_empty),
@@ -344,7 +345,7 @@ READ_MISS_HANDLER rmiss_handler
 
 	.write_en_o	(rob_wren_miss),
 	.full_i		(rob_full_miss),
-	.wdata_ROB_o	(rob_data_miss),
+	.wdata_ROB_o	(rob_wdata_miss),
 
 	.valid_o	(rmiss_valid),
 	.ready_i	(rmiss_ready),

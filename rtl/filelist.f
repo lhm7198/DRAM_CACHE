@@ -10,4 +10,6 @@ $ROOT_PATH/rtl/evict_aw_w.sv
 $ROOT_PATH/rtl/read_miss_handler.sv
 $ROOT_PATH/rtl/rob.sv
 $ROOT_PATH/rtl/arbiter.sv
+$ROOT_PATH/rtl/wbuffer.sv
+$ROOT_PATH/rtl/fill_fifo.sv
 $ROOT_PATH/rtl/fifo.sv

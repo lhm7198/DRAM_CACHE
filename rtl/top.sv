@@ -223,17 +223,17 @@ INDEX_EXTRACTOR	index_extractor
 	.clk			(clk),
 	.rst_n			(rst_n),
 
-	.arid_i			(),
+	.arid_i			(arid_i),
 	.araddr_i		(araddr_i),
 	.arvalid_i		(arvalid_i),
 	.arready_o		(arready_o),
 
-	.awid_i			(),
+	.awid_i			(awid_i),
 	.awaddr_i		(awaddr_i),
 	.awvalid_i		(awvalid_i),
 	.awready_o		(awready_o),
 
-	.arid_o			(),
+	.arid_o			(m_arid_o),
 	.araddr_o		(m_araddr_o),
 	.arvalid_o		(m_arvalid_o),
 	.arready_i		(m_arready_i),
@@ -248,7 +248,7 @@ TAG_COMPARE tag_compare
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.rid_i		(),
+	.rid_i		(rid_i),
 	.rdata_i	(rdata_i),
 	.rvalid_i	(rvalid_i),
 	.rready_o	(rready_o),
@@ -287,7 +287,7 @@ FILL_AR	 fill_ar
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.arid_o			(),
+	.arid_o			(c_arid_o),
 	.araddr_o		(c_araddr_o),
 	.arvalid_o		(c_arvalid_o),
 	.arready_i		(c_arready_i),
@@ -306,17 +306,17 @@ EVICT_AW_W evict_aw_w
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.awid_o			(),
+	.awid_o			(c_awid_o),
 	.awaddr_o		(c_awaddr_o),
 	.awvalid_o		(c_awvalid_o),
 	.awready_i		(c_awready_i),
 
-	.wid_o			(),
+	.wid_o			(c_wid_o),
 	.wdata_o		(c_wdata_o),
 	.wvalid_o		(c_wvalid_o),
 	.wready_i		(c_wready_i),
 
-	.bid_o			(),
+	.bid_o			(c_bid_o),
 	.bvalid_o		(c_bvalid_o),
 	.bready_i		(c_bready_i),
 
@@ -377,7 +377,7 @@ ROB rob
 
 	.valid_o	(rvalid_o),
 	.ready_i	(rready_i),
-	.rid_o		(),
+	.rid_o		(rid_o),
 	.rdata_o	(rdata_o),
 
 	.full_hit_o	(rob_full_hit),
@@ -401,6 +401,26 @@ WBUFFER	wbuffer
 	.Aempty_o	(wbuffer_aempty),
 	.rden_i		(wbuffer_rden),
 	.rdata_o	(wbuffer_rdata)	
+);
+
+FILL_FIFO fill_fifo
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.afull_o	(fill_fifo_afull),
+	.wren_i		(fill_fifo_wren),
+	.data_i		(fill_fifo_data),
+
+	.wid_o		(m_wid_o),
+	.wvalid_o	(m_wvalid_o),
+	.wdata_o	(m_wdata_o),
+	.wready_i	(m_wready_i),
+
+	.awid_o		(m_awid_o),
+	.awvalid_o	(m_awvalid_o),
+	.awaddr_o	(m_awaddr_o),
+	.awready_i	(m_awready_i)
 );
 
 FIFO
@@ -502,26 +522,4 @@ FIFO
 	.read_en_i	(rmfifo_rden),
 	.read_data_o	(rmfifo_rdata)	
 );
-
-FIFO
-#(
-	.DATA_WIDTH 	(ADDR_WIDTH + DATA_WIDTH),
-	.FIFO_SIZE 	(64),
-	.A_FULL_THR 	(62),
-	.A_EMPTY_THR 	(2)
-) fill_fifo
-(
-	.clk		(clk),
-	.rst_n		(rst_n),
-
-	.A_full_o	(fill_fifo_afull),
-	.write_en_i	(fill_fifo_wren),
-	.write_data_i	(fill_fifo_wdata),
-
-	.A_empty_o	(),
-	.read_en_i	(),
-	.read_data_o	()	
-);
-
-
 endmodule

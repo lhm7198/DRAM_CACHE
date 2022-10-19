@@ -448,7 +448,7 @@ FIFO
 	.DATA_WIDTH 	(TID_WIDTH + ADDR_WIDTH),
 	.FIFO_SIZE 	(64),
 	.A_FULL_THR 	(62),
-	.A_EMPTY_THR 	(2)
+	.A_EMPTY_THR 	(0)
 ) ar_fifo
 (
 	.clk		(clk),
@@ -468,7 +468,7 @@ FIFO
 	.DATA_WIDTH 	(ADDR_WIDTH),
 	.FIFO_SIZE 	(64),
 	.A_FULL_THR 	(62),
-	.A_EMPTY_THR 	(2)
+	.A_EMPTY_THR 	(0)
 ) aw_fifo
 (
 	.clk		(clk),
@@ -488,7 +488,7 @@ FIFO
 	.DATA_WIDTH 	(DATA_WIDTH),
 	.FIFO_SIZE 	(64),
 	.A_FULL_THR 	(62),
-	.A_EMPTY_THR 	(2)
+	.A_EMPTY_THR 	(0)
 ) w_fifo
 (
 	.clk		(clk),
@@ -508,7 +508,7 @@ FIFO
 	.DATA_WIDTH 	(TID_WIDTH + ADDR_WIDTH),
 	.FIFO_SIZE 	(64),
 	.A_FULL_THR 	(62),
-	.A_EMPTY_THR 	(2)
+	.A_EMPTY_THR 	(0)
 ) rmiss_fifo
 (
 	.clk		(clk),

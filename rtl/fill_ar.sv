@@ -73,8 +73,9 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
-			$display("S_IDLE\n");
 			if(!arfifo_aempty_i) begin
+				$display("here %x",arfifo_data_i);
+
 				arfifo_rden	= 1'b1;
 
 				rmfifo_data_n   = arfifo_data_i;
@@ -84,7 +85,6 @@ always_comb begin
 			end
 		end
 		S_RUN: begin
-			$display("S_RUN\n");
 			arfifo_rden	= 1'b0;
 
 			arvalid		= 1'b1;

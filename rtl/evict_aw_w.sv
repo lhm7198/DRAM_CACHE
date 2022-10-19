@@ -86,7 +86,6 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
-			$display("S_IDLE\n");
 			if(!awfifo_aempty_i & !wfifo_aempty_i) begin
 				awfifo_rden	= 1'b1;
 				wfifo_rden	= 1'b1;
@@ -98,7 +97,6 @@ always_comb begin
 			end
 		end
 		S_RUN: begin
-			$display("S_RUN\n");
 			awfifo_rden	= 1'b0;
 			wfifo_rden	= 1'b0;
 			

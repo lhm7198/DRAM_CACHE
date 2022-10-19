@@ -173,7 +173,7 @@ begin
 	
 	m_rvalid_i		= 1;
 	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'habcd;
-	m_rdata_i[`TAG_S + `DATA_W - 1] = 1;	//valid bit
+	m_rdata_i[`TAG_S + `DATA_W - 1] = 0;	//valid bit
 	m_rdata_i[`DATA_W - 1 : 0]	= 512'haaaaaaaaaaaabbbbbbbbbbbbbb;
 
 	#(CLOCK_PERIOD);
@@ -185,6 +185,21 @@ begin
 	
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	m_awready_i			= 1;
+	m_wready_i			= 1;
+	c_rvalid_i			= 1;
+	c_rdata_i			= 512'habcabcabc;
+	$display("valid = %d CXL ar = %x",c_arvalid_o, c_araddr_o);
+	#(CLOCK_PERIOD);
+	c_rvalid_i			= 0;
+	$display("rdata_o = %x",rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o = %x",rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o = %x",rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o = %x",rdata_o);
 	#(CLOCK_PERIOD);
 	$display("rdata_o = %x",rdata_o);
 	#(CLOCK_PERIOD);

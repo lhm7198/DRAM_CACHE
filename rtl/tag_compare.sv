@@ -195,7 +195,7 @@ always_comb begin
 			end
 		end
 		S_RHIT: begin			
-			$display("S_RHIT\n");
+			$display("S_RHIT");
 			tag_fifo_rden	= 1'b0;
 			rready 		= 1'b0;
 
@@ -206,7 +206,7 @@ always_comb begin
 			end
 		end
 		S_RMISS: begin
-			$display("S_RMISS\n");
+			$display("S_RMISS");
 			tag_fifo_rden	= 1'b0;
 			rready		= 1'b0;
 
@@ -219,7 +219,7 @@ always_comb begin
 			end
 		end
 		S_WHIT: begin
-			$display("S_WHIT\n");
+			$display("S_WHIT");
 			tag_fifo_rden	= 1'b0;
 			wbuffer_rden	= 1'b0;
 
@@ -231,7 +231,7 @@ always_comb begin
 			end
 		end
 		S_WMISS: begin
-			$display("S_WMISS\n");
+			$display("S_WMISS");
 			tag_fifo_rden	= 1'b0;
 			wbuffer_rden	= 1'b0;
 

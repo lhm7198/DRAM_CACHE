@@ -66,17 +66,21 @@ always_comb begin
 	wdata_ROB_n	= wdata_ROB;
 	write_en	= 0;
 	read_en		= 0;
+	valid		= 0;
+	ready		= 0;
 
 	case(state)
 		S_IDLE: begin
 			if(valid_i) begin
+				$display("ar_i = %x",ar_i);
+				$display("rob %x",wdata_ROB_n);
 				wdata_Arbiter_n[DATA_WIDTH-1 : 0] 			= data_i;
 				wdata_Arbiter_n[WDATA_WIDTH-1 : DATA_WIDTH]		= ar_i[ADDR_WIDTH-1 : 0];
 				wdata_ROB_n[DATA_WIDTH-1 : 0]				= data_i;
 				wdata_ROB_n[DATA_WIDTH+TID_WIDTH-1 : DATA_WIDTH]	= ar_i[ADDR_WIDTH+TID_WIDTH-1 : ADDR_WIDTH];
 				valid	 						= 1;
-				ready							= 0;
 				read_en 						= 1;
+				ready							= 0;
 				state_n 						= S_READY;
 			end
 			else begin

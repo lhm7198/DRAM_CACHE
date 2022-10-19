@@ -61,7 +61,7 @@ always_comb begin
 	state_n			= state;
 
 	fill_ready		= 1'b0;
-	rmiss_ready		= 1'b0;
+	rmiss_ready		= 1'b1;
 
 	fill_fifo_wren		= 1'b0;
 	fill_fifo_data_n	= fill_fifo_data;
@@ -70,13 +70,14 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
-			$display("S_IDLE\n");
 			fill_fifo_data_n	= 0;
 
 			if(fill_fifo_afull_i) begin
+				$display("no");	
 				state_n			= state;
 			end
 			else if(fill_valid_i & (!rmiss_valid_i | !arbiter)) begin
+				$display("no");	
 				fill_ready		= 1'b1;
 				arbiter_n		= 1'b1;
 
@@ -92,14 +93,10 @@ always_comb begin
 
 				state_n			= S_REQ;
 			end
-			else begin
-				state_n			= state;
-			end
 		end
 		S_REQ: begin
-			$display("S_REQ\n");
 			fill_ready = 1'b0;
-			rmiss_ready = 1'b0;
+			//rmiss_ready = 1'b0;
 			
 			if(!fill_fifo_afull_i) begin
 				fill_fifo_wren	= 1'b1;

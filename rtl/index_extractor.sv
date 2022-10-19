@@ -137,7 +137,6 @@ always_comb begin
 			end
 		end
 		S_REQ: begin
-			$display("index : %x", index);
 			tag_fifo_wren_n				= 1'b0;
 		
 			arready 				= 1'b0;

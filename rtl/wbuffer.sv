@@ -51,7 +51,6 @@ always_comb begin
 			end
 		end
 		S_VAL: begin
-			$display("Valid");
 			ready			= 0;
 			write_en		= 0;
 			state_n			= S_IDLE;

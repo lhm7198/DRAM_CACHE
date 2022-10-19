@@ -106,9 +106,6 @@ wire	[`ID_W - 1 : 0]			c_bid_o;
 wire					c_bvalid_o;
 reg					c_bready_i;
 
-logic [7:0] tmp;
-
-
 localparam			CLOCK_PERIOD 	= 1000;
 always #(CLOCK_PERIOD/2) 	clk 		= ~clk;
 
@@ -154,30 +151,31 @@ begin
 
 	$display("\nStart\n");
 
+	/////////////////////////////////////////////////
+	/////////////////// write miss  /////////////////
+	/////////////////////////////////////////////////
+	awaddr_i		= 64'h0000000f0000040; // tag(f), index(1), offset(0)
+	awvalid_i		= 1'b1;
+	wdata_i			= 64'hddddddddddddddddd;
+	wvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
 
+	awvalid_i		= 1'b0;
+	wvalid_i		= 1'b0;
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+/*
 	/////////////////////////////////////////////////
 	/////////////////// read hit  ///////////////////
 	/////////////////////////////////////////////////
-	
-	memory_ctrl.write_8byte(1, 64'hc0000003c0000000); // valid(1), dirty(1), tag(f), blank(0)
-	#(CLOCK_PERIOD); 
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD); 
-	
-	
-	memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
 
-	#(CLOCK_PERIOD); 
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD); 
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD); 
-	#(CLOCK_PERIOD);
-
-
-
-	tmp = memory_ctrl.read_8byte(0);
-	$display("tag : %x", tmp);
+	//memory_ctrl.write_8byte(1, 64'hc0000003c0000000); // valid(1), dirty(1), tag(f), blank(0)
+	//memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
 
 	// index extractor get data
 	araddr_i		= 64'h0000000f00000040; // tag(f) + index(1) + offset(0)
@@ -189,18 +187,13 @@ begin
 	
 	#(CLOCK_PERIOD); 
 	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+*/
 
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
+
 
 
 

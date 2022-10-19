@@ -32,7 +32,7 @@ localparam 		S_IDLE		= 1'b0,
 
 reg						state,		state_n;
 
-reg						fill_ready;
+reg						fill_ready,	fill_ready_n;
 reg						rmiss_ready,	rmiss_ready_n;
 
 reg						fill_fifo_wren;
@@ -44,6 +44,8 @@ always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
 	
+		fill_ready	<= 1'b0;
+
 		rmiss_ready	<= 1'b0;
 		fill_fifo_data	<= 0;
 
@@ -51,6 +53,8 @@ always_ff @(posedge clk) begin
 	end
 	else begin
 		state		<= state_n;
+
+		fill_ready	<= fill_ready_n;
 
 		rmiss_ready	<= rmiss_ready_n;
 		fill_fifo_data  <= fill_fifo_data_n;
@@ -62,10 +66,11 @@ end
 always_comb begin
 	state_n			= state;
 
-	fill_ready		= 1'b0;
-
+	fill_ready_n		= fill_ready;
 	fill_fifo_wren		= 1'b0;
 	fill_fifo_data_n	= fill_fifo_data;
+
+	rmiss_ready_n		= rmiss_ready;
 
 	arbiter_n		= arbiter;
 
@@ -79,8 +84,9 @@ always_comb begin
 				state_n			= state;
 			end
 			else if(fill_valid_i & (!rmiss_valid_i | !arbiter)) begin
-				$display("2");	
-				fill_ready		= 1'b1;
+				$display("2");
+				fill_ready_n		= 1'b1;
+				
 				arbiter_n		= 1'b1;
 
 				fill_fifo_data_n	= fill_data_i;
@@ -98,9 +104,9 @@ always_comb begin
 			end
 		end
 		S_REQ: begin
-			//fill_ready = 1'b0;
-			rmiss_ready_n = 1'b0;
-			$display("S_REQ\n");	
+			fill_ready_n	= 1'b0;
+			rmiss_ready_n 	= 1'b0;
+			$display("fill_fifo data : %x", fill_fifo_data);	
 			if(!fill_fifo_afull_i) begin
 				fill_fifo_wren	= 1'b1;
 			

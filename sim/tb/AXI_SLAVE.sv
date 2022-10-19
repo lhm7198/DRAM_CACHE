@@ -126,10 +126,12 @@ always @(*) begin
     case (wstate)
         S_W_IDLE: begin
         	if (awvalid_i) begin
+			$display("awvalid on");
                 	wstate_n                = S_W_AWREADY;
             	end
         end
         S_W_AWREADY: begin
+		$display("awaddr_i : %x", awaddr_i);
 		wtag_n[`TAG_S - 1 : `TAG_S - 1] = 1'b1; // valid
 		wtag_n[`TAG_S - 2 : `TAG_S - 2] = 1'b0; // dirty
 		wtag_n[`TAG_S - 3 : `BLANK_W] = awaddr_i[`ADDR_W - 1 : `INDEX_W + `OFFSET_W]; // tag data
@@ -141,6 +143,7 @@ always @(*) begin
                 wstate_n        = S_W_RUN;
         end
         S_W_RUN: begin
+		$display("wtag : %x", wtag);
                 wready                 = 1'b1;
                 if (wvalid_i) begin
 		    write_8byte(windex, wtag); // tag
@@ -205,7 +208,7 @@ always_comb begin
 		rdata[`TAG_S + `DATA_W - 1 : `DATA_W] = read_8byte(rindex);
                 rdata[`DATA_W - 1 : 0] = read_64byte(rindex);
 
-		$display("rdata : %x", rdata);
+		//$display("rdata : %x", rdata);
                 if (rready_i) begin
                     rstate_n                = S_R_IDLE;
                 end

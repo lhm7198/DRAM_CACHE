@@ -27,13 +27,13 @@ module ARBITER
 	output	wire	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]	fill_fifo_data_o
 );
 
-localparam 		S_IDLE		= 2'd0,
-			S_REQ		= 2'd1;
+localparam 		S_IDLE		= 1'b0,
+			S_REQ		= 1'b1;
 
 reg						state,		state_n;
 
 reg						fill_ready;
-reg						rmiss_ready;
+reg						rmiss_ready,	rmiss_ready_n;
 
 reg						fill_fifo_wren;
 reg	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]	fill_fifo_data, fill_fifo_data_n;
@@ -44,13 +44,16 @@ always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
 	
+		rmiss_ready	<= 1'b0;
 		fill_fifo_data	<= 0;
 
 		arbiter		<= 1'b0;
 	end
 	else begin
+		$display("rising edge arbiter");
 		state		<= state_n;
 
+		rmiss_ready	<= rmiss_ready_n;
 		fill_fifo_data  <= fill_fifo_data_n;
 		
 		arbiter		<= arbiter_n;
@@ -61,7 +64,6 @@ always_comb begin
 	state_n			= state;
 
 	fill_ready		= 1'b0;
-	rmiss_ready		= 1'b1;
 
 	fill_fifo_wren		= 1'b0;
 	fill_fifo_data_n	= fill_fifo_data;
@@ -70,14 +72,15 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
+			$display("fill_valid_i = %d, rmiss_valid_i = %d", fill_valid_i, rmiss_valid_i);
 			fill_fifo_data_n	= 0;
 
 			if(fill_fifo_afull_i) begin
-				$display("no");	
+				$display("1");	
 				state_n			= state;
 			end
 			else if(fill_valid_i & (!rmiss_valid_i | !arbiter)) begin
-				$display("no");	
+				$display("2");	
 				fill_ready		= 1'b1;
 				arbiter_n		= 1'b1;
 
@@ -86,7 +89,8 @@ always_comb begin
 				state_n			= S_REQ;
 			end
 			else if(rmiss_valid_i & (!fill_valid_i | arbiter)) begin
-				rmiss_ready		= 1'b1;
+				$display("3");	
+				rmiss_ready_n		= 1'b1;
 				arbiter_n		= 1'b0;
 
 				fill_fifo_data_n	= rmiss_data_i;
@@ -95,9 +99,9 @@ always_comb begin
 			end
 		end
 		S_REQ: begin
-			fill_ready = 1'b0;
-			//rmiss_ready = 1'b0;
-			
+			//fill_ready = 1'b0;
+			rmiss_ready_n = 1'b0;
+			$display("S_REQ\n");	
 			if(!fill_fifo_afull_i) begin
 				fill_fifo_wren	= 1'b1;
 			

@@ -64,7 +64,7 @@ reg	[ID_WIDTH - 1 : 0]		rid, rid_n;
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
 		state		<= S_IDLE;
-		tID		<= 0;
+		tID		<= 1;
 		rid		<= 0;
 		rdata		<= 0;
 		tID_hit		<= 0;
@@ -81,8 +81,6 @@ always_ff @(posedge clk) begin
 end
 
 always_comb begin
-
-	$display("rob read data = %x",read_data_miss);
 	state_n		= state;
 	tID_n		= tID;
 	rid_n		= rid;
@@ -92,7 +90,7 @@ always_comb begin
 	en_miss		= 0;
 	case (state)
 		S_IDLE: begin
-			if((!empty_hit & (tID == tID_hit)) | (!empty_miss & (tID == tID_miss))) begin
+			if((!empty_hit & (tID == tID_hit_n)) | (!empty_miss & (tID == tID_miss_n))) begin
 				tID_n	= tID + 1;
 
 				if(tID == tID_hit) begin

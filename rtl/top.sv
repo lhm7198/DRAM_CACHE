@@ -270,7 +270,7 @@ TAG_COMPARE tag_compare
 	.ar_fifo_data_o		(arfifo_wdata),
 
 	.aw_fifo_afull_i	(awfifo_afull),
-	.aw_fifo_wren_o		(awfull_wren),
+	.aw_fifo_wren_o		(awfifo_wren),
 	.aw_fifo_data_o		(awfifo_wdata),
 
 	.w_fifo_afull_i		(wfifo_afull),

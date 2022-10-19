@@ -69,8 +69,7 @@ always_comb begin
 				wdata_n		= rdata[DATA_WIDTH-1 : 0];
 
 				awaddr_n[OFFSET_WIDTH - 1 : 0]					= 0;
-				awaddr_n[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH]		= rdata[OFFSET_WIDTH+INDEX_WIDTH+DATA_WIDTH-1 : OFFSET_WIDTH+DATA_WIDTH];
-				awaddr_n[ADDR_WIDTH - 1 : OFFSET_WIDTH + INDEX_WIDTH]		= 0;
+				awaddr_n[ADDR_WIDTH + DATA_WIDTH - 1 : OFFSET_WIDTH]		= rdata[ADDR_WIDTH + DATA_WIDTH - 1 : OFFSET_WIDTH + DATA_WIDTH];
 
 				wvalid		= 1;
 				awvalid		= 1;

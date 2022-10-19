@@ -74,8 +74,6 @@ always_comb begin
 	case (state)
 		S_IDLE: begin
 			if(!arfifo_aempty_i) begin
-				$display("here %x",arfifo_data_i);
-
 				arfifo_rden	= 1'b1;
 
 				rmfifo_data_n   = arfifo_data_i;

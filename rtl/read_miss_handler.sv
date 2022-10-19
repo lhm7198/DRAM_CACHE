@@ -32,17 +32,16 @@ module READ_MISS_HANDLER # (
 	output	wire	[WDATA_WIDTH-1 : 0]		wdata_Arbiter_o
 );
 
-localparam		S_IDLE	= 2'd0,
-			S_READY	= 2'd1,
-			S_RUN	= 2'd2;
+localparam		S_IDLE	= 1'b0,
+			S_RUN	= 1'b1;
 
-reg	[1 : 0]				state, state_n;
-reg					ready, ready_n;
+reg					state, state_n;
+reg					rready;
 reg	[DATA_WIDTH+TID_WIDTH-1 : 0]	wdata_ROB, wdata_ROB_n;
 reg	[WDATA_WIDTH-1 : 0]		wdata_Arbiter, wdata_Arbiter_n;
-reg					valid, valid_n;
-reg					write_en, write_en_n;
-reg					read_en, read_en_n;
+reg					rmvalid;
+reg					write_en;
+reg					read_en;
 
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
@@ -52,6 +51,7 @@ always_ff @(posedge clk) begin
 		wdata_ROB	<= 0;
 	end
 	else begin
+		$display("rising edge rm handler");
 		state		<= state_n;
 
 		wdata_Arbiter	<= wdata_Arbiter_n;
@@ -64,54 +64,41 @@ always_comb begin
 
 	wdata_Arbiter_n	= wdata_Arbiter;
 	wdata_ROB_n	= wdata_ROB;
-	write_en	= 0;
-	read_en		= 0;
-	valid		= 0;
-	ready		= 0;
+	write_en	= 1'b0;
+	read_en		= 1'b0;
+	rmvalid		= 1'b0;
+	rready		= 1'b1;
 
 	case(state)
 		S_IDLE: begin
-			if(valid_i) begin
-				$display("ar_i = %x",ar_i);
-				$display("rob %x",wdata_ROB_n);
+			$display("valid_i : %d empty_i : %d", valid_i, empty_i);
+			if(valid_i & !empty_i) begin
 				wdata_Arbiter_n[DATA_WIDTH-1 : 0] 			= data_i;
 				wdata_Arbiter_n[WDATA_WIDTH-1 : DATA_WIDTH]		= ar_i[ADDR_WIDTH-1 : 0];
 				wdata_ROB_n[DATA_WIDTH-1 : 0]				= data_i;
 				wdata_ROB_n[DATA_WIDTH+TID_WIDTH-1 : DATA_WIDTH]	= ar_i[ADDR_WIDTH+TID_WIDTH-1 : ADDR_WIDTH];
-				valid	 						= 1;
-				read_en 						= 1;
-				ready							= 0;
-				state_n 						= S_READY;
+				
+				read_en 						= 1'b1;
+				rready							= 1'b0;
+
+				state_n 						= S_RUN;
 			end
-			else begin
-				valid					= 0;
-				ready					= 1;
-			end
-		end
-		S_READY: begin
-			ready			= 0;
-			if(ready_i) begin
-				write_en	= 1;
-				state_n		= S_RUN;
-				valid		= 0;
-			end
-			else
-				valid		= 1;
 		end
 		S_RUN: begin
-			valid 			= 0;
-			if(!full_i) begin
-				ready		= 1;
+			$display("wdata = %x\nrmiss_ready = %d", wdata_Arbiter, ready_i);
+			rready	= 1'b0;
+			rmvalid	= 1'b1;
+			if(ready_i & !full_i) begin
+				write_en	= 1'b1;
+				rmvalid		= 1'b0;
 				state_n		= S_IDLE;
 			end
-			else
-				ready		= 0;
 		end
 	endcase
 end
 
-assign	ready_o		= ready;
-assign	valid_o		= valid;
+assign	ready_o		= rready;
+assign	valid_o		= rmvalid;
 assign	read_en_o	= read_en;
 assign	write_en_o	= write_en;
 assign	wdata_ROB_o	= wdata_ROB;

@@ -159,31 +159,55 @@ begin
 	#(CLOCK_PERIOD);
 
 	$display("\nStart\n");
-	
-	#(CLOCK_PERIOD);
-	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
-	araddr_i		= 64'habcd1234abcd1234;
+
+	// index extractor get data
+	araddr_i		= 64'habcd1234abcd1234; // tag + index + offset
 	arvalid_i		= 1;
-
 	#(CLOCK_PERIOD);
-	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
+	$display("m_addr = %x, m_arvalid = %d", m_araddr_o, m_arvalid_o);
 
+	// tag comparator get data
 	m_arready_i		= 1;	
 	arvalid_i		= 0;
 	
 	m_rvalid_i		= 1;
-	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'habcd;
-	m_rdata_i[`TAG_S + `DATA_W - 1] = 0;	//valid bit
-	m_rdata_i[`DATA_W - 1 : 0]	= 512'haaaaaaaaaaaabbbbbbbbbbbbbb;
+	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'hffff; // tag
+	m_rdata_i[`TAG_S + `DATA_W - 1 : `TAG_S + `DATA_W - 1] = 0; // valid bit
+	m_rdata_i[`DATA_W - 1 : 0]	= 512'haaaaaaaaaaaabbbbbbbbbbbbbb; // data
+	#(CLOCK_PERIOD); 	
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
+	// rmfifo get data	
+	c_arready_i		= 1'b1;
 	#(CLOCK_PERIOD);
-	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
-	//m_arready_i		= 0;	
+	$display("c_araddr = %x\nc_awaddr = %x\nc_wdata = %x\n", c_araddr_o, c_awaddr_o, c_wdata_o);
+
+	// rm handler get data
+	c_rvalid_i		= 1'b1;
+	c_rdata_i		= 512'habcabcabc;
+	#(CLOCK_PERIOD);
 	
 	#(CLOCK_PERIOD);
-	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
+	c_rvalid_i		= 1'b0;
+
+	
 	
 	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+
+ 	$display("m_awvalid : %x\nm_awaddr : %x\nm_wvalid : %x\nm_wdata : %x\n",m_awvalid_o,m_awaddr_o,m_wvalid_o,m_wdata_o);	
+/*	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	m_awready_i			= 1;
@@ -204,7 +228,7 @@ begin
 	$display("rdata_o = %x",rdata_o);
 	#(CLOCK_PERIOD);
 	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD); */
 	$finish;
 end
 

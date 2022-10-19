@@ -46,7 +46,7 @@ always @(*) begin
     if (read) begin
 	    if (head == (FIFO_SIZE-1)) begin 
 		    head_n = 0;
-	    end else begin 
+	    end else begin
 		    head_n = head + 1;        
 	    end
     end

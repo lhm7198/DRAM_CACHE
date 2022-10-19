@@ -175,8 +175,6 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
-	$display("m_awaddr = %x",m_awaddr);
-	$display("m_data = %x",m_wdata);
 
 	/////////////////////////////////////////////////
 	/////////////////// read hit  ///////////////////
@@ -204,9 +202,49 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 
+	/////////////////////////////////////////////////
+	/////////////////// write hit  //////////////////
+	/////////////////////////////////////////////////
+	
+	awaddr_i		= 64'h0000000f00000040; // tag(f), index(1), offset(0)
+	awvalid_i		= 1'b1;
+	wdata_i			= 64'hcccccccc;
+	wvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
 
+	awvalid_i		= 1'b0;
+	wvalid_i		= 1'b0;
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
+	/////////////////////////////////////////////////
+	/////////////////// read hit  ///////////////////
+	/////////////////////////////////////////////////
 
+	//memory_ctrl.write_8byte(1, 64'hc0000003c0000000); // valid(1), dirty(1), tag(f), blank(0)
+	//memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
+
+	// index extractor get data
+	araddr_i		= 64'h0000000f00000040; // tag(f) + index(1) + offset(0)
+	arvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
+
+	// tag comparator get data
+	arvalid_i		= 1'b0;
+	
+	#(CLOCK_PERIOD); 
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
 	$finish;
 end

@@ -66,14 +66,11 @@ always_comb begin
 	case(state)
 		S_IDLE: begin
 			if(!empty) begin
-				$display("fill fifo data : %x", rdata);
 				wdata_n		= rdata[DATA_WIDTH-1 : 0];
 
 				awaddr_n[OFFSET_WIDTH - 1 : 0]					= 0;
 				awaddr_n[ADDR_WIDTH + DATA_WIDTH - 1 : OFFSET_WIDTH]		= rdata[ADDR_WIDTH + DATA_WIDTH - 1 : OFFSET_WIDTH + DATA_WIDTH];
 
-				//wvalid		= 1;
-				//awvalid		= 1;
 				state_n		= S_READY;
 			end
 		end
@@ -81,7 +78,6 @@ always_comb begin
 				wvalid		= 1;
 				awvalid		= 1;
 				if(wready_i & awready_i) begin
-					$display("aaaaaaaaaaaaaaaaaa");
 					read_en	= 1;
 					state_n	= S_IDLE;
 				end

@@ -70,7 +70,6 @@ always_comb begin
 
 	case(state)
 		S_IDLE: begin
-			$display("valid_i : %d empty_i : %d", valid_i, empty_i);
 			if(valid_i & !empty_i) begin
 				wdata_Arbiter_n[DATA_WIDTH-1 : 0] 			= data_i;
 				wdata_Arbiter_n[WDATA_WIDTH-1 : DATA_WIDTH]		= ar_i[ADDR_WIDTH-1 : 0];
@@ -84,7 +83,6 @@ always_comb begin
 			end
 		end
 		S_RUN: begin
-			$display("wdata = %x\nrmiss_ready = %d", wdata_Arbiter, ready_i);
 			rready	= 1'b0;
 			rmvalid	= 1'b1;
 			if(ready_i & !full_i) begin

@@ -125,8 +125,7 @@ always @(*) begin
 
     case (wstate)
         S_W_IDLE: begin
-		$display("awvalid_i : %x", awvalid_i);
-        	if (awvalid_i) begin
+		if (awvalid_i) begin
                 	wstate_n                = S_W_AWREADY;
             	end
         end
@@ -138,16 +137,14 @@ always @(*) begin
 
                 windex_n        = awaddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
 
-                awready		= 1'b1;
                 wstate_n        = S_W_RUN;
         end
         S_W_RUN: begin
-		$display("wtag : %x, index : %x", wtag, windex);
-                wready                 = 1'b1;
+                awready		= 1'b1;
+                wready          = 1'b1;
                 if (wvalid_i) begin
 		    write_8byte(windex, wtag); // tag
                     write_64byte(windex, wdata_i); // data
-                    
 		    wstate_n   = S_W_RESP;
                 end
         end

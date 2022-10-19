@@ -152,7 +152,6 @@ always_comb begin
 				rready			= 1'b1;
 				if(read) begin
 					// read hit(valid && same tag) 
-					//$display("tag_fifo %x \nrdata_i %x",tag_fifo_data_i[63:48],rdata_i[TAG_WIDTH+BLANK_WIDTH+DATA_WIDTH-1:BLANK_WIDTH+DATA_WIDTH]);
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 						rob_data_n[TID_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : ADDR_WIDTH]; // tid
 						rob_data_n[DATA_WIDTH - 1 : 0] = rdata_i[DATA_WIDTH - 1 : 0];
@@ -176,7 +175,6 @@ always_comb begin
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
-
 						state_n		= S_WHIT;
 					end
 					// write miss
@@ -272,5 +270,8 @@ assign w_fifo_data_o	= w_fifo_data;
 // fill arbiter
 assign fill_valid_o	= fill_valid;
 assign fill_data_o	= fill_data;
+
+// wbuffer
+assign  wbuffer_rden_o	= wbuffer_rden;
 
 endmodule

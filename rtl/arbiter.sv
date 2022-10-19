@@ -79,21 +79,17 @@ always_comb begin
 			fill_fifo_data_n	= 0;
 
 			if(fill_fifo_afull_i) begin
-				$display("1");	
 				state_n			= state;
 			end
 			else if(fill_valid_i & (!rmiss_valid_i | !arbiter)) begin
-				$display("2");
 				fill_ready_n		= 1'b1;
 				
 				arbiter_n		= 1'b1;
-				$display("fill data i = %x",fill_data_i);
 				fill_fifo_data_n	= fill_data_i;
 
 				state_n			= S_REQ;
 			end
 			else if(rmiss_valid_i & (!fill_valid_i | arbiter)) begin
-				$display("3");	
 				rmiss_ready_n		= 1'b1;
 				arbiter_n		= 1'b0;
 

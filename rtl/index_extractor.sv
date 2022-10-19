@@ -41,7 +41,7 @@ module INDEX_EXTRACTOR
 localparam 			S_IDLE	= 1'd0,
 				S_REQ 	= 1'd1;
 
-reg	[2 : 0]					state,		state_n;
+reg						state,		state_n;
 
 reg 	[ADDR_WIDTH - 1 : 0] 			index,		index_n;
 reg	[TID_WIDTH - 1 : 0]		 	tid,		tid_n; 		 // 10 bit
@@ -96,7 +96,7 @@ always_comb begin
 			end
 			else if(arvalid_i & (!awvalid_i | !arbiter)) begin
 				index_n[OFFSET_WIDTH - 1 : 0]						= 0;
-				index_n[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH]			= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
+				index_n[INDEX_WIDTH + OFFSET_WIDTH - 1 : OFFSET_WIDTH]			= araddr_i[INDEX_WIDTH + OFFSET_WIDTH - 1 : OFFSET_WIDTH];
 				index_n[ADDR_WIDTH - 1 : OFFSET_WIDTH + INDEX_WIDTH]			= 0;
 
 				tag_fifo_data_n[ADDR_WIDTH - 1 : 0]					= araddr_i;
@@ -137,6 +137,7 @@ always_comb begin
 			end
 		end
 		S_REQ: begin
+			$display("index : %x", index);
 			tag_fifo_wren_n				= 1'b0;
 		
 			arready 				= 1'b0;

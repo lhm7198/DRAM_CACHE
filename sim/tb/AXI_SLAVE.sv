@@ -5,10 +5,10 @@
 
 `define TAG_S 	8*8
 
-`define INDEX_W 10
-`define OFFSET_W 38
+`define INDEX_W 26
+`define OFFSET_W 6
 
-`define BLANK_W 46
+`define BLANK_W 30
 
 module AXI_SLAVE
 (
@@ -55,14 +55,14 @@ reg					awready;
 reg					wready;
 reg					bvalid;
 
-logic   [`INDEX_W - 1 : 0]              mem_tag[`TAG_S];
-logic   [`INDEX_W - 1 : 0]              mem_data[`DATA_W];
+logic   [`TAG_S - 1 : 0]              mem_tag[`INDEX_W];
+logic   [`DATA_W - 1 : 0]              mem_data[`INDEX_W];
 
-function void write_byte(int index, input bit [7:0] wdata);
+function void write_8byte(int index, input bit [63:0] wdata);
     mem_tag[index] = wdata;
 endfunction
 
-function void write_64byte(int index, input bit [63:0] wdata);
+function void write_64byte(int index, input bit [511:0] wdata);
     mem_data[index] = wdata;
 endfunction
 
@@ -72,11 +72,11 @@ endfunction
     end
 endfunction*/
 
-function bit [7:0] read_byte(int index);
-    read_byte = mem_tag[index];
+function bit [63:0] read_8byte(int index);
+    read_8byte = mem_tag[index];
 endfunction
 
-function bit [63:0] read_64byte(int index);
+function bit [511:0] read_64byte(int index);
     read_64byte = mem_data[index];
 endfunction
 
@@ -143,7 +143,7 @@ always @(*) begin
         S_W_RUN: begin
                 wready                 = 1'b1;
                 if (wvalid_i) begin
-		    write_byte(windex, wtag); // tag
+		    write_8byte(windex, wtag); // tag
                     write_64byte(windex, wdata_i); // data
                     
 		    wstate_n   = S_W_RESP;
@@ -196,15 +196,16 @@ always_comb begin
             end
             S_R_ARREADY: begin
             	rindex_n        = araddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
-
+		
                 arready         = 1'b1;
                 rstate_n        = S_R_RUN;
             end
             S_R_RUN: begin
                 rvalid          = 1'b1;
-                
-		rdata[`TAG_S + `DATA_W - 1 : `DATA_W] = read_byte(rindex);
+		rdata[`TAG_S + `DATA_W - 1 : `DATA_W] = read_8byte(rindex);
                 rdata[`DATA_W - 1 : 0] = read_64byte(rindex);
+
+		$display("rdata : %x", rdata);
                 if (rready_i) begin
                     rstate_n                = S_R_IDLE;
                 end

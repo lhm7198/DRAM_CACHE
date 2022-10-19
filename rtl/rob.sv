@@ -93,7 +93,7 @@ always_comb begin
 			if((!empty_hit & (tID == tID_hit_n)) | (!empty_miss & (tID == tID_miss_n))) begin
 				tID_n	= tID + 1;
 
-				if(tID == tID_hit) begin
+				if(tID == tID_hit_n) begin
 					rdata_n		= read_data_hit;
 					en_hit		= 1;
 				end

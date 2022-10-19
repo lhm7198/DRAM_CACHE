@@ -4,10 +4,10 @@
 `define ID	1
 
 `define TAG_S	8*8
-`define TAG_W 16
-`define INDEX_W	10
-`define OFFSET_W 38
-`define BLANK_W 46	
+`define TAG_W	 32
+`define INDEX_W	 26
+`define OFFSET_W 6
+`define BLANK_W  30
 
 `define TID_W	10
 
@@ -23,21 +23,21 @@ reg	rst_n;
 //////////////////////////////////////////////////////////////////
 
 // AR channel (Processor <-> Index extractor)
-reg	[`ID_W : 0]		arid_i;
-reg	[`ADDR_W : 0]		araddr_i;
-reg				arvalid_i;
-wire				arready_o;
+reg	[`ID_W : 0]			arid_i;
+reg	[`ADDR_W : 0]			araddr_i;
+reg					arvalid_i;
+wire					arready_o;
 
 // AW channel (Processor <-> Index extractor)
-reg	[`ID_W : 0]		awid_i;
-reg	[`ADDR_W : 0]		awaddr_i;
-reg				awvalid_i;
-wire				awready_o;
+reg	[`ID_W : 0]			awid_i;
+reg	[`ADDR_W : 0]			awaddr_i;
+reg					awvalid_i;
+wire					awready_o;
 
 // W channel (Processor <-> Wbuffer)
-reg	[`DATA_W - 1 : 0]	wdata_i;
-reg				wvalid_i;
-wire				wready_o;	
+reg	[`DATA_W - 1 : 0]		wdata_i;
+reg					wvalid_i;
+wire					wready_o;	
 
 // R channel (Processor -> ROB)
 wire					rid_o;
@@ -50,28 +50,28 @@ reg					rready_i;
 //////////////////////////////////////////////////////////////////
 	
 // AR channel (Index extractor -> Memory Ctrl)
-wire 	[`ID_W - 1 : 0] 		m_arid_o;
-wire 	[`ADDR_W - 1 : 0] 		m_araddr_o;
-wire					m_arvalid_o;
-reg					m_arready_i;
+wire 	[`ID_W - 1 : 0] 		m_arid;
+wire 	[`ADDR_W - 1 : 0] 		m_araddr;
+wire					m_arvalid;
+wire					m_arready;
 
 // R channel (Memory Ctrl -> Tag comparator)
-reg					m_rid_i;
-reg	[`TAG_S + `DATA_W - 1 : 0]	m_rdata_i;
-reg					m_rvalid_i;
-wire					m_rready_o;
+wire					m_rid;
+wire	[`TAG_S + `DATA_W - 1 : 0]	m_rdata;
+wire					m_rvalid;
+wire					m_rready;
 
 // AW channel (Fill fifo <-> Memory Ctrl)
-wire 	[`ID_W - 1 : 0] 		m_awid_o;
-wire 	[`ADDR_W - 1 : 0] 		m_awaddr_o;
-wire 					m_awvalid_o;
-reg					m_awready_i;
+wire 	[`ID_W - 1 : 0] 		m_awid;
+wire 	[`ADDR_W - 1 : 0] 		m_awaddr;
+wire 					m_awvalid;
+wire					m_awready;
 
 // W channel (Fill fifo <-> Memory Ctrl)
-wire	[`ID_W - 1 : 0]			m_wid_o;
-wire	[`DATA_W - 1 : 0]		m_wdata_o;
-wire					m_wvalid_o;
-reg					m_wready_i;	
+wire	[`ID_W - 1 : 0]			m_wid;
+wire	[`DATA_W - 1 : 0]		m_wdata;
+wire					m_wvalid;
+wire					m_wready;	
 
 //////////////////////////////////////////////////////////////////
 ////////////////   DRAM $ Ctrl <-> CXL Ctrl   ////////////////////
@@ -106,6 +106,9 @@ wire	[`ID_W - 1 : 0]			c_bid_o;
 wire					c_bvalid_o;
 reg					c_bready_i;
 
+logic [7:0] tmp;
+
+
 localparam			CLOCK_PERIOD 	= 1000;
 always #(CLOCK_PERIOD/2) 	clk 		= ~clk;
 
@@ -125,18 +128,9 @@ begin
 	wdata_i		= 0;
 	wvalid_i	= 0;
 
-	rready_i	= 0;
+	rready_i	= 1'b1;
 
 	// DRAM $ Ctrl <-> Memory Ctrl //
-	m_arready_i	= 0;
-	
-	m_rid_i 	= 0;
-	m_rdata_i	= 0;
-	m_rvalid_i	= 0;
-
-	m_awready_i	= 0;
-	
-	m_wready_i	= 0;
 
 	// DRAM $ Ctrl <-> CXL Ctrl //
 	c_arready_i 	= 0;
@@ -160,89 +154,42 @@ begin
 
 	$display("\nStart\n");
 
+
 	/////////////////////////////////////////////////
-	/////////////////// read miss ///////////////////
+	/////////////////// read hit  ///////////////////
 	/////////////////////////////////////////////////
 	
-	// index extractor get data
-	araddr_i		= 64'habcd1234abcd1234; // tag + index + offset
-	arvalid_i		= 1;
+	memory_ctrl.write_8byte(1, 64'hc0000003c0000000); // valid(1), dirty(1), tag(f), blank(0)
+	#(CLOCK_PERIOD); 
 	#(CLOCK_PERIOD);
-	$display("m_addr = %x, m_arvalid = %d", m_araddr_o, m_arvalid_o);
+	#(CLOCK_PERIOD); 
+	
+	
+	memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
+
+	#(CLOCK_PERIOD); 
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD); 
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD); 
+	#(CLOCK_PERIOD);
+
+
+
+	tmp = memory_ctrl.read_8byte(0);
+	$display("tag : %x", tmp);
+
+	// index extractor get data
+	araddr_i		= 64'h0000000f00000040; // tag(f) + index(1) + offset(0)
+	arvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
 
 	// tag comparator get data
-	m_arready_i		= 1;	
-	arvalid_i		= 0;
+	arvalid_i		= 1'b0;
 	
-	m_rvalid_i		= 1;
-	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'hffff; // tag
-	m_rdata_i[`TAG_S + `DATA_W - 1 : `TAG_S + `DATA_W - 1] = 1; // valid bit
-	m_rdata_i[`DATA_W - 1 : 0]	= 512'haaaaaaaaaaaabbbbbbbbbbbbbb; // data
-	#(CLOCK_PERIOD); 	
+	#(CLOCK_PERIOD); 
 	#(CLOCK_PERIOD);
 
-	/////////////////////////////////////////////////
-	/////////////////// read hit ////////////////////
-	/////////////////////////////////////////////////
-
-	// index extractor get data
-	araddr_i		= 64'hfedc9876bcde3456; // tag + index + offset
-	arvalid_i		= 1;
-	#(CLOCK_PERIOD);
-	$display("m_addr = %x, m_arvalid = %d", m_araddr_o, m_arvalid_o);
-
-	// tag comparator get data
-	m_arready_i		= 1;	
-	arvalid_i		= 0;
-	
-	m_rvalid_i		= 1;
-	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'hfedc; // tag
-	m_rdata_i[`TAG_S + `DATA_W - 1 : `TAG_S + `DATA_W - 1] = 1; // valid bit
-	m_rdata_i[`DATA_W - 1 : 0]	= 512'heeeeeeeeeeeeeeeeffffffffffffffff; // data
-
-
-	#(CLOCK_PERIOD);
-
-	// rmfifo get data	
-	c_arready_i		= 1'b1;
-	#(CLOCK_PERIOD);
-	$display("c_araddr = %x\nc_awaddr = %x\nc_wdata = %x\n", c_araddr_o, c_awaddr_o, c_wdata_o);
-
-	// rm handler get data
-	c_rvalid_i		= 1'b1;
-	c_rdata_i		= 512'habcabcabc;
-	#(CLOCK_PERIOD);
-	
-	#(CLOCK_PERIOD);
-	c_rvalid_i		= 1'b0;
-
-	
-	
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o : %x\n", rdata_o);
 	#(CLOCK_PERIOD);
 	$display("rdata_o : %x\n", rdata_o);
 	#(CLOCK_PERIOD);
@@ -256,28 +203,7 @@ begin
 	#(CLOCK_PERIOD);
 
 
-/*	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	m_awready_i			= 1;
-	m_wready_i			= 1;
-	c_rvalid_i			= 1;
-	c_rdata_i			= 512'habcabcabc;
-	$display("valid = %d CXL ar = %x",c_arvalid_o, c_araddr_o);
-	#(CLOCK_PERIOD);
-	c_rvalid_i			= 0;
-	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD);
-	$display("rdata_o = %x",rdata_o);
-	#(CLOCK_PERIOD); */
+
 	$finish;
 end
 
@@ -307,25 +233,25 @@ TOP_MODULE top_module
 	.rready_i	(rready_i),
 
 	// 2
-	.m_arid_o	(m_arid_o),
-	.m_araddr_o	(m_araddr_o),
-	.m_arvalid_o	(m_arvalid_o),
-	.m_arready_i	(m_arready_i),
+	.m_arid_o	(m_arid),
+	.m_araddr_o	(m_araddr),
+	.m_arvalid_o	(m_arvalid),
+	.m_arready_i	(m_arready),
 
-	.m_rid_i	(m_rid_i),
-	.m_rdata_i	(m_rdata_i),
-	.m_rvalid_i	(m_rvalid_i),
-	.m_rready_o	(m_rready_o),
+	.m_rid_i	(m_rid),
+	.m_rdata_i	(m_rdata),
+	.m_rvalid_i	(m_rvalid),
+	.m_rready_o	(m_rready),
 
-	.m_awid_o	(m_awid_o),
-	.m_awaddr_o	(m_awaddr_o),
-	.m_awvalid_o	(m_awvalid_o),
-	.m_awready_i	(m_awready_i),
+	.m_awid_o	(m_awid),
+	.m_awaddr_o	(m_awaddr),
+	.m_awvalid_o	(m_awvalid),
+	.m_awready_i	(m_awready),
 
-	.m_wid_o	(m_wid_o),
-	.m_wdata_o	(m_wdata_o),
-	.m_wvalid_o	(m_wvalid_o),
-	.m_wready_i	(m_wready_i),
+	.m_wid_o	(m_wid),
+	.m_wdata_o	(m_wdata),
+	.m_wvalid_o	(m_wvalid),
+	.m_wready_i	(m_wready),
 
 	// 3
 	.c_arid_o	(c_arid_o),
@@ -351,6 +277,36 @@ TOP_MODULE top_module
 	.c_bid_o	(c_bid_o),
 	.c_bvalid_o	(c_bvalid_o),
 	.c_bready_i	(c_bready_i)
+);
+
+AXI_SLAVE memory_ctrl
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.arid_i		(m_arid),
+	.araddr_i	(m_araddr),
+	.arvalid_i	(m_arvalid),
+	.arready_o	(m_arready),
+
+	.rid_o		(m_rid),
+	.rdata_o	(m_rdata),
+	.rvalid_o	(m_rvalid),
+	.rready_i	(m_rready),
+
+	.awid_i		(m_awid),
+	.awaddr_i	(m_awaddr),
+	.awvalid_i	(m_awvalid),
+	.awready_o	(m_awready),
+
+	.wid_i		(m_wid),
+	.wdata_i	(m_wdata),
+	.wvalid_i	(m_wvalid),
+	.wready_o	(m_wready),
+
+	.bid_o		(),
+	.bvalid_o	(),
+	.bready_i	()
 );
 
 endmodule

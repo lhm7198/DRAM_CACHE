@@ -9,12 +9,12 @@
 
 // TAG SIZE
 `define TAG_SIZE		8*8
-`define TAG_WIDTH		16
-`define BLANK_WIDTH		TAG_SIZE - TAG_WIDTH - 2
+`define TAG_WIDTH		32
+`define BLANK_WIDTH		30
 
 // ADDRESS (64 bit)
-`define INDEX_WIDTH		10
-`define OFFSET_WIDTH		38
+`define INDEX_WIDTH		26
+`define OFFSET_WIDTH		6
 
 // FIFO
 `define FIFO_DATA_WIDTH		64*9

@@ -18,18 +18,23 @@ module	TOB_TB;
 reg	clk	= 1'b0;
 reg	rst_n;
 
+
+wire	[`ID_W - 1 : 0]			bid_o;
+wire					bvalid_o;
+reg					bready_i;
+
 //////////////////////////////////////////////////////////////////
 ////////////////  Processor <-> DRAM $ Ctrl  /////////////////////
 //////////////////////////////////////////////////////////////////
 
 // AR channel (Processor <-> Index extractor)
-reg	[`ID_W : 0]			arid_i;
+reg	[`ID_W - 1 : 0]			arid_i;
 reg	[`ADDR_W : 0]			araddr_i;
 reg					arvalid_i;
 wire					arready_o;
 
 // AW channel (Processor <-> Index extractor)
-reg	[`ID_W : 0]			awid_i;
+reg	[`ID_W - 1 : 0]			awid_i;
 reg	[`ADDR_W : 0]			awaddr_i;
 reg					awvalid_i;
 wire					awready_o;
@@ -113,6 +118,7 @@ initial
 begin
 	rst_n		= 1'b1;
 
+	bready_i	= 1'b1;
 	// Processor <-> DRAM $ Ctrl //
 	arid_i 		= 0;
 	araddr_i 	= 0;
@@ -154,7 +160,7 @@ begin
 	/////////////////////////////////////////////////
 	/////////////////// write miss  /////////////////
 	/////////////////////////////////////////////////
-	awaddr_i		= 64'h0000000f0000040; // tag(f), index(1), offset(0)
+	awaddr_i		= 64'h0000000f00000040; // tag(f), index(1), offset(0)
 	awvalid_i		= 1'b1;
 	wdata_i			= 64'hddddddddddddddddd;
 	wvalid_i		= 1'b1;
@@ -171,7 +177,7 @@ begin
 	#(CLOCK_PERIOD);
 	$display("m_awaddr = %x",m_awaddr);
 	$display("m_data = %x",m_wdata);
-/*
+
 	/////////////////////////////////////////////////
 	/////////////////// read hit  ///////////////////
 	/////////////////////////////////////////////////
@@ -193,7 +199,10 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	$display("rdata_o : %x\n", rdata_o);
-*/
+
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
 
 
@@ -206,6 +215,10 @@ TOP_MODULE top_module
 (
 	.clk		(clk),
 	.rst_n		(rst_n),
+
+	.bid_o		(bid_o),
+	.bvalid_o	(bvalid_o),
+	.bready_i	(bready_i),
 
 	// 1
 	.arid_i		(arid_i),
@@ -299,9 +312,9 @@ AXI_SLAVE memory_ctrl
 	.wvalid_i	(m_wvalid),
 	.wready_o	(m_wready),
 
-	.bid_o		(),
-	.bvalid_o	(),
-	.bready_i	()
+	.bid_o		(bid_o),
+	.bvalid_o	(bvalid_o),
+	.bready_i	(bready_i)
 );
 
 endmodule

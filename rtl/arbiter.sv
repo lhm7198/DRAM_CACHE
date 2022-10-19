@@ -105,7 +105,6 @@ always_comb begin
 		S_REQ: begin
 			fill_ready_n	= 1'b0;
 			rmiss_ready_n 	= 1'b0;
-			$display("fill fifo data = %x",fill_fifo_data);
 			if(!fill_fifo_afull_i) begin
 				fill_fifo_wren	= 1'b1;
 			

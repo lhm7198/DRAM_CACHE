@@ -236,7 +236,6 @@ always_comb begin
 			wbuffer_rden	= 1'b0;
 
 			fill_valid 	= 1'b1;
-			$display("send valid && data = %x",fill_data);
 			rready 		= 1'b0;
 
 			if(!aw_fifo_afull_i & !w_fifo_afull_i & fill_ready_i) begin

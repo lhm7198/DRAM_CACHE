@@ -359,7 +359,7 @@ ARBITER arbiter
 
 	.fill_ready_o		(fill_ready),
 	.fill_valid_i		(fill_valid),
-	.fill_data_i		(fill_data),
+	.fill_data_i		(fill_wdata),
 
 	.rmiss_ready_o		(rmiss_ready),
 	.rmiss_valid_i		(rmiss_valid),

@@ -169,6 +169,8 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
+	$display("m_awaddr = %x",m_awaddr);
+	$display("m_data = %x",m_wdata);
 /*
 	/////////////////////////////////////////////////
 	/////////////////// read hit  ///////////////////

@@ -76,7 +76,6 @@ always_comb begin
 
 	case (state)
 		S_IDLE: begin
-			$display("fill_valid_i = %d, rmiss_valid_i = %d", fill_valid_i, rmiss_valid_i);
 			fill_fifo_data_n	= 0;
 
 			if(fill_fifo_afull_i) begin
@@ -88,7 +87,7 @@ always_comb begin
 				fill_ready_n		= 1'b1;
 				
 				arbiter_n		= 1'b1;
-
+				$display("fill data i = %x",fill_data_i);
 				fill_fifo_data_n	= fill_data_i;
 
 				state_n			= S_REQ;
@@ -106,7 +105,7 @@ always_comb begin
 		S_REQ: begin
 			fill_ready_n	= 1'b0;
 			rmiss_ready_n 	= 1'b0;
-			$display("fill_fifo data : %x", fill_fifo_data);	
+			$display("fill fifo data = %x",fill_fifo_data);
 			if(!fill_fifo_afull_i) begin
 				fill_fifo_wren	= 1'b1;
 			

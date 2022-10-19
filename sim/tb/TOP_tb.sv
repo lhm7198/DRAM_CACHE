@@ -160,6 +160,10 @@ begin
 
 	$display("\nStart\n");
 
+	/////////////////////////////////////////////////
+	/////////////////// read miss ///////////////////
+	/////////////////////////////////////////////////
+	
 	// index extractor get data
 	araddr_i		= 64'habcd1234abcd1234; // tag + index + offset
 	arvalid_i		= 1;
@@ -172,10 +176,31 @@ begin
 	
 	m_rvalid_i		= 1;
 	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'hffff; // tag
-	m_rdata_i[`TAG_S + `DATA_W - 1 : `TAG_S + `DATA_W - 1] = 0; // valid bit
+	m_rdata_i[`TAG_S + `DATA_W - 1 : `TAG_S + `DATA_W - 1] = 1; // valid bit
 	m_rdata_i[`DATA_W - 1 : 0]	= 512'haaaaaaaaaaaabbbbbbbbbbbbbb; // data
 	#(CLOCK_PERIOD); 	
 	#(CLOCK_PERIOD);
+
+	/////////////////////////////////////////////////
+	/////////////////// read hit ////////////////////
+	/////////////////////////////////////////////////
+
+	// index extractor get data
+	araddr_i		= 64'hfedc9876bcde3456; // tag + index + offset
+	arvalid_i		= 1;
+	#(CLOCK_PERIOD);
+	$display("m_addr = %x, m_arvalid = %d", m_araddr_o, m_arvalid_o);
+
+	// tag comparator get data
+	m_arready_i		= 1;	
+	arvalid_i		= 0;
+	
+	m_rvalid_i		= 1;
+	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'hfedc; // tag
+	m_rdata_i[`TAG_S + `DATA_W - 1 : `TAG_S + `DATA_W - 1] = 1; // valid bit
+	m_rdata_i[`DATA_W - 1 : 0]	= 512'heeeeeeeeeeeeeeeeffffffffffffffff; // data
+
+
 	#(CLOCK_PERIOD);
 
 	// rmfifo get data	
@@ -204,9 +229,33 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
+
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o : %x\n", rdata_o);
 	#(CLOCK_PERIOD);
 
- 	$display("m_awvalid : %x\nm_awaddr : %x\nm_wvalid : %x\nm_wdata : %x\n",m_awvalid_o,m_awaddr_o,m_wvalid_o,m_wdata_o);	
+
 /*	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);

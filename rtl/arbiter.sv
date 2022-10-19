@@ -50,7 +50,6 @@ always_ff @(posedge clk) begin
 		arbiter		<= 1'b0;
 	end
 	else begin
-		$display("rising edge arbiter");
 		state		<= state_n;
 
 		rmiss_ready	<= rmiss_ready_n;

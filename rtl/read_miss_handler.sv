@@ -51,7 +51,6 @@ always_ff @(posedge clk) begin
 		wdata_ROB	<= 0;
 	end
 	else begin
-		$display("rising edge rm handler");
 		state		<= state_n;
 
 		wdata_Arbiter	<= wdata_Arbiter_n;

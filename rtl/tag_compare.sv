@@ -140,7 +140,6 @@ always_comb begin
 	
 	case (state)
 		S_IDLE: begin
-			$display("S_IDLE\n");
 			rob_data_n		= 0;
 			ar_fifo_data_n		= 0;
 			aw_fifo_data_n		= 0;
@@ -151,13 +150,12 @@ always_comb begin
 			if(rvalid_i & !tag_fifo_aempty_i) begin
 				tag_fifo_rden		= 1'b1;
 				rready			= 1'b1;
-
 				if(read) begin
 					// read hit(valid && same tag) 
+					$display("tag_fifo %x \nrdata_i %x",tag_fifo_data_i[63:48],rdata_i[TAG_WIDTH+BLANK_WIDTH+DATA_WIDTH-1:BLANK_WIDTH+DATA_WIDTH]);
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 						rob_data_n[TID_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : ADDR_WIDTH]; // tid
 						rob_data_n[DATA_WIDTH - 1 : 0] = rdata_i[DATA_WIDTH - 1 : 0];
-					
 						state_n		= S_RHIT;
 					end
 					// read miss

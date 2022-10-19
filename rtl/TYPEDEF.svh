@@ -20,7 +20,7 @@
 `define FIFO_DATA_WIDTH		64*9
 `define FIFO_SIZE		64
 `define FIFO_AFULL_THR		62
-`define FIFO_AEMPTY_THR		2
+`define FIFO_AEMPTY_THR		0
 
 // TID
 `define	TID_WIDTH		10

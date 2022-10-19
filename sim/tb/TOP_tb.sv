@@ -4,9 +4,10 @@
 `define ID	1
 
 `define TAG_S	8*8
-
+`define TAG_W 16
 `define INDEX_W	10
 `define OFFSET_W 38
+`define BLANK_W 46	
 
 `define TID_W	10
 
@@ -95,7 +96,7 @@ wire					c_wvalid_o;
 reg					c_wready_i;	
 
 // R channel (RMiss Handler -> CXL Ctrl)
-//input	wire					c_rid_i,
+reg	[`ID_W - 1 : 0]			c_rid_i;
 reg	[`DATA_W - 1 : 0]		c_rdata_i;
 reg					c_rvalid_i;
 wire					c_rready_o;
@@ -144,7 +145,7 @@ begin
 
 	c_wready_i	= 0;
 
-	//c_rid_i		= 0;
+	c_rid_i		= 0;
 	c_rdata_i	= 0;
 	c_rvalid_i	= 0;
 
@@ -159,6 +160,36 @@ begin
 
 	$display("\nStart\n");
 	
+	#(CLOCK_PERIOD);
+	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
+	araddr_i		= 64'habcd1234abcd1234;
+	arvalid_i		= 1;
+
+	#(CLOCK_PERIOD);
+	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
+
+	m_arready_i		= 1;	
+	arvalid_i		= 0;
+	
+	m_rvalid_i		= 1;
+	m_rdata_i[`TAG_W + `BLANK_W + `DATA_W - 1 : `BLANK_W + `DATA_W] = 16'habcd;
+	m_rdata_i[`TAG_S + `DATA_W - 1] = 1;	//valid bit
+	m_rdata_i[`DATA_W - 1 : 0]	= 512'haaaaaaaaaaaabbbbbbbbbbbbbb;
+
+	#(CLOCK_PERIOD);
+	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
+	//m_arready_i		= 0;	
+	
+	#(CLOCK_PERIOD);
+	$display("addr = %x, arvalid = %d, ready = %d",m_araddr_o, m_arvalid_o, arready_o);
+	
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	$display("rdata_o = %x",rdata_o);
+	#(CLOCK_PERIOD);
+	$display("rdata_o = %x",rdata_o);
+	#(CLOCK_PERIOD);
 	$finish;
 end
 
@@ -189,7 +220,7 @@ TOP_MODULE top_module
 
 	// 2
 	.m_arid_o	(m_arid_o),
-	.m_araddr_o	(m_addr_o),
+	.m_araddr_o	(m_araddr_o),
 	.m_arvalid_o	(m_arvalid_o),
 	.m_arready_i	(m_arready_i),
 
@@ -224,7 +255,7 @@ TOP_MODULE top_module
 	.c_wvalid_o	(c_wvalid_o),
 	.c_wready_i	(c_wready_i),
 
-	//.c_rid_i	(c_rid_i),
+	.c_rid_i	(c_rid_i),
 	.c_rdata_i	(c_rdata_i),
 	.c_rvalid_i	(c_rvalid_i),
 	.c_rready_o	(c_rready_o),

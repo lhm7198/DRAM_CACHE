@@ -248,10 +248,10 @@ TAG_COMPARE tag_compare
 	.clk		(clk),
 	.rst_n		(rst_n),
 
-	.rid_i		(rid_i),
-	.rdata_i	(rdata_i),
-	.rvalid_i	(rvalid_i),
-	.rready_o	(rready_o),
+	.rid_i		(m_rid_i),
+	.rdata_i	(m_rdata_i),
+	.rvalid_i	(m_rvalid_i),
+	.rready_o	(m_rready_o),
 
 	.tag_fifo_aempty_i 	(tag_fifo_aempty),
 	.tag_fifo_rden_o	(tag_fifo_rden),
@@ -428,7 +428,7 @@ FIFO
 	.DATA_WIDTH 	(TID_WIDTH + ADDR_WIDTH + 1),
      	.FIFO_SIZE 	(64),
      	.A_FULL_THR 	(62),
-        .A_EMPTY_THR 	(2)
+        .A_EMPTY_THR 	(0)
 ) tag_fifo
 (
 	.clk		(clk),

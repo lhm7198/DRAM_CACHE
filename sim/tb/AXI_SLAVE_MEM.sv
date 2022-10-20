@@ -4,6 +4,7 @@
 `define ID 	1
 
 `define TAG_S 	8*8
+`define TAG_W	32
 
 `define INDEX_W 26
 `define OFFSET_W 6
@@ -59,9 +60,13 @@ logic   [`TAG_S - 1 : 0]              mem_tag[`INDEX_W];
 logic   [`DATA_W - 1 : 0]              mem_data[`INDEX_W];
 
 function void write_8byte(int index, input bit [63:0] wdata);
+    mem_tag[index][`TAG_S - 1 : `TAG_S - `TAG_W - 2]  = wdata[`TAG_W + 1 : 0];
+endfunction
+/*
+function void write_8byte(int index, input bit [63:0] wdata);
     mem_tag[index] = wdata;
 endfunction
-
+*/
 function void write_64byte(int index, input bit [511:0] wdata);
     mem_data[index] = wdata;
 endfunction

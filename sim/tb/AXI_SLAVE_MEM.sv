@@ -10,7 +10,7 @@
 
 `define BLANK_W 30
 
-module AXI_SLAVE
+module AXI_SLAVE_MEM
 (
     	input   wire                clk,
     	input   wire                rst_n,  // _n means active low

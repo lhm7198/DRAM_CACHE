@@ -83,33 +83,33 @@ wire					m_wready;
 //////////////////////////////////////////////////////////////////
 
 // AR channel (Fill AR <-> CXL Ctrl)
-wire 	[`ID_W - 1 : 0] 		c_arid_o;
-wire 	[`ADDR_W - 1 : 0] 		c_araddr_o;
-wire					c_arvalid_o;
-reg					c_arready_i;
+wire 	[`ID_W - 1 : 0] 		c_arid;
+wire 	[`ADDR_W - 1 : 0] 		c_araddr;
+wire					c_arvalid;
+wire					c_arready;
 
 // AW channel (Evict AW W <-> CXL Ctrl)
-wire 	[`ID_W - 1 : 0] 		c_awid_o;
-wire 	[`ADDR_W - 1 : 0] 		c_awaddr_o;
-wire 					c_awvalid_o;
-reg					c_awready_i;
+wire 	[`ID_W - 1 : 0] 		c_awid;
+wire 	[`ADDR_W - 1 : 0] 		c_awaddr;
+wire 					c_awvalid;
+wire					c_awready;
 
 // W channel (Evict AW W <-> CXL Ctrl)
-wire	[`ID_W - 1 : 0]			c_wid_o;
-wire	[`DATA_W - 1 : 0]		c_wdata_o;
-wire					c_wvalid_o;
-reg					c_wready_i;	
+wire	[`ID_W - 1 : 0]			c_wid;
+wire	[`DATA_W - 1 : 0]		c_wdata;
+wire					c_wvalid;
+wire					c_wready;	
 
 // R channel (RMiss Handler -> CXL Ctrl)
-reg	[`ID_W - 1 : 0]			c_rid_i;
-reg	[`DATA_W - 1 : 0]		c_rdata_i;
-reg					c_rvalid_i;
-wire					c_rready_o;
+wire	[`ID_W - 1 : 0]			c_rid;
+wire	[`DATA_W - 1 : 0]		c_rdata;
+wire					c_rvalid;
+wire					c_rready;
 
 // B channel (Evict AW W <-> CXL Ctrl)
-wire	[`ID_W - 1 : 0]			c_bid_o;
-wire					c_bvalid_o;
-reg					c_bready_i;
+wire	[`ID_W - 1 : 0]			c_bid;
+wire					c_bvalid;
+wire					c_bready;
 
 localparam			CLOCK_PERIOD 	= 1000;
 always #(CLOCK_PERIOD/2) 	clk 		= ~clk;
@@ -119,6 +119,7 @@ begin
 	rst_n		= 1'b1;
 
 	bready_i	= 1'b1;
+
 	// Processor <-> DRAM $ Ctrl //
 	arid_i 		= 0;
 	araddr_i 	= 0;
@@ -136,17 +137,6 @@ begin
 	// DRAM $ Ctrl <-> Memory Ctrl //
 
 	// DRAM $ Ctrl <-> CXL Ctrl //
-	c_arready_i 	= 0;
-
-	c_awready_i	= 0;
-
-	c_wready_i	= 0;
-
-	c_rid_i		= 0;
-	c_rdata_i	= 0;
-	c_rvalid_i	= 0;
-
-	c_bready_i	= 0;
 	
 	#(CLOCK_PERIOD);
 	rst_n = 1'b0;
@@ -156,6 +146,9 @@ begin
 	#(CLOCK_PERIOD);
 
 	$display("\nStart\n");
+	
+	memory_ctrl.write_8byte(1, 64'hc0000001c0000000); // valid(1), dirty(1), tag(7), blank(0)
+	memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
 
 	/////////////////////////////////////////////////
 	/////////////////// write miss  /////////////////
@@ -175,7 +168,11 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
+/*
 	/////////////////////////////////////////////////
 	/////////////////// read hit  ///////////////////
 	/////////////////////////////////////////////////
@@ -245,7 +242,7 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
-
+*/
 	$finish;
 end
 
@@ -300,32 +297,32 @@ TOP_MODULE top_module
 	.m_wready_i	(m_wready),
 
 	// 3
-	.c_arid_o	(c_arid_o),
-	.c_araddr_o	(c_araddr_o),
-	.c_arvalid_o	(c_arvalid_o),
-	.c_arready_i	(c_arready_i),
+	.c_arid_o	(c_arid),
+	.c_araddr_o	(c_araddr),
+	.c_arvalid_o	(c_arvalid),
+	.c_arready_i	(c_arready),
 
-	.c_awid_o	(c_awid_o),
-	.c_awaddr_o	(c_awaddr_o),
-	.c_awvalid_o	(c_awvalid_o),
-	.c_awready_i	(c_awready_i),
+	.c_awid_o	(c_awid),
+	.c_awaddr_o	(c_awaddr),
+	.c_awvalid_o	(c_awvalid),
+	.c_awready_i	(c_awready),
 
-	.c_wid_o	(c_wid_o),
-	.c_wdata_o	(c_wdata_o),
-	.c_wvalid_o	(c_wvalid_o),
-	.c_wready_i	(c_wready_i),
+	.c_wid_o	(c_wid),
+	.c_wdata_o	(c_wdata),
+	.c_wvalid_o	(c_wvalid),
+	.c_wready_i	(c_wready),
 
-	.c_rid_i	(c_rid_i),
-	.c_rdata_i	(c_rdata_i),
-	.c_rvalid_i	(c_rvalid_i),
-	.c_rready_o	(c_rready_o),
+	.c_rid_i	(c_rid),
+	.c_rdata_i	(c_rdata),
+	.c_rvalid_i	(c_rvalid),
+	.c_rready_o	(c_rready),
 
-	.c_bid_o	(c_bid_o),
-	.c_bvalid_o	(c_bvalid_o),
-	.c_bready_i	(c_bready_i)
+	.c_bid_i	(c_bid),
+	.c_bvalid_i	(c_bvalid),
+	.c_bready_o	(c_bready)
 );
 
-AXI_SLAVE memory_ctrl
+AXI_SLAVE_MEM memory_ctrl
 (
 	.clk		(clk),
 	.rst_n		(rst_n),
@@ -355,4 +352,33 @@ AXI_SLAVE memory_ctrl
 	.bready_i	(bready_i)
 );
 
+AXI_SLAVE_CXL cxl_ctrl
+(
+	.clk		(clk),
+	.rst_n		(rst_n),
+
+	.arid_i		(c_arid),
+	.araddr_i	(c_araddr),
+	.arvalid_i	(c_arvalid),
+	.arready_o	(c_arready),
+
+	.rid_o		(c_rid),
+	.rdata_o	(c_rdata),
+	.rvalid_o	(c_rvalid),
+	.rready_i	(c_rready),
+
+	.awid_i		(c_awid),
+	.awaddr_i	(c_awaddr),
+	.awvalid_i	(c_awvalid),
+	.awready_o	(c_awready),
+
+	.wid_i		(c_wid),
+	.wdata_i	(c_wdata),
+	.wvalid_i	(c_wvalid),
+	.wready_o	(c_wready),
+
+	.bid_o		(c_bid),
+	.bvalid_o	(c_bvalid),
+	.bready_i	(c_bready)
+);
 endmodule

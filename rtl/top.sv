@@ -110,9 +110,9 @@ module TOP_MODULE
 	output	wire					c_rready_o,
 
 	// B channel (Evict AW W <-> CXL Ctrl)
-	output	wire	[ID_WIDTH - 1 : 0]		c_bid_o,
-	output	wire					c_bvalid_o,
-	input	wire					c_bready_i
+	input	wire	[ID_WIDTH - 1 : 0]		c_bid_i,
+	input	wire					c_bvalid_i,
+	output	wire					c_bready_o
 );
 
 ////////////////////////////////////////////////////////////////////
@@ -321,9 +321,9 @@ EVICT_AW_W evict_aw_w
 	.wvalid_o		(c_wvalid_o),
 	.wready_i		(c_wready_i),
 
-	.bid_o			(c_bid_o),
-	.bvalid_o		(c_bvalid_o),
-	.bready_i		(c_bready_i),
+	.bid_i			(c_bid_i),
+	.bvalid_i		(c_bvalid_i),
+	.bready_o		(c_bready_o),
 
 	.awfifo_aempty_i	(awfifo_aempty),
 	.awfifo_rden_o		(awfifo_rden),

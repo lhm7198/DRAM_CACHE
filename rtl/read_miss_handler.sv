@@ -77,7 +77,6 @@ always_comb begin
 				wdata_ROB_n[DATA_WIDTH+TID_WIDTH-1 : DATA_WIDTH]	= ar_i[ADDR_WIDTH+TID_WIDTH-1 : ADDR_WIDTH];
 				
 				read_en 						= 1'b1;
-				rready							= 1'b0;
 
 				state_n 						= S_RUN;
 			end

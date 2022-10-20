@@ -24,9 +24,9 @@ module EVICT_AW_W
 	input	wire						wready_i,
 
 	// B channel (EVICT AW W FIFO <-> CXL Ctrl)
-	output	wire	[ID_WIDTH - 1 : 0]			bid_o,
-	output	wire						bvalid_o,
-	input	wire						bready_i,
+	input	wire	[ID_WIDTH - 1 : 0]			bid_i,
+	input	wire						bvalid_i,
+	output	wire						bready_o,
 
 	// Inner wire (AW FIFO <-> Evict AW W)
 	input	wire						awfifo_aempty_i,
@@ -52,7 +52,7 @@ reg						wfifo_rden;
 reg	[ADDR_WIDTH - 1 : 0]			awaddr,		awaddr_n;
 reg						awvalid;
 reg						wvalid;
-reg						bvalid;
+reg						bready;
 
 always_ff @(posedge clk) begin
 	if(!rst_n) begin
@@ -82,7 +82,7 @@ always_comb begin
 	awaddr_n	= awaddr;
 	awvalid		= 1'b0;
 	wvalid		= 1'b0;
-	bvalid		= 1'b0;
+	bready		= 1'b0;
 
 	case (state)
 		S_IDLE: begin
@@ -102,8 +102,9 @@ always_comb begin
 			
 			awvalid		= 1'b1;
 			wvalid		= 1'b1;
+			bready		= 1'b1;
 
-			if(awready_i & wready_i) begin
+			if(awready_i & wready_i & bvalid_i) begin
 				state_n		= S_IDLE;
 			end
 		end
@@ -119,7 +120,7 @@ assign wdata_o		= wdata;
 assign wvalid_o		= wvalid;
 
 assign bid_o		= ID;
-assign bvalid_o		= bvalid;
+assign bready__o	= bready;
 
 assign awfifo_rden_o	= awfifo_rden;
 assign wfifo_rden_o	= wfifo_rden;

@@ -116,7 +116,7 @@ always_comb begin
 			end
 			else if(awvalid_i & (!arvalid_i | arbiter)) begin
 				index_n[OFFSET_WIDTH - 1 : 0]						= 0;
-				index_n[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH]			= araddr_i[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH];
+				index_n[OFFSET_WIDTH + INDEX_WIDTH - 1 : OFFSET_WIDTH]			= awaddr_i[INDEX_WIDTH + OFFSET_WIDTH - 1 : OFFSET_WIDTH];
 				index_n[ADDR_WIDTH - 1 : OFFSET_WIDTH + INDEX_WIDTH]			= 0;
 				
 				tag_fifo_data_n[ADDR_WIDTH - 1 : 0]					= awaddr_i;				

@@ -115,14 +115,15 @@ always @(*) begin
                 wready          = 1'b1;
                 if (wvalid_i) begin
 			$display("wdata_i : %x", wdata_i);
-                    write_64byte(windex, wdata_i); // data
-		    wstate_n   = S_W_RESP;
+                	write_64byte(windex, wdata_i); // data
+			wstate_n   = S_W_RESP;
                 end
         end
         S_W_RESP: begin
 		bvalid    = 1'b1;
-                if (bready_i) begin
-                    wstate_n    = S_W_IDLE;
+                
+		if (bready_i) begin
+                	wstate_n    = S_W_IDLE;
                 end
         end
     endcase

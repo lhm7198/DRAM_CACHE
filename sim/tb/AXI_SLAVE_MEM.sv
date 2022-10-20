@@ -140,7 +140,7 @@ always @(*) begin
                 wstate_n        = S_W_RUN;
         end
         S_W_RUN: begin
-                awready		= 1'b1;
+		awready		= 1'b1;
                 wready          = 1'b1;
                 if (wvalid_i) begin
 		    write_8byte(windex, wtag); // tag

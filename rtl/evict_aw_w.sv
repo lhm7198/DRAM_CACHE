@@ -39,10 +39,11 @@ module EVICT_AW_W
 	input	wire	[DATA_WIDTH - 1 : 0]		 	wfifo_data_i
 );
 
-localparam 		S_IDLE		= 1'd0,
-			S_RUN		= 1'd1;
+localparam 		S_IDLE		= 2'd0,
+			S_RUN		= 2'd1,
+			S_RESP		= 2'd2;
 
-reg						state,		state_n;
+reg	[1 : 0]					state,		state_n;
 
 reg	[DATA_WIDTH - 1 : 0]			wdata,		wdata_n;
 
@@ -82,7 +83,7 @@ always_comb begin
 	awaddr_n	= awaddr;
 	awvalid		= 1'b0;
 	wvalid		= 1'b0;
-	bready		= 1'b0;
+	bready		= 1'b1;
 
 	case (state)
 		S_IDLE: begin
@@ -102,9 +103,15 @@ always_comb begin
 			
 			awvalid		= 1'b1;
 			wvalid		= 1'b1;
+
+			if(awready_i & wready_i) begin
+				state_n		= S_RESP;
+			end
+		end
+		S_RESP: begin
 			bready		= 1'b1;
 
-			if(awready_i & wready_i & bvalid_i) begin
+			if(bvalid_i) begin
 				state_n		= S_IDLE;
 			end
 		end
@@ -120,7 +127,7 @@ assign wdata_o		= wdata;
 assign wvalid_o		= wvalid;
 
 assign bid_o		= ID;
-assign bready__o	= bready;
+assign bready_o		= bready;
 
 assign awfifo_rden_o	= awfifo_rden;
 assign wfifo_rden_o	= wfifo_rden;

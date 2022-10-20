@@ -321,17 +321,17 @@ EVICT_AW_W evict_aw_w
 	.wvalid_o		(c_wvalid_o),
 	.wready_i		(c_wready_i),
 
-	.bid_i			(c_bid_i),
-	.bvalid_i		(c_bvalid_i),
-	.bready_o		(c_bready_o),
-
 	.awfifo_aempty_i	(awfifo_aempty),
 	.awfifo_rden_o		(awfifo_rden),
 	.awfifo_data_i		(awfifo_rdata),
 
 	.wfifo_aempty_i		(wfifo_aempty),
 	.wfifo_rden_o		(wfifo_rden),
-	.wfifo_data_i		(wfifo_rdata)
+	.wfifo_data_i		(wfifo_rdata),
+	
+	.bid_i			(c_bid_i),
+	.bvalid_i		(c_bvalid_i),
+	.bready_o		(c_bready_o)
 );
 
 READ_MISS_HANDLER rmiss_handler

@@ -147,8 +147,29 @@ begin
 
 	$display("\nStart\n");
 	
-	memory_ctrl.write_8byte(1, 64'hc0000001c0000000); // valid(1), dirty(1), tag(7), blank(0)
-	memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
+	//memory_ctrl.write_8byte(1, 64'hc0000001c0000000); // valid(1), dirty(1), tag(7), blank(0)
+	//memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
+
+	/////////////////////////////////////////////////
+	/////////////////// write miss  /////////////////
+	/////////////////////////////////////////////////
+	
+	awaddr_i		= 64'h0000000700000040; // tag(7), index(1), offset(0)
+	awvalid_i		= 1'b1;
+	wdata_i			= 64'hcccccccc;
+	wvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
+
+	awvalid_i		= 1'b0;
+	wvalid_i		= 1'b0;
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
 
 	/////////////////////////////////////////////////
 	/////////////////// write miss  /////////////////
@@ -171,6 +192,34 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+
+	/////////////////////////////////////////////////
+	/////////////////// write miss  /////////////////
+	/////////////////////////////////////////////////
+	
+	awaddr_i		= 64'h0000000700000040; // tag(7), index(1), offset(0)
+	awvalid_i		= 1'b1;
+	wdata_i			= 64'haaaaaaaaaaaaaaaaaa;
+	wvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
+
+	awvalid_i		= 1'b0;
+	wvalid_i		= 1'b0;
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+
 
 /*
 	/////////////////////////////////////////////////

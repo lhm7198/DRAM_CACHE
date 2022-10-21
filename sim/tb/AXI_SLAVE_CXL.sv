@@ -55,7 +55,7 @@ reg					awready;
 reg					wready;
 reg					bvalid;
 
-logic   [`DATA_W - 1 : 0]             mem_data[`INDEX_W];
+logic   [`DATA_W - 1 : 0]             mem_data[2**(4 + `INDEX_W)]; // 64GB
 
 function void write_64byte(int index, input bit [511:0] wdata);
     mem_data[index] = wdata;
@@ -105,7 +105,7 @@ always @(*) begin
         end
         S_W_AWREADY: begin
 		$display("awaddr : %x", awaddr_i);
-                windex_n        = awaddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
+                windex_n        = awaddr_i >> 6;
 
                 wstate_n        = S_W_RUN;
         end
@@ -162,23 +162,18 @@ always_comb begin
         case (rstate)
             S_R_IDLE: begin
             	if (arvalid_i) begin
-			$display("cxl valid in");
                         rstate_n                = S_R_ARREADY;
                 end
             end
             S_R_ARREADY: begin
-            	rindex_n        = araddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
-		$display("ARREADY");
+            	rindex_n        = araddr_i >> 6;
                 arready         = 1'b1;
                 rstate_n        = S_R_RUN;
             end
             S_R_RUN: begin
                 rvalid          = 1'b1;
                 rdata[`DATA_W - 1 : 0] = read_64byte(rindex);
-		$display("cxl -> rmh data : %x", rdata);
-
                 if (rready_i) begin
-		    $display("cxl -> rmh data : %x", rdata);
                     rstate_n                = S_R_IDLE;
                 end
             end

@@ -57,8 +57,8 @@ reg					wready;
 reg					bvalid;
 reg	[`TAG_S -1 : 0]			tmp;
 
-logic   [`TAG_S - 1 : 0]              mem_tag[`INDEX_W];
-logic   [`DATA_W - 1 : 0]             mem_data[`INDEX_W];
+logic   [`TAG_S - 1 : 0]              mem_tag[2**`INDEX_W];
+logic   [`DATA_W - 1 : 0]             mem_data[2**`INDEX_W];
 /*
 function void write_8byte(int index, input bit [63:0] wdata);
     mem_tag[index][`TAG_S - 1 : `TAG_S - `TAG_W - 2]  = wdata[`TAG_W + 1 : 0];

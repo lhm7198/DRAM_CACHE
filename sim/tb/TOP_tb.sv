@@ -156,7 +156,7 @@ begin
 	
 	awaddr_i		= 64'h0000000700000040; // tag(7), index(1), offset(0)
 	awvalid_i		= 1'b1;
-	wdata_i			= 64'hcccccccc;
+	wdata_i			= 64'haaaaaaaaaaaaaaaa;
 	wvalid_i		= 1'b1;
 	#(CLOCK_PERIOD);
 
@@ -172,11 +172,33 @@ begin
 	#(CLOCK_PERIOD);
 
 	/////////////////////////////////////////////////
+	/////////////////// write miss  /////////////////
+	/////////////////////////////////////////////////
+	
+	awaddr_i		= 64'h0000000f00000040; // tag(f), index(1), offset(0)
+	awvalid_i		= 1'b1;
+	wdata_i			= 64'hbbbbbbbbbbbbbbbbbb;
+	wvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
+
+	awvalid_i		= 1'b0;
+	wvalid_i		= 1'b0;
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+
+
+	/////////////////////////////////////////////////
 	/////////////////// read miss ///////////////////
 	/////////////////////////////////////////////////
 
 
-	araddr_i		= 64'h0000000f00000040; // tag(f) + index(1) + offset(0)
+	araddr_i		= 64'h0000000700000040; // tag(7) + index(1) + offset(0)
 	arvalid_i		= 1'b1;
 	#(CLOCK_PERIOD);
 
@@ -200,37 +222,6 @@ begin
 	#(CLOCK_PERIOD);
 
 	$display("rdata_o : %x\n", rdata_o);
-
-	/////////////////////////////////////////////////
-	/////////////////// read miss ///////////////////
-	/////////////////////////////////////////////////
-
-
-	araddr_i		= 64'h0000000f00000040; // tag(f) + index(1) + offset(0)
-	arvalid_i		= 1'b1;
-	#(CLOCK_PERIOD);
-
-	// tag comparator get data
-	arvalid_i		= 1'b0;
-	
-	#(CLOCK_PERIOD); 
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-
-	$display("rdata_o : %x\n", rdata_o);
-
 
 /*	/////////////////////////////////////////////////
 	/////////////////// write hit / /////////////////
@@ -259,58 +250,6 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);*/
-
-	/////////////////////////////////////////////////
-	/////////////////// write miss  /////////////////
-	/////////////////////////////////////////////////
-	
-	awaddr_i		= 64'h0000000700000040; // tag(7), index(1), offset(0)
-	awvalid_i		= 1'b1;
-	wdata_i			= 64'haaaaaaaaaaaaaaaaaa;
-	wvalid_i		= 1'b1;
-	#(CLOCK_PERIOD);
-
-	awvalid_i		= 1'b0;
-	wvalid_i		= 1'b0;
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-
-	/////////////////////////////////////////////////
-	/////////////////// read hit ///////////////////
-	/////////////////////////////////////////////////
-
-
-	araddr_i		= 64'h0000000700000040; // tag(f) + index(1) + offset(0)
-	arvalid_i		= 1'b1;
-	#(CLOCK_PERIOD);
-
-	// tag comparator get data
-	arvalid_i		= 1'b0;
-	
-	#(CLOCK_PERIOD); 
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
-
-	$display("rdata_o : %x\n", rdata_o);
-
 
 /*
 	/////////////////////////////////////////////////

@@ -89,7 +89,7 @@ reg							fill_valid;
 reg	[ADDR_WIDTH + DATA_WIDTH - 1 : 0]		fill_data, 	fill_data_n;
 
 reg 							rready;
-reg							dirty;
+reg							dirty, 		dirty_n;
 
 wire	read  = !tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH : TID_WIDTH + ADDR_WIDTH]; // read = 0, write = 1
 wire	valid = rdata_i[TAG_SIZE + DATA_WIDTH - 1 : TAG_SIZE + DATA_WIDTH - 1]; // tag = VALID + DIRTY + TAG DATA + BLANK
@@ -104,6 +104,7 @@ always_ff @(posedge clk)
 		w_fifo_data	<= 0;
 
 		fill_data	<= 0;
+		dirty		<= 0;
 	end
 	else begin
 		state		<= state_n;
@@ -114,6 +115,7 @@ always_ff @(posedge clk)
 		w_fifo_data	<= w_fifo_data_n;
 		
 		fill_data	<= fill_data_n;
+		dirty		<= dirty_n;
 	end
 
 always_comb begin
@@ -137,6 +139,8 @@ always_comb begin
 	fill_valid		= 1'b0;
 	fill_data_n		= fill_data;
 
+	dirty_n			= dirty;
+
 	rready			= 1'b0;
 	
 	case (state)
@@ -151,9 +155,7 @@ always_comb begin
 			if(rvalid_i & !tag_fifo_aempty_i) begin
 				tag_fifo_rden		= 1'b1;
 				rready			= 1'b1;
-				///////////////////////////////////////
-				dirty 			= rdata_i[TAG_SIZE + DATA_WIDTH - 2 : TAG_SIZE + DATA_WIDTH - 2];
-				///////////////////////////////////////
+				dirty_n			= rdata_i[TAG_SIZE + DATA_WIDTH - 2 : TAG_SIZE + DATA_WIDTH - 2];
 				if(read) begin
 					// read hit(valid && same tag) 
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
@@ -211,12 +213,10 @@ always_comb begin
 			$display("S_RMISS");
 			tag_fifo_rden	= 1'b0;
 			rready		= 1'b0;
-			///////////////////////////////////////
 			if(!dirty & !ar_fifo_afull_i) begin
 				ar_fifo_wren	= 1'b1;
 				state_n		= S_IDLE;
 			end
-			///////////////////////////////////////
 			else if(!ar_fifo_afull_i & !aw_fifo_afull_i & !w_fifo_afull_i) begin
 				ar_fifo_wren	= 1'b1;
 				aw_fifo_wren	= 1'b1;
@@ -244,11 +244,9 @@ always_comb begin
 
 			fill_valid 	= 1'b1;
 			rready 		= 1'b0;
-			///////////////////////////////////////
 			if(!dirty & fill_ready_i) begin
 				state_n		= S_IDLE;
 			end
-			///////////////////////////////////////
 			else if(!aw_fifo_afull_i & !w_fifo_afull_i & fill_ready_i) begin
 				aw_fifo_wren	= 1'b1;
 				w_fifo_wren	= 1'b1;

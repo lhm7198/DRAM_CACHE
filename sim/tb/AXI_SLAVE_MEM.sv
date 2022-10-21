@@ -137,6 +137,9 @@ always @(*) begin
         end
         S_W_AWREADY: begin
 		wtag_n[`TAG_S - 1 : `TAG_S - 1] = 1'b1; // valid
+		//if(awaddr_i[:] == mem[][])
+			//wtag_n[:] = 1
+		//else
 		wtag_n[`TAG_S - 2 : `TAG_S - 2] = 1'b0; // dirty
 		wtag_n[`TAG_S - 3 : `BLANK_W] = awaddr_i[`ADDR_W - 1 : `INDEX_W + `OFFSET_W]; // tag data
 		wtag_n[`BLANK_W - 1 : 0] = {`BLANK_W{1'b0}}; // blank

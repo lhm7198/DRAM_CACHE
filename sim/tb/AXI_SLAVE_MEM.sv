@@ -55,9 +55,10 @@ reg					rvalid;
 reg					awready;
 reg					wready;
 reg					bvalid;
+reg	[`TAG_S -1 : 0]			tmp;
 
 logic   [`TAG_S - 1 : 0]              mem_tag[`INDEX_W];
-logic   [`DATA_W - 1 : 0]              mem_data[`INDEX_W];
+logic   [`DATA_W - 1 : 0]             mem_data[`INDEX_W];
 /*
 function void write_8byte(int index, input bit [63:0] wdata);
     mem_tag[index][`TAG_S - 1 : `TAG_S - `TAG_W - 2]  = wdata[`TAG_W + 1 : 0];
@@ -128,6 +129,7 @@ always @(*) begin
     awready	= 1'b0;
     wready	= 1'b0;
     bvalid	= 1'b0;
+    tmp		= 0;
 
     case (wstate)
         S_W_IDLE: begin
@@ -137,14 +139,17 @@ always @(*) begin
         end
         S_W_AWREADY: begin
 		wtag_n[`TAG_S - 1 : `TAG_S - 1] = 1'b1; // valid
-		//if(awaddr_i[:] == mem[][])
-			//wtag_n[:] = 1
-		//else
 		wtag_n[`TAG_S - 2 : `TAG_S - 2] = 1'b0; // dirty
 		wtag_n[`TAG_S - 3 : `BLANK_W] = awaddr_i[`ADDR_W - 1 : `INDEX_W + `OFFSET_W]; // tag data
 		wtag_n[`BLANK_W - 1 : 0] = {`BLANK_W{1'b0}}; // blank
 
                 windex_n        = awaddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
+
+		tmp = read_8byte(windex_n);
+		if(awaddr_i[`ADDR_W - 1 : `INDEX_W + `OFFSET_W] == tmp[ `TAG_S - 3 : `BLANK_W]) begin
+			$display("set");
+			wtag_n[`TAG_S - 2 : `TAG_S - 2] = 1'b1; // dirty set
+		end
 
                 wstate_n        = S_W_RUN;
         end

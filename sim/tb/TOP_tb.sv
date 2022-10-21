@@ -202,6 +202,37 @@ begin
 	$display("rdata_o : %x\n", rdata_o);
 
 	/////////////////////////////////////////////////
+	/////////////////// read miss ///////////////////
+	/////////////////////////////////////////////////
+
+
+	araddr_i		= 64'h0000000f00000040; // tag(f) + index(1) + offset(0)
+	arvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
+
+	// tag comparator get data
+	arvalid_i		= 1'b0;
+	
+	#(CLOCK_PERIOD); 
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+
+	$display("rdata_o : %x\n", rdata_o);
+
+
+/*	/////////////////////////////////////////////////
 	/////////////////// write hit / /////////////////
 	/////////////////////////////////////////////////
 	awaddr_i		= 64'h0000000f00000040; // tag(f), index(1), offset(0)
@@ -227,7 +258,7 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
-	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);*/
 
 	/////////////////////////////////////////////////
 	/////////////////// write miss  /////////////////
@@ -249,6 +280,36 @@ begin
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
 	#(CLOCK_PERIOD);
+
+	/////////////////////////////////////////////////
+	/////////////////// read hit ///////////////////
+	/////////////////////////////////////////////////
+
+
+	araddr_i		= 64'h0000000700000040; // tag(f) + index(1) + offset(0)
+	arvalid_i		= 1'b1;
+	#(CLOCK_PERIOD);
+
+	// tag comparator get data
+	arvalid_i		= 1'b0;
+	
+	#(CLOCK_PERIOD); 
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+	#(CLOCK_PERIOD);
+
+	$display("rdata_o : %x\n", rdata_o);
 
 
 /*

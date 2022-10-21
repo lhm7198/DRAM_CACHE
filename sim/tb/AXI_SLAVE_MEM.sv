@@ -146,8 +146,7 @@ always @(*) begin
                 windex_n        = awaddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
 
 		tmp = read_8byte(windex_n);
-		if(awaddr_i[`ADDR_W - 1 : `INDEX_W + `OFFSET_W] == tmp[ `TAG_S - 3 : `BLANK_W]) begin
-			$display("set");
+		if(awaddr_i[`ADDR_W - 1 : `ADDR_W - 1] == 1'b1) begin
 			wtag_n[`TAG_S - 2 : `TAG_S - 2] = 1'b1; // dirty set
 		end
 

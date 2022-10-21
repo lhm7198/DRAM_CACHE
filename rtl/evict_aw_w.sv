@@ -103,7 +103,6 @@ always_comb begin
 			
 			awvalid		= 1'b1;
 			wvalid		= 1'b1;
-			$display("evict aw w -> cxl ctrl w valid in");
 
 			if(awready_i & wready_i) begin
 				state_n		= S_RESP;

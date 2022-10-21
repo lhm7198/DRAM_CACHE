@@ -162,6 +162,7 @@ always_comb begin
 						rob_data_n[TID_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : ADDR_WIDTH]; // tid
 						rob_data_n[DATA_WIDTH - 1 : 0] = rdata_i[DATA_WIDTH - 1 : 0];
 						state_n		= S_RHIT;
+						$display("S_RHIT");
 					end
 					// read miss
 					else begin
@@ -173,6 +174,7 @@ always_comb begin
 						w_fifo_data_n = rdata_i[DATA_WIDTH - 1 : 0];
 	
 						state_n		= S_RMISS;
+						$display("S_RMISS");
 					end
 				end
 				else begin
@@ -181,6 +183,8 @@ always_comb begin
 					if(valid & (tag_fifo_data_i[ADDR_WIDTH - 1 : INDEX_WIDTH + OFFSET_WIDTH] == rdata_i[TAG_WIDTH + BLANK_WIDTH + DATA_WIDTH - 1 : BLANK_WIDTH + DATA_WIDTH])) begin
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
+						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : ADDR_WIDTH + DATA_WIDTH - 1] = 1'b1; // write flag
+						$display("S_WHIT");
 						state_n		= S_WHIT;
 					end
 					// write miss
@@ -192,14 +196,15 @@ always_comb begin
 						
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
-	
+						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : ADDR_WIDTH + DATA_WIDTH - 1] = 1'b1; // write flag
+						$display("S_WMISS");
+
 						state_n		= S_WMISS;
 					end
 				end
 			end
 		end
 		S_RHIT: begin			
-			$display("S_RHIT");
 			tag_fifo_rden	= 1'b0;
 			rready 		= 1'b0;
 
@@ -210,7 +215,6 @@ always_comb begin
 			end
 		end
 		S_RMISS: begin
-			$display("S_RMISS");
 			tag_fifo_rden	= 1'b0;
 			rready		= 1'b0;
 			if(!dirty & !ar_fifo_afull_i) begin
@@ -226,7 +230,6 @@ always_comb begin
 			end
 		end
 		S_WHIT: begin
-			$display("S_WHIT");
 			tag_fifo_rden	= 1'b0;
 			wbuffer_rden	= 1'b0;
 
@@ -238,7 +241,6 @@ always_comb begin
 			end
 		end
 		S_WMISS: begin
-			$display("S_WMISS");
 			tag_fifo_rden	= 1'b0;
 			wbuffer_rden	= 1'b0;
 

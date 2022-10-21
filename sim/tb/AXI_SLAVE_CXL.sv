@@ -73,8 +73,8 @@ localparam logic [1:0]      S_W_IDLE = 0,
                             S_W_RUN = 2,
                             S_W_RESP = 3;
 
-logic   [1 : 0]            	wstate,         wstate_n;
-logic   [`INDEX_W - 1 : 0] 	windex,         windex_n;
+logic   [1 : 0]            		wstate,         wstate_n;
+logic   [(4 + `INDEX_W) - 1 : 0] 	windex,         windex_n;
 
 always_ff @(posedge clk)
     if (!rst_n) begin
@@ -104,17 +104,15 @@ always @(*) begin
             	end
         end
         S_W_AWREADY: begin
-		$display("awaddr : %x", awaddr_i);
                 windex_n        = awaddr_i >> 6;
 
                 wstate_n        = S_W_RUN;
         end
         S_W_RUN: begin
-                $display("windex : %x", windex);
 		awready		= 1'b1;
                 wready          = 1'b1;
                 if (wvalid_i) begin
-			$display("wdata_i : %x", wdata_i);
+			$display("Evict AW W -> CXL data: %x", wdata_i);
                 	write_64byte(windex, wdata_i); // data
 			wstate_n   = S_W_RESP;
                 end
@@ -136,8 +134,8 @@ localparam logic [1:0]      S_R_IDLE = 0,
                             S_R_ARREADY = 1,
                             S_R_RUN = 2;
 
-logic   [1 : 0]			rstate,		rstate_n;
-logic   [`INDEX_W - 1 : 0] 	rindex,         rindex_n;
+logic   [1 : 0]				rstate,		rstate_n;
+logic   [(4 + `INDEX_W) - 1 : 0] 	rindex,         rindex_n;
 
 always_ff @(posedge clk)
 	if (!rst_n) begin

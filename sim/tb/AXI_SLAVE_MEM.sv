@@ -58,15 +58,16 @@ reg					bvalid;
 
 logic   [`TAG_S - 1 : 0]              mem_tag[`INDEX_W];
 logic   [`DATA_W - 1 : 0]              mem_data[`INDEX_W];
-
+/*
 function void write_8byte(int index, input bit [63:0] wdata);
     mem_tag[index][`TAG_S - 1 : `TAG_S - `TAG_W - 2]  = wdata[`TAG_W + 1 : 0];
 endfunction
-/*
+*/
+
 function void write_8byte(int index, input bit [63:0] wdata);
     mem_tag[index] = wdata;
 endfunction
-*/
+
 function void write_64byte(int index, input bit [511:0] wdata);
     mem_data[index] = wdata;
 endfunction
@@ -147,7 +148,7 @@ always @(*) begin
         S_W_RUN: begin
 		awready		= 1'b1;
                 wready          = 1'b1;
-                if (wvalid_i) begin
+		if (wvalid_i) begin
 		    write_8byte(windex, wtag); // tag
                     write_64byte(windex, wdata_i); // data
 		    wstate_n   = S_W_RESP;

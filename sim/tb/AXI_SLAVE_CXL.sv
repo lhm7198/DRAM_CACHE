@@ -136,7 +136,7 @@ localparam logic [1:0]      S_R_IDLE = 0,
                             S_R_ARREADY = 1,
                             S_R_RUN = 2;
 
-logic   			rstate,		rstate_n;
+logic   [1 : 0]			rstate,		rstate_n;
 logic   [`INDEX_W - 1 : 0] 	rindex,         rindex_n;
 
 always_ff @(posedge clk)
@@ -162,21 +162,23 @@ always_comb begin
         case (rstate)
             S_R_IDLE: begin
             	if (arvalid_i) begin
+			$display("cxl valid in");
                         rstate_n                = S_R_ARREADY;
                 end
             end
             S_R_ARREADY: begin
             	rindex_n        = araddr_i[`INDEX_W + `OFFSET_W - 1 : `OFFSET_W];
-		
+		$display("ARREADY");
                 arready         = 1'b1;
                 rstate_n        = S_R_RUN;
             end
             S_R_RUN: begin
                 rvalid          = 1'b1;
                 rdata[`DATA_W - 1 : 0] = read_64byte(rindex);
+		$display("cxl -> rmh data : %x", rdata);
 
-		//$display("rdata : %x", rdata);
                 if (rready_i) begin
+		    $display("cxl -> rmh data : %x", rdata);
                     rstate_n                = S_R_IDLE;
                 end
             end

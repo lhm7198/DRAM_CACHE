@@ -196,7 +196,6 @@ begin
 		#(CLOCK_PERIOD);
 		#(CLOCK_PERIOD);
 		#(CLOCK_PERIOD);
-		$display("rdata_o : %x\n", rdata_o);
 	end
 
 	for(int i=0 ; i<10 ; i++) begin
@@ -242,7 +241,6 @@ begin
 		#(CLOCK_PERIOD);
 		#(CLOCK_PERIOD);
 		#(CLOCK_PERIOD);
-		$display("rdata_o : %x\n", rdata_o);
 	end
 
 
@@ -420,6 +418,12 @@ begin
 	#(CLOCK_PERIOD);
 */
 	$finish;
+end
+
+always @(posedge rvalid_o)begin
+	rready_i	= 1;
+	$display("rdata_o = %x",rdata_o);
+	#(CLOCK_PERIOD);
 end
 
 TOP_MODULE top_module

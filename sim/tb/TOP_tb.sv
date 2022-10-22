@@ -111,6 +111,8 @@ wire	[`ID_W - 1 : 0]			c_bid;
 wire					c_bvalid;
 wire					c_bready;
 
+int					i;
+
 localparam			CLOCK_PERIOD 	= 1000;
 always #(CLOCK_PERIOD/2) 	clk 		= ~clk;
 
@@ -150,6 +152,101 @@ begin
 	//memory_ctrl.write_8byte(1, 64'hc0000001c0000000); // valid(1), dirty(1), tag(7), blank(0)
 	//memory_ctrl.write_64byte(1, 64'hfffffffffffffffff);
 
+	
+	for(int i=0 ; i<10 ; i++) begin
+
+		awaddr_i[5:0]		= 0;	
+		awaddr_i[31:6]		= i;		//index = i
+		awaddr_i[35:32]		= 1;		//tag	= 1
+		awaddr_i[63:36]		= 0;
+		awvalid_i		= 1'b1;
+		wdata_i			= i;
+		wvalid_i		= 1'b1;
+		#(CLOCK_PERIOD);
+	
+		awvalid_i		= 1'b0;
+		wvalid_i		= 1'b0;
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+	end	
+	for(int i=0 ; i<10 ; i++) begin
+
+		araddr_i[5:0]		= 0;	
+		araddr_i[31:6]		= i;		//index = i
+		araddr_i[35:32]		= 1;		//tag	= 1
+		araddr_i[63:36]		= 0;
+		arvalid_i		= 1'b1;
+		#(CLOCK_PERIOD);
+	
+		arvalid_i		= 1'b0;
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		$display("rdata_o : %x\n", rdata_o);
+	end
+
+	for(int i=0 ; i<10 ; i++) begin
+
+		awaddr_i[5:0]		= 0;	
+		awaddr_i[31:6]		= i;		//index = i
+		awaddr_i[35:32]		= i%2;		//tag
+		awaddr_i[63:36]		= 0;
+		awvalid_i		= 1'b1;
+		wdata_i			= i+1;
+		wvalid_i		= 1'b1;
+		#(CLOCK_PERIOD);
+	
+		awvalid_i		= 1'b0;
+		wvalid_i		= 1'b0;
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+	end	
+	for(int i=0 ; i<10 ; i++) begin
+
+		araddr_i[5:0]		= 0;	
+		araddr_i[31:6]		= i;		//index = i
+		araddr_i[34:32]		= 1;		//tag	= 1
+		araddr_i[63:35]		= 0;
+		arvalid_i		= 1'b1;
+		#(CLOCK_PERIOD);
+	
+		arvalid_i		= 1'b0;
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		#(CLOCK_PERIOD);
+		$display("rdata_o : %x\n", rdata_o);
+	end
+
+
+/*
 	/////////////////////////////////////////////////
 	/////////////////// write miss  /////////////////
 	/////////////////////////////////////////////////
@@ -222,7 +319,7 @@ begin
 	#(CLOCK_PERIOD);
 
 	$display("rdata_o : %x\n", rdata_o);
-
+*/
 /*	/////////////////////////////////////////////////
 	/////////////////// write hit / /////////////////
 	/////////////////////////////////////////////////

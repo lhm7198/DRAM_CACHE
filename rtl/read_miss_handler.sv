@@ -75,7 +75,7 @@ always_comb begin
 				wdata_Arbiter_n[WDATA_WIDTH-1 : DATA_WIDTH]		= ar_i[ADDR_WIDTH-1 : 0];
 				wdata_ROB_n[DATA_WIDTH-1 : 0]				= data_i;
 				wdata_ROB_n[DATA_WIDTH+TID_WIDTH-1 : DATA_WIDTH]	= ar_i[ADDR_WIDTH+TID_WIDTH-1 : ADDR_WIDTH];
-				$display("CXL ctrl -> RMH data = %x",data_i);	
+				//$display("CXL ctrl -> RMH data = %x",data_i);	
 				read_en 						= 1'b1;
 
 				state_n 						= S_RUN;

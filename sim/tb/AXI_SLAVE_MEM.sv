@@ -105,7 +105,10 @@ localparam logic [1:0]      S_W_IDLE = 0,
 logic   [1 : 0]            	wstate,         wstate_n;
 logic	[`TAG_S - 1 : 0]	wtag,		wtag_n;
 logic   [`INDEX_W - 1 : 0] 	windex,         windex_n;
-
+//////////////
+int i_check;
+logic	[63: 0]  tag_check;
+//////////////
 always_ff @(posedge clk)
     if (!rst_n) begin
         wstate          <= S_W_IDLE;
@@ -148,9 +151,15 @@ always @(*) begin
 		tmp = read_8byte(windex_n);
 		if(awaddr_i[`ADDR_W - 1 : `ADDR_W - 1] == 1'b1) begin
 			wtag_n[`TAG_S - 2 : `TAG_S - 2] = 1'b1; // dirty set
+			wtag_n[`TAG_S - 3 : `TAG_S - 3] = 1'b0;	// write flag off
 		end
 
                 wstate_n        = S_W_RUN;
+		/////////////////////////////////////////////////////////////////
+		$display("\nCACHE data");
+		$display("index | tag | data");
+		$display("----------------------------------------------------");
+		/////////////////////////////////////////////////////////////////
         end
         S_W_RUN: begin
 		awready		= 1'b1;
@@ -159,6 +168,13 @@ always @(*) begin
 		    write_8byte(windex, wtag); // tag
                     write_64byte(windex, wdata_i); // data
 		    wstate_n   = S_W_RESP;
+		    /////////////////////////////////////////////////////////////////
+		    for(i_check=0 ; i_check<10 ; i_check++) begin
+			    tag_check		= read_8byte(i_check);
+			    $display("%5d | %3x | %10x", i_check, tag_check[61:30], read_64byte(i_check));
+			    $display("----------------------------------------------------");
+		    end
+		    /////////////////////////////////////////////////////////////////
                 end
         end
         S_W_RESP: begin

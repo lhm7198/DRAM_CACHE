@@ -112,7 +112,7 @@ always @(*) begin
 		awready		= 1'b1;
                 wready          = 1'b1;
                 if (wvalid_i) begin
-			$display("Evict AW W -> CXL data: %x", wdata_i);
+			//$display("Evict AW W -> CXL data: %x", wdata_i);
                 	write_64byte(windex, wdata_i); // data
 			wstate_n   = S_W_RESP;
                 end

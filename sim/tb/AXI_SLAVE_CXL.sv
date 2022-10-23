@@ -76,7 +76,7 @@ localparam logic [1:0]      S_W_IDLE = 0,
 logic   [1 : 0]            		wstate,         wstate_n;
 logic   [(4 + `INDEX_W) - 1 : 0] 	windex,         windex_n;
 //////////////
-localparam int test = 0;
+localparam int test = 1;
 int i_check, j_check;
 //////////////
 
@@ -111,14 +111,6 @@ always @(*) begin
                 windex_n        = awaddr_i >> 6;
 
                 wstate_n        = S_W_RUN;
-		/////////////////////////////////////////////////////////////////
-		if(test)begin
-			$display("\nCXL data");
-			$display("index | tag | data                 index | tag | data");
-			$display("--------------------------------------------------------------------------------");
-		end
-		/////////////////////////////////////////////////////////////////
-
         end
         S_W_RUN: begin
 		awready		= 1'b1;
@@ -128,6 +120,10 @@ always @(*) begin
 			wstate_n   = S_W_RESP;
 			/////////////////////////////////////////////////////////////////
 			if(test)begin
+			    $display("\nCXL data");
+			    $display("index | tag | data                 index | tag | data");
+	    		    $display("--------------------------------------------------------------------------------");
+
 			    for(i_check=0 ; i_check<1 ; i_check++) begin
 			    	for(j_check=0 ; j_check<10 ; j_check++) begin
 				    $display("%5d | %3x | %10x      %10d | %3x | %10x", j_check, i_check, read_64byte(2**windex*i_check + j_check), j_check, i_check+1, read_64byte(2**windex*(i_check+1) + j_check));

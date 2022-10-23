@@ -7,7 +7,7 @@ Report : power
         -analysis_effort high
 Design : FIFO
 Version: Q-2019.12-SP5-5
-Date   : Mon Jul  4 11:46:28 2022
+Date   : Mon Oct 24 01:52:10 2022
 ****************************************
 
 
@@ -15,6 +15,8 @@ Library(s) Used:
 
     um28nchhlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v0c.db)
     um28nchslogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/svt/latest/liberty/logic_synth/um28nchslogl35udl140f_ssgwc0p9v0c.db)
+    um28nchvlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v0c.db)
+    um28nchllogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/lvt/latest/liberty/logic_synth/um28nchllogl35udl140f_ssgwc0p9v0c.db)
 
 
 Operating Conditions: SSGWC0P9V0C   Library: um28nchhlogl35udl140f_ssgwc0p9v0c
@@ -34,12 +36,12 @@ Power-specific unit information :
     Leakage Power Units = 1nW
 
 
-  Cell Internal Power  = 560.7134 uW   (97%)
-  Net Switching Power  =  19.0558 uW    (3%)
+  Cell Internal Power  = 257.8413 mW   (98%)
+  Net Switching Power  =   5.4788 mW    (2%)
                          ---------
-Total Dynamic Power    = 579.7692 uW  (100%)
+Total Dynamic Power    = 263.3202 mW  (100%)
 
-Cell Leakage Power     =   6.5207 nW
+Cell Leakage Power     =   3.4779 uW
 
 
                  Internal         Switching           Leakage            Total
@@ -49,9 +51,9 @@ io_pad             0.0000            0.0000            0.0000            0.0000 
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
 clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
-register           0.5492        2.6852e-03            4.0031            0.5519  (  95.19%)
+register         254.1229        9.8794e-02        1.8839e+03          254.2274  (  96.52%)
 sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
-combinational  1.1525e-02        1.6371e-02            2.5176        2.7898e-02  (   4.81%)
+combinational      3.7826            5.3792        1.5940e+03            9.1639  (   3.48%)
 --------------------------------------------------------------------------------------------------
-Total              0.5607 mW     1.9056e-02 mW         6.5207 nW         0.5798 mW
+Total            257.9055 mW         5.4780 mW     3.4779e+03 nW       263.3913 mW
 1

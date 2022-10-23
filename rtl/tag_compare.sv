@@ -162,7 +162,7 @@ always_comb begin
 						rob_data_n[TID_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[TID_WIDTH + ADDR_WIDTH - 1 : ADDR_WIDTH]; // tid
 						rob_data_n[DATA_WIDTH - 1 : 0] = rdata_i[DATA_WIDTH - 1 : 0];
 						state_n		= S_RHIT;
-						$display("S_RHIT");
+						//$display("S_RHIT");
 					end
 					// read miss
 					else begin
@@ -174,7 +174,7 @@ always_comb begin
 						w_fifo_data_n = rdata_i[DATA_WIDTH - 1 : 0];
 	
 						state_n		= S_RMISS;
-						$display("S_RMISS");
+						//$display("S_RMISS");
 					end
 				end
 				else begin
@@ -184,7 +184,7 @@ always_comb begin
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : ADDR_WIDTH + DATA_WIDTH - 1] = 1'b1; // write flag
-						$display("S_WHIT");
+						//$display("S_WHIT");
 						state_n		= S_WHIT;
 					end
 					// write miss
@@ -197,7 +197,7 @@ always_comb begin
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : DATA_WIDTH] = tag_fifo_data_i[ADDR_WIDTH - 1 : 0]; // addr
 						fill_data_n[DATA_WIDTH - 1 : 0] = wbuffer_data_i[DATA_WIDTH - 1 : 0]; // data
 						fill_data_n[ADDR_WIDTH + DATA_WIDTH - 1 : ADDR_WIDTH + DATA_WIDTH - 1] = 1'b1; // write flag
-						$display("S_WMISS");
+						//$display("S_WMISS");
 
 						state_n		= S_WMISS;
 					end

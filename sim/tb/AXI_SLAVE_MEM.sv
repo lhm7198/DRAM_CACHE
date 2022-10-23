@@ -106,7 +106,7 @@ logic   [1 : 0]            	wstate,         wstate_n;
 logic	[`TAG_S - 1 : 0]	wtag,		wtag_n;
 logic   [`INDEX_W - 1 : 0] 	windex,         windex_n;
 //////////////
-localparam int test = 0;
+localparam int test = 1;
 int i_check;
 logic	[63: 0]  tag_check;
 //////////////
@@ -156,13 +156,6 @@ always @(*) begin
 		end
 
                 wstate_n        = S_W_RUN;
-		/////////////////////////////////////////////////////////////////
-		if(test) begin
-			$display("\nCACHE data");
-			$display("index | tag | data");
-			$display("----------------------------------------");
-		end
-		/////////////////////////////////////////////////////////////////
         end
         S_W_RUN: begin
 		awready		= 1'b1;
@@ -173,6 +166,9 @@ always @(*) begin
 		    wstate_n   = S_W_RESP;
 		    /////////////////////////////////////////////////////////////////
 		    if(test) begin
+			$display("\nCACHE data");
+			$display("index | tag | data");
+			$display("----------------------------------------");
 		   	 for(i_check=0 ; i_check<10 ; i_check++) begin
 				    tag_check		= read_8byte(i_check);
 				    $display("%5d | %3x | %10x", i_check, tag_check[61:30], read_64byte(i_check));

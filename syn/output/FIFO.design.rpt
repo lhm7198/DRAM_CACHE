@@ -3,7 +3,7 @@
 Report : design
 Design : FIFO
 Version: Q-2019.12-SP5-5
-Date   : Mon Jul  4 11:46:28 2022
+Date   : Mon Oct 24 01:51:53 2022
 ****************************************
 
 Design allows ideal nets on clock nets.
@@ -12,6 +12,8 @@ Library(s) Used:
 
     um28nchhlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v0c.db)
     um28nchslogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/svt/latest/liberty/logic_synth/um28nchslogl35udl140f_ssgwc0p9v0c.db)
+    um28nchvlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v0c.db)
+    um28nchllogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/lvt/latest/liberty/logic_synth/um28nchllogl35udl140f_ssgwc0p9v0c.db)
 
 Local Link Library:
 

@@ -3,30 +3,32 @@
 Report : area
 Design : FIFO
 Version: Q-2019.12-SP5-5
-Date   : Mon Jul  4 11:46:28 2022
+Date   : Mon Oct 24 01:51:53 2022
 ****************************************
 
 Library(s) Used:
 
     um28nchhlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ssgwc0p9v0c.db)
     um28nchslogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/svt/latest/liberty/logic_synth/um28nchslogl35udl140f_ssgwc0p9v0c.db)
+    um28nchvlogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/ulvt/latest/liberty/logic_synth/um28nchvlogl35udl140f_ssgwc0p9v0c.db)
+    um28nchllogl35udl140f_ssgwc0p9v0c (File: /media/0/LogicLibraries/UMC/28nm/35uhd/udl/lvt/latest/liberty/logic_synth/um28nchllogl35udl140f_ssgwc0p9v0c.db)
 
-Number of ports:                           28
-Number of nets:                           265
-Number of cells:                          253
-Number of combinational cells:            175
-Number of sequential cells:                78
+Number of ports:                         1164
+Number of nets:                        115584
+Number of cells:                       115000
+Number of combinational cells:          78113
+Number of sequential cells:             36887
 Number of macros/black boxes:               0
-Number of buf/inv:                         15
-Number of references:                      25
+Number of buf/inv:                       4083
+Number of references:                     161
 
-Combinational area:                 86.730000
-Buf/Inv area:                        2.940000
-Noncombinational area:             122.303997
+Combinational area:              44962.007953
+Buf/Inv area:                     1527.623984
+Noncombinational area:           57843.028489
 Macro/Black Box area:                0.000000
 Net Interconnect area:      undefined  (Wire load has zero net area)
 
-Total cell area:                   209.033997
+Total cell area:                102805.036442
 Total area:                 undefined
 
 The above information was reported from the logical library. The following are from the physical library:
@@ -34,13 +36,13 @@ The above information was reported from the logical library. The following are f
 Hierarchical area distribution
 ------------------------------
 
-                                  Global cell area          Local cell area
-                                  ------------------  --------------------------- 
-Hierarchical cell                 Absolute   Percent  Combi-    Noncombi-  Black-
-                                  Total      Total    national  national   boxes   Design
---------------------------------  ---------  -------  --------  ---------  ------  ---------
-FIFO                               209.0340    100.0   86.7300   122.3040  0.0000  FIFO
---------------------------------  ---------  -------  --------  ---------  ------  ---------
-Total                                                  86.7300   122.3040  0.0000
+                                  Global cell area             Local cell area
+                                  --------------------  ------------------------------ 
+Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black-
+                                  Total        Total    national    national    boxes   Design
+--------------------------------  -----------  -------  ----------  ----------  ------  ---------
+FIFO                              102805.0364    100.0  44962.0080  57843.0285  0.0000  FIFO
+--------------------------------  -----------  -------  ----------  ----------  ------  ---------
+Total                                                   44962.0080  57843.0285  0.0000
 
 1

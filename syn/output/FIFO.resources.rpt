@@ -3,29 +3,38 @@
 Report : resources
 Design : FIFO
 Version: Q-2019.12-SP5-5
-Date   : Mon Jul  4 11:46:28 2022
+Date   : Mon Oct 24 01:51:56 2022
 ****************************************
 
 
 Resource Report for this hierarchy in file
-        /home/lhm7198/DRAM_CACHE/rtl/fifo.sv
+        /home/leejh1593/DRAM_CACHE/rtl/fifo.sv
 =============================================================================
 | Cell           | Module         | Parameters | Contained Operations       |
 =============================================================================
-| add_x_1        | DW01_inc       | width=3    | add_47 (fifo.sv:47)        |
-| add_x_2        | DW01_inc       | width=3    | add_55 (fifo.sv:55)        |
-| add_x_3        | DW01_inc       | width=4    | add_60 (fifo.sv:60)        |
-| sub_x_4        | DW01_dec       | width=4    | sub_63 (fifo.sv:63)        |
-| gte_x_8        | DW_cmp         | width=4    | gte_87 (fifo.sv:87)        |
-| lte_x_9        | DW_cmp         | width=4    | lte_89 (fifo.sv:89)        |
+| add_x_1        | DW01_inc       | width=7    | add_50 (fifo.sv:50)        |
+| add_x_2        | DW01_inc       | width=7    | add_59 (fifo.sv:59)        |
+| gte_x_5        | DW_cmp         | width=8    | gte_96 (fifo.sv:96)        |
+| lte_x_6        | DW_cmp         | width=8    | lte_98 (fifo.sv:98)        |
+| DP_OP_33_125_8414               |            |                            |
+|                | DP_OP_33_125_8414 |         |                            |
 =============================================================================
 
+Datapath Report for DP_OP_33_125_8414
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_33_125_8414    | add_64 (fifo.sv:64) sub_67 (fifo.sv:67)             |
+==============================================================================
 
-Datapath Extraction Report
-
-Information: Operator associated with resources 'add_60 (fifo.sv:60)' in design 'FIFO' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'C376 (fifo.sv:59)'.  (HDL-120)
-
-Information: Operator associated with resources 'sub_63 (fifo.sv:63)' in design 'FIFO' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'C376 (fifo.sv:59)'.  (HDL-120)
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 8     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Signed   | 8     | addsub(I1,1,I2) ( fifo.sv:64 fifo.sv:67 ) |
+==============================================================================
 
 
 Implementation Report
@@ -35,10 +44,9 @@ Implementation Report
 ===============================================================================
 | add_x_1            | DW01_inc         | apparch (area)     |                |
 | add_x_2            | DW01_inc         | apparch (area)     |                |
-| add_x_3            | DW01_inc         | apparch (area)     |                |
-| sub_x_4            | DW01_dec         | apparch (area)     |                |
-| gte_x_8            | DW_cmp           | apparch (area)     |                |
-| lte_x_9            | DW_cmp           | apparch (area)     |                |
+| gte_x_5            | DW_cmp           | apparch (area)     |                |
+| lte_x_6            | DW_cmp           | apparch (area)     |                |
+| DP_OP_33_125_8414  | DP_OP_33_125_8414 | str (area,speed)  |                |
 ===============================================================================
 
 1

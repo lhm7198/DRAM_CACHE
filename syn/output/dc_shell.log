@@ -119,17 +119,46 @@ exit
 == READ_FILE autoread for top design 'FIFO' ==
 
 Starting READ_FILE autoread mode...
-Information: Adding '/home/lhm7198/DRAM_CACHE/rtl/'.  (AUTOREAD-100)
-Warning: Adding missing directory to search_path - '/home/lhm7198/DRAM_CACHE/rtl/'. (AUTOREAD-105)
-Information: Adding '/home/lhm7198/DRAM_CACHE/rtl/fifo.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/'.  (AUTOREAD-100)
+Warning: Adding missing directory to search_path - '/home/leejh1593/DRAM_CACHE/rtl/'. (AUTOREAD-105)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/fill_ar.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/fill_fifo.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/rob.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/wbuffer.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/fifo.sv'.  (AUTOREAD-100)
+Information: Source TYPEDEF.svh ignored by autoread due to filtering.  (AUTOREAD-102)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/index_extractor.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/top.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/tag_compare.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/read_miss_handler.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/arbiter.sv'.  (AUTOREAD-100)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl/evict_aw_w.sv'.  (AUTOREAD-100)
 Information: Source filelist.f ignored by autoread due to filtering.  (AUTOREAD-102)
-Information: Source ROB.v ignored by autoread due to filtering.  (AUTOREAD-102)
+Information: Adding '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'.  (AUTOREAD-100)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Warning: Using user-excluded file '/home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh'. (AUTOREAD-108)
+Information: Scanning file { fill_ar.sv }. (AUTOREAD-303)
+Information: Scanning file { fill_fifo.sv }. (AUTOREAD-303)
+Information: Scanning file { rob.sv }. (AUTOREAD-303)
+Information: Scanning file { wbuffer.sv }. (AUTOREAD-303)
 Information: Scanning file { fifo.sv }. (AUTOREAD-303)
-Compiling source file /home/lhm7198/DRAM_CACHE/rtl/fifo.sv
-Warning:  /home/lhm7198/DRAM_CACHE/rtl/fifo.sv:25: Redeclaration of port 'full'. (VER-331)
-Warning:  /home/lhm7198/DRAM_CACHE/rtl/fifo.sv:26: Redeclaration of port 'A_full'. (VER-331)
-Warning:  /home/lhm7198/DRAM_CACHE/rtl/fifo.sv:27: Redeclaration of port 'empty'. (VER-331)
-Warning:  /home/lhm7198/DRAM_CACHE/rtl/fifo.sv:28: Redeclaration of port 'A_empty'. (VER-331)
+Information: Scanning file { index_extractor.sv }. (AUTOREAD-303)
+Information: Scanning file { top.sv }. (AUTOREAD-303)
+Information: Scanning file { tag_compare.sv }. (AUTOREAD-303)
+Information: Scanning file { read_miss_handler.sv }. (AUTOREAD-303)
+Information: Scanning file { arbiter.sv }. (AUTOREAD-303)
+Information: Scanning file { evict_aw_w.sv }. (AUTOREAD-303)
+Compiling source file /home/leejh1593/DRAM_CACHE/rtl/fifo.sv
+Opening include file /home/leejh1593/DRAM_CACHE/rtl//TYPEDEF.svh
 Presto compilation completed successfully.
 Elaborating top design FIFO
 Loading db file '/media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05v0c.db'
@@ -236,21 +265,21 @@ Loading db file '/usr/synopsys/syn/Q-2019.12-SP5-5/libraries/syn/standard.sldb'
   Loading link library 'um28nchvlogl35udl140f_ssgwc0p9vn40c'
   Loading link library 'gtech'
 Running PRESTO HDLC
-Warning:  /home/lhm7198/DRAM_CACHE/rtl/fifo.sv:44: signed to unsigned conversion occurs. (VER-318)
-Warning:  /home/lhm7198/DRAM_CACHE/rtl/fifo.sv:52: signed to unsigned conversion occurs. (VER-318)
+Warning:  /home/leejh1593/DRAM_CACHE/rtl/fifo.sv:47: signed to unsigned conversion occurs. (VER-318)
+Warning:  /home/leejh1593/DRAM_CACHE/rtl/fifo.sv:55: signed to unsigned conversion occurs. (VER-318)
 
 Inferred memory devices in process
-	in routine FIFO line 68 in file
-		'/home/lhm7198/DRAM_CACHE/rtl/fifo.sv'.
+	in routine FIFO line 72 in file
+		'/home/leejh1593/DRAM_CACHE/rtl/fifo.sv'.
 ===============================================================================
 |    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===============================================================================
 |      empty_reg      | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
-|      head_reg       | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
-|      tail_reg       | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
-|       cnt_reg       | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|      head_reg       | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|      tail_reg       | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|       cnt_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
 |     A_empty_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
-|       mem_reg       | Flip-flop |  64   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop | 36864 |  Y  | N  | N  | N  | N  | N  | N  |
 |      full_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
 |     A_full_reg      | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
 ===============================================================================
@@ -258,7 +287,7 @@ Statistics for MUX_OPs
 ======================================================
 | block name/line  | Inputs | Outputs | # sel inputs |
 ======================================================
-|     FIFO/93      |   8    |    8    |      3       |
+|     FIFO/102     |   64   |   576   |      6       |
 ======================================================
 Presto compilation completed successfully. (FIFO)
 Elaborated 1 design.
@@ -268,7 +297,7 @@ Autoread command completed successfully.
   Linking design 'FIFO'
   Using the following designs and libraries:
   --------------------------------------------------------------------------
-  FIFO                        /home/lhm7198/DRAM_CACHE/syn/output/FIFO.db
+  FIFO                        /home/leejh1593/DRAM_CACHE/syn/output/FIFO.db
   um28nchhlogl35udl140f_ffbc1p05v0c (library) /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05v0c.db
   um28nchhlogl35udl140f_ffbc1p05v125c (library) /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05v125c.db
   um28nchhlogl35udl140f_ffbc1p05vn40c (library) /media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05vn40c.db
@@ -389,6 +418,7 @@ Information: State dependent leakage is now switched from on to off.
   Beginning Pass 1 Mapping
   ------------------------
   Processing 'FIFO'
+ Implement Synthetic for 'FIFO'.
 Information: Added key list 'DesignWare' to design 'FIFO'. (DDB-72)
 
   Updating timing information
@@ -410,21 +440,25 @@ Threshold voltage group cell usage:
 
   Beginning Mapping Optimizations  (Ultra High effort)
   -------------------------------
+  Mapping Optimization (Phase 1)
+  Mapping Optimization (Phase 2)
+Information: In design 'FIFO', the register 'A_empty_reg' is removed because it is merged to 'empty_reg'. (OPT-1215)
 
                                   TOTAL                                                
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:02:37     224.3      0.00       0.0       0.0                              7.4970
-    0:02:37     224.3      0.00       0.0       0.0                              7.4970
+    0:08:45  182223.2      0.01       5.8       0.0                           9486.8242
+    0:08:52  182223.2      0.01       5.8       0.0                           9486.8242
 
 Threshold voltage group cell usage:
 >> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
 
   Beginning Constant Register Removal
   -----------------------------------
-    0:02:37     224.3      0.00       0.0       0.0                              7.4970
-    0:02:37     224.3      0.00       0.0       0.0                              7.4970
+Information: The register 'tail_reg[6]' is a constant and will be removed. (OPT-1206)
+    0:08:58  182221.4      0.01       6.7       0.0                           9486.9180
+    0:09:07  182220.9      0.01       5.8       0.0                           9486.8975
 
 Threshold voltage group cell usage:
 >> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
@@ -462,6 +496,8 @@ Threshold voltage group cell usage:
   Global Optimization (Phase 27)
   Global Optimization (Phase 28)
   Global Optimization (Phase 29)
+  Global Optimization (Phase 30)
+  Global Optimization (Phase 31)
 
 Threshold voltage group cell usage:
 >> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
@@ -474,82 +510,89 @@ Threshold voltage group cell usage:
 
   Beginning Delay Optimization
   ----------------------------
-    0:02:38     211.8      0.00       0.0       0.0                              7.2835
-    0:02:38     211.8      0.00       0.0       0.0                              7.2835
-    0:02:38     211.8      0.00       0.0       0.0                              7.2835
-    0:02:39     211.8      0.00       0.0       0.0                              7.2835
+    0:10:25  108764.7      0.15     538.9       0.0                           3756.9507
+    0:10:41  108876.0      0.00       0.0      14.0                           3764.7571
+    0:10:41  108876.0      0.00       0.0      14.0                           3764.7571
+    0:10:42  108875.8      0.00       0.0      14.0                           3764.7422
 
 Threshold voltage group cell usage:
 >> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
-    0:02:39     211.8      0.00       0.0       0.0                              7.2835
-    0:02:39     211.8      0.00       0.0       0.0                              7.2835
+    0:10:55  108870.3      0.00       0.0      14.0                           3764.5149
+    0:11:04  108870.3      0.00       0.0      14.0                           3764.5149
 
   Beginning WLM Backend Optimization
   --------------------------------------
+    0:11:36  108862.5      0.00       0.0      14.0                           3764.3015
+    0:11:43  108699.6      0.00       0.0      14.0                           3757.2051
+    0:11:47  108521.9      0.00       0.2      14.0                           3751.2190
+    0:12:02  108191.7      0.00       0.7      14.0                           3736.3350
+    0:12:29  107838.0      0.00       1.1      14.0                           3719.3250
+    0:13:09  107738.6      0.00       1.2      14.0                           3714.3513
+    0:13:23  107454.9      0.00       1.4      14.0                           3700.2847
 
 Threshold voltage group cell usage:
 >> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
 
   Beginning Delay Optimization HSVT Pass
   --------------------------------------
-    0:03:00     211.8      0.00       0.0       0.0                              7.2835
-    0:03:00     211.8      0.00       0.0       0.0                              7.2835
-    0:03:00     211.8      0.00       0.0       0.0                              7.2835
-    0:03:00     211.8      0.00       0.0       0.0                              7.2835
-    0:03:08     211.8      0.00       0.0       0.0                              7.2835
-    0:03:08     211.8      0.00       0.0       0.0                              7.2835
-    0:03:08     211.8      0.00       0.0       0.0                              7.2835
-    0:03:08     211.8      0.00       0.0       0.0                              7.2835
-    0:03:19     211.8      0.00       0.0       0.0                              7.2835
-    0:03:19     211.8      0.00       0.0       0.0                              7.2835
-    0:03:19     211.8      0.00       0.0       0.0                              7.2835
-    0:03:19     211.8      0.00       0.0       0.0                              7.2835
-    0:03:32     211.8      0.00       0.0       0.0                              7.2835
-    0:03:33     211.8      0.00       0.0       0.0                              7.2835
-    0:03:33     211.8      0.00       0.0       0.0                              7.2835
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
+    0:13:41  107306.4      0.00       2.3      14.0                           3693.0203
+    0:13:41  107306.4      0.00       2.3      14.0                           3693.0203
+    0:13:41  107306.4      0.00       2.3      14.0                           3693.0203
+    0:14:14  107701.5      0.00       0.0     103.0                           4956.1401
+    0:14:22  107701.5      0.00       0.0     103.0                           4956.1401
+    0:14:22  107701.5      0.00       0.0     103.0                           4956.1401
+    0:14:22  107701.5      0.00       0.0     103.0                           4956.1401
+    0:14:36  107718.3      0.00       0.0     103.0                           4997.7788
+    0:14:46  107718.3      0.00       0.0     103.0                           4997.7788
+    0:14:46  107718.3      0.00       0.0     103.0                           4997.7788
+    0:14:46  107718.3      0.00       0.0     103.0                           4997.7788
+    0:14:50  107718.3      0.00       0.0     103.0                           4997.7788
+    0:15:02  107718.3      0.00       0.0     103.0                           4997.7788
+    0:15:03  107717.6      0.00       0.0     103.0                           5003.3003
+    0:15:03  107717.6      0.00       0.0     103.0                           5003.3003
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
 
 Threshold voltage group cell usage:
->> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
+>> HVT35 99.82%, LVT35 0.01%, SVT35 0.17%, UHVT35 0.00%, ULVT35 0.00%
 
   Beginning Delay Optimization
   ----------------------------
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
 
 
-  Beginning Design Rule Fixing  (min_capacitance)
+  Beginning Design Rule Fixing  (min_capacitance)  (max_fanout)
   ----------------------------
 
                                   TOTAL                                                
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:03:34     211.8      0.00       0.0       0.0                              7.2562
-  Global Optimization (Phase 30)
-  Global Optimization (Phase 31)
+    0:15:25  107529.4      0.00       0.0     103.0                           3640.3008
   Global Optimization (Phase 32)
-    0:03:35     211.8      0.00       0.0       0.0                              7.2562
-    0:03:35     211.8      0.00       0.0       0.0                              7.2562
+  Global Optimization (Phase 33)
+  Global Optimization (Phase 34)
+    0:15:28  107532.4      0.00       0.0       0.0                           3644.0020
+    0:15:28  107532.4      0.00       0.0       0.0                           3644.0020
 
 Threshold voltage group cell usage:
->> HVT35 100.00%, LVT35 0.00%, SVT35 0.00%, UHVT35 0.00%, ULVT35 0.00%
+>> HVT35 99.82%, LVT35 0.02%, SVT35 0.16%, UHVT35 0.00%, ULVT35 0.00%
 
 
   Beginning Leakage Power Optimization  (max_leakage_power 0)
@@ -559,9 +602,7 @@ Threshold voltage group cell usage:
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:03:35     211.8      0.00       0.0       0.0                              7.2562
-  Global Optimization (Phase 33)
-  Global Optimization (Phase 34)
+    0:15:29  107532.4      0.00       0.0       0.0                           3644.0020
   Global Optimization (Phase 35)
   Global Optimization (Phase 36)
   Global Optimization (Phase 37)
@@ -572,62 +613,82 @@ Threshold voltage group cell usage:
   Global Optimization (Phase 42)
   Global Optimization (Phase 43)
   Global Optimization (Phase 44)
-    0:03:35     211.0      0.00       0.0       0.0                              7.0312
-    0:03:35     211.0      0.00       0.0       0.0                              7.0312
-    0:03:35     211.0      0.00       0.0       0.0                              7.0312
-    0:03:36     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
+  Global Optimization (Phase 45)
+  Global Optimization (Phase 46)
+  Global Optimization (Phase 47)
+  Global Optimization (Phase 48)
+  Global Optimization (Phase 49)
+  Global Optimization (Phase 50)
+    0:17:50  105442.8      0.03      67.6       0.0 read_data_o[541]          4451.9595
+    0:17:58  105470.8      0.01       9.6       0.0 mem_reg[21][88]/D         4727.4502
+    0:18:10  105476.9      0.01       5.2       0.0 read_data_o[463]          4786.9033
+    0:18:19  105476.9      0.01       5.2       0.0 read_data_o[92]           4803.3350
+    0:18:25  105477.6      0.01       4.1       0.0 read_data_o[373]          4809.5039
+    0:18:34  105477.7      0.01       3.4       0.0 read_data_o[28]           4818.7271
+    0:18:43  105479.2      0.01       2.9       0.0 read_data_o[5]            4839.7637
+    0:18:52  105480.1      0.01       2.4       0.0 read_data_o[492]          4849.3345
+    0:19:00  105481.4      0.01       1.9       0.0 read_data_o[461]          4867.1519
+    0:19:08  105490.3      0.00       1.2       0.0 mem_reg[59][103]/D        4980.1201
+    0:19:17  105491.3      0.00       1.1       0.0 read_data_o[539]          5005.9648
+    0:19:19  105493.5      0.00       0.8       0.0                           5032.1924
+    0:19:25  105614.5      0.01       0.3       4.0                           5621.9771
+    0:19:26  105614.5      0.01       0.3       4.0                           5621.9771
+    0:19:51  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
+    0:19:52  103871.5      0.00       0.0       4.0                           4142.8735
 
                                   TOTAL                                                
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:03:37     211.0      0.00       0.0       0.0                              7.0312
-    0:03:38     209.0      0.00       0.0       0.0                              6.9200
-    0:03:38     209.0      0.00       0.0       0.0                              6.9200
-    0:03:38     209.0      0.00       0.0       0.0                              6.9200
-    0:03:40     209.0      0.00       0.0       0.0                              6.9200
+    0:19:58  103871.5      0.00       0.0       4.0                           4142.8735
+    0:21:12  103167.0      0.00       0.0       3.0                           3770.8088
+    0:21:13  103166.7      0.00       0.0      10.0                           3770.7893
+    0:21:14  103166.7      0.00       0.0      10.0                           3770.7893
+    0:21:29  103118.8      0.00       0.0      10.0                           3712.8762
 
 Threshold voltage group cell usage:
->> HVT35 99.60%, LVT35 0.00%, SVT35 0.40%, UHVT35 0.00%, ULVT35 0.00%
+>> HVT35 97.75%, LVT35 0.10%, SVT35 2.14%, UHVT35 0.00%, ULVT35 0.01%
 
   Beginning Delay Optimization HSVT Pass
   --------------------------------------
-    0:03:46     209.0      0.00       0.0       0.0                              6.9200
-    0:03:46     209.0      0.00       0.0       0.0                              6.9200
-    0:03:46     209.0      0.00       0.0       0.0                              6.9200
-    0:03:46     209.0      0.00       0.0       0.0                              6.9200
-    0:03:55     209.0      0.00       0.0       0.0                              6.9200
-    0:03:55     209.0      0.00       0.0       0.0                              6.9200
-    0:03:55     209.0      0.00       0.0       0.0                              6.9200
-    0:03:55     209.0      0.00       0.0       0.0                              6.9200
-    0:04:05     209.0      0.00       0.0       0.0                              6.9200
-    0:04:05     209.0      0.00       0.0       0.0                              6.9200
-    0:04:05     209.0      0.00       0.0       0.0                              6.9200
-    0:04:05     209.0      0.00       0.0       0.0                              6.9200
-    0:04:18     209.0      0.00       0.0       0.0                              6.9200
-    0:04:18     209.0      0.00       0.0       0.0                              6.9200
-    0:04:18     209.0      0.00       0.0       0.0                              6.9200
-    0:04:18     209.0      0.00       0.0       0.0                              6.9200
-    0:04:18     209.0      0.00       0.0       0.0                              6.9200
-    0:04:18     209.0      0.00       0.0       0.0                              6.9200
+    0:21:35  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:35  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:35  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:35  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:43  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:43  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:44  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:44  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:54  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:54  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:54  103118.8      0.00       0.0      10.0                           3712.8762
+    0:21:54  103118.8      0.00       0.0      10.0                           3712.8762
+    0:22:55  102921.8      0.00       0.0      10.0                           3697.2732
+    0:23:37  102896.7      0.00       0.0      10.0                           3672.3020
+    0:23:41  102904.2      0.00       0.0       0.0                           3662.5178
+    0:23:41  102904.2      0.00       0.0       0.0                           3662.5178
+    0:23:41  102904.2      0.00       0.0       0.0                           3662.5178
+    0:23:41  102904.2      0.00       0.0       0.0                           3662.5178
+    0:23:42  102904.2      0.00       0.0       0.0                           3662.5178
+    0:23:42  102904.2      0.00       0.0       0.0                           3662.5178
+    0:25:11  102805.0      0.00       0.0       0.0                           3660.7808
 Loading db file '/media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05v0c.db'
 Loading db file '/media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05v125c.db'
 Loading db file '/media/0/LogicLibraries/UMC/28nm/35uhd/udl/hvt/latest/liberty/logic_synth/um28nchhlogl35udl140f_ffbc1p05vn40c.db'
@@ -685,6 +746,8 @@ Note: Symbol # after min delay cost means estimated hold TNS across all active s
 
   Optimization Complete
   ---------------------
+Warning: Design 'FIFO' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'clk': 36887 load(s), 1 driver(s)
   Loading target library 'um28nchhlogl35udl140f_ssgwc0p9v125c'
   Loading target library 'um28nchhlogl35udl140f_ssgwc0p9vn40c'
   Loading target library 'um28nchllogl35udl140f_ssgwc0p9v125c'
@@ -698,11 +761,12 @@ Note: Symbol # after min delay cost means estimated hold TNS across all active s
 Information: State dependent leakage is now switched from off to on.
 Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
 Writing ddc file 'FIFO.ddc'.
-Writing verilog file '/home/lhm7198/DRAM_CACHE/syn/output/FIFO.netlist.v'.
+Writing verilog file '/home/leejh1593/DRAM_CACHE/syn/output/FIFO.netlist.v'.
+Warning: Verilog 'assign' or 'tran' statements are written out. (VO-4)
 
-Memory usage for this session 12288 Mbytes.
-Memory usage for this session including child processes 12288 Mbytes.
-CPU usage for this session 1769 seconds ( 0.49 hours ).
-Elapsed time for this session 1804 seconds ( 0.50 hours ).
+Memory usage for this session 12565 Mbytes.
+Memory usage for this session including child processes 12565 Mbytes.
+CPU usage for this session 2993 seconds ( 0.83 hours ).
+Elapsed time for this session 3034 seconds ( 0.84 hours ).
 
 Thank you...

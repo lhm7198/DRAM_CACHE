@@ -5,9 +5,9 @@ if { [catch {
 # ---------------------------------------
 # DESIGN PROFILE
 # ---------------------------------------
-set topmodule_name      FIFO
+set topmodule_name      TOP_MODULE
 set clk_port_name       clk
-set clk_freq            1200
+set clk_freq            1000
 # ---------------------------------------
 # Read Libraries
 # ---------------------------------------

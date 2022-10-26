@@ -48,7 +48,7 @@ module TOP_MODULE
 	output	wire					wready_o,	
 
 	// R channel (Processor -> ROB)
-	output	wire					rid_o,
+	output	wire	[ID_WIDTH - 1 : 0]		rid_o,
 	output	wire	[DATA_WIDTH - 1 : 0]		rdata_o,
 	output	wire					rvalid_o,
 	input	wire					rready_i,
@@ -64,7 +64,7 @@ module TOP_MODULE
 	input	wire					m_arready_i,
 
 	// R channel (Memory Ctrl -> Tag comparator)
-	input	wire					m_rid_i,
+	input	wire	[ID_WIDTH - 1 : 0]		m_rid_i,
 	input	wire	[TAG_SIZE + DATA_WIDTH - 1 : 0]	m_rdata_i,
 	input	wire					m_rvalid_i,
 	output	wire					m_rready_o,

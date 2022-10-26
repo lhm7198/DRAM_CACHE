@@ -119,7 +119,10 @@ always_comb begin
 end
 
 
-FIFO	hit_fifo
+FIFO	
+#(
+	.DATA_WIDTH	(FIFO_WIDTH)
+) hit_fifo
 (
 	.clk		(clk),
 	.rst_n		(rst_n),
@@ -133,8 +136,10 @@ FIFO	hit_fifo
 	.read_data_o	(read_data_hit)
 );
 
-
-FIFO	miss_fifo
+FIFO	
+#(
+	.DATA_WIDTH	(FIFO_WIDTH)
+) miss_fifo
 (
 	.clk		(clk),
 	.rst_n		(rst_n),
